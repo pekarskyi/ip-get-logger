@@ -44,10 +44,6 @@ URL Matching Test
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Navigate to the 'IP GET Logger' settings page to configure the plugin
 
-## Importing a list of GET requests
-
-In the `GET Requests Database` section, select the `ip-get-logger-export.txt` file and import the list of requests. The file is located in the plugin folder.
-
 ## Example: Watch for suspicious parameters
 
 Add a pattern: `eval=`
