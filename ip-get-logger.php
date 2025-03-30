@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IP GET Logger
  * Description: Plugin for tracking GET requests to the site and logging them
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: InwebPress
  * Author URI: https://inwebpress.com
  * Plugin URI: https://github.com/pekarskyi/ip-get-logger
@@ -32,13 +32,17 @@ define('IP_GET_LOGGER_TABLE', 'ip_get_logger');
 global $ip_get_logger_processed_requests;
 $ip_get_logger_processed_requests = array();
 
+// Глобальна змінна для зберігання повідомлень, які потрібно відправити
+global $ip_get_logger_notifications;
+$ip_get_logger_notifications = array();
+
 // Підключення необхідних файлів
 require_once(IP_GET_LOGGER_PLUGIN_DIR . 'includes/class-ip-get-logger.php');
 require_once(IP_GET_LOGGER_PLUGIN_DIR . 'admin/class-ip-get-logger-admin.php');
 
 // Перехоплення запитів до статичних файлів перед завантаженням WordPress
 function ip_get_logger_early_request_capture() {
-    global $ip_get_logger_processed_requests;
+    global $ip_get_logger_processed_requests, $ip_get_logger_notifications;
     
     // Перехоплюємо тільки GET-запити
     if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
@@ -147,27 +151,52 @@ function ip_get_logger_early_request_capture() {
         $send_notifications = isset($settings['send_notifications']) ? $settings['send_notifications'] : 1;
         
         if ($send_notifications && !empty($settings['email_recipient'])) {
-            // Відправляємо сповіщення
-            $to = $settings['email_recipient'];
-            $subject = isset($settings['email_subject']) ? $settings['email_subject'] : __('GET Request Match Found', 'ip-get-logger');
+            // Зберігаємо дані сповіщення для подальшої відправки
+            $notification = array(
+                'to' => $settings['email_recipient'],
+                'subject' => isset($settings['email_subject']) ? $settings['email_subject'] : __('GET Request Match Found', 'ip-get-logger'),
+                'message' => isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger'),
+                'request_url' => $request_url,
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+                'timestamp' => current_time('mysql')
+            );
             
-            $message = isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger');
-            $message = str_replace('{request}', $request_url, $message);
+            // Додаємо сповіщення до списку
+            $ip_get_logger_notifications[] = $notification;
+        }
+    }
+}
+
+// Функція для відправки відкладених сповіщень
+function ip_get_logger_send_notifications() {
+    global $ip_get_logger_notifications;
+    
+    // Перевіряємо чи є сповіщення для відправки
+    if (!empty($ip_get_logger_notifications)) {
+        foreach ($ip_get_logger_notifications as $notification) {
+            $to = $notification['to'];
+            $subject = $notification['subject'];
+            $message = str_replace('{request}', $notification['request_url'], $notification['message']);
             
             // Додаємо додаткову інформацію
             $message .= '<br><br>';
             $message .= __('Request details:', 'ip-get-logger') . '<br>';
-            $message .= __('IP Address:', 'ip-get-logger') . ' ' . $_SERVER['REMOTE_ADDR'] . '<br>';
-            $message .= __('User Agent:', 'ip-get-logger') . ' ' . (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided') . '<br>';
-            $message .= __('Date and Time:', 'ip-get-logger') . ' ' . current_time('mysql') . '<br>';
+            $message .= __('IP Address:', 'ip-get-logger') . ' ' . $notification['ip'] . '<br>';
+            $message .= __('User Agent:', 'ip-get-logger') . ' ' . $notification['user_agent'] . '<br>';
+            $message .= __('Date and Time:', 'ip-get-logger') . ' ' . $notification['timestamp'] . '<br>';
             
             $headers = array('Content-Type: text/html; charset=UTF-8');
             
             // Відправляємо лист
             wp_mail($to, $subject, $message, $headers);
         }
+        
+        // Очищаємо список сповіщень
+        $ip_get_logger_notifications = array();
     }
 }
+add_action('init', 'ip_get_logger_send_notifications');
 
 // Викликаємо функцію перехоплення перед завантаженням WordPress
 ip_get_logger_early_request_capture();

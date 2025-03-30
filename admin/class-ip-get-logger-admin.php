@@ -43,6 +43,7 @@ class IP_Get_Logger_Admin {
         add_action('wp_ajax_ip_get_logger_add_request', array($this, 'ajax_add_request'));
         add_action('wp_ajax_ip_get_logger_delete_request', array($this, 'ajax_delete_request'));
         add_action('wp_ajax_ip_get_logger_edit_request', array($this, 'ajax_edit_request'));
+        add_action('wp_ajax_ip_get_logger_update_from_github', array($this, 'ajax_update_from_github'));
     }
 
     /**
@@ -602,8 +603,7 @@ class IP_Get_Logger_Admin {
         }
         
         // Видаляємо запит
-        unset($this->get_requests[$index]);
-        $this->get_requests = array_values($this->get_requests); // Перенумеровуємо індекси
+        array_splice($this->get_requests, $index, 1);
         
         // Зберігаємо оновлені запити
         ip_get_logger_update_option('get_requests', $this->get_requests);
@@ -614,6 +614,99 @@ class IP_Get_Logger_Admin {
         ));
     }
     
+    /**
+     * AJAX-обробник для оновлення бази запитів з GitHub
+     */
+    public function ajax_update_from_github() {
+        // Перевіряємо nonce
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        // Перевіряємо права
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions to perform this operation', 'ip-get-logger'));
+            return;
+        }
+        
+        // URL файлу в GitHub
+        $github_file_url = 'https://raw.githubusercontent.com/pekarskyi/ip-get-logger-db/main/ip-get-logger-import.txt';
+        
+        // Використовуємо WordPress HTTP API для безпечного отримання файлу
+        $response = wp_remote_get($github_file_url);
+        
+        // Перевіряємо на помилки
+        if (is_wp_error($response)) {
+            wp_send_json_error(sprintf(
+                __('Failed to fetch data from GitHub: %s', 'ip-get-logger'),
+                $response->get_error_message()
+            ));
+            return;
+        }
+        
+        // Перевіряємо HTTP код відповіді
+        $response_code = wp_remote_retrieve_response_code($response);
+        if ($response_code !== 200) {
+            wp_send_json_error(sprintf(
+                __('Failed to fetch data from GitHub. HTTP Response Code: %s', 'ip-get-logger'),
+                $response_code
+            ));
+            return;
+        }
+        
+        // Отримуємо тіло відповіді (вміст файлу)
+        $content = wp_remote_retrieve_body($response);
+        
+        if (empty($content)) {
+            wp_send_json_error(__('Empty response from GitHub', 'ip-get-logger'));
+            return;
+        }
+        
+        // Розбиваємо на рядки
+        $lines = explode("\n", $content);
+        $lines = array_map('trim', $lines);
+        $lines = array_filter($lines);
+        
+        // Отримуємо поточні запити
+        $current_requests = $this->get_requests;
+        
+        // Лічильники для статистики
+        $added_count = 0;
+        $duplicated_count = 0;
+        
+        // Додаємо нові запити, які ще не існують
+        foreach ($lines as $request) {
+            if (!in_array($request, $current_requests)) {
+                $current_requests[] = $request;
+                $added_count++;
+            } else {
+                $duplicated_count++;
+            }
+        }
+        
+        // Якщо є нові запити, оновлюємо базу
+        if ($added_count > 0) {
+            // Зберігаємо оновлені запити
+            ip_get_logger_update_option('get_requests', $current_requests);
+            $this->get_requests = $current_requests;
+            
+            wp_send_json_success(array(
+                'message' => sprintf(
+                    __('Database updated successfully: %d new requests added, %d duplicates skipped.', 'ip-get-logger'),
+                    $added_count,
+                    $duplicated_count
+                ),
+                'requests' => $current_requests
+            ));
+        } else {
+            wp_send_json_success(array(
+                'message' => sprintf(
+                    __('Your database is up to date. No new requests added. %d duplicates skipped.', 'ip-get-logger'),
+                    $duplicated_count
+                ),
+                'requests' => $current_requests
+            ));
+        }
+    }
+
     /**
      * Отримати логи з файлу
      *

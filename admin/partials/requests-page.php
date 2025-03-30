@@ -13,6 +13,20 @@
                     <button type="submit" class="button button-primary"><?php echo esc_html__('Add Request', 'ip-get-logger'); ?></button>
                 </div>
             </form>
+            <hr>
+
+            <div style="background: #F0F0F1; padding: 10px; border-left: 4px solid #2271b1; margin: 10px 0;">
+                <p><span class="dashicons dashicons-info"></span> <?php echo esc_html__('The plugin does not track or collect anonymous data about websites, users, or requests.', 'ip-get-logger'); ?><br>
+                <?php echo esc_html__('If you discover new malicious GET requests, please inform me so that I can add them to the request database.', 'ip-get-logger'); ?></p>
+                <p><span class="dashicons dashicons-shield"></span> <?php echo esc_html__('Report a new malicious request:', 'ip-get-logger'); ?>
+                <ul>
+                    <li>- <a href="https://github.com/pekarskyi/ip-get-logger/issues" target="_blank"><?php echo esc_html__('on Github - Issues - New issue', 'ip-get-logger'); ?></a></li>
+                    <li>- <?php echo esc_html__('send me an email:', 'ip-get-logger'); ?> <a href="mailto:ipgetlogger@gmail.com">ipgetlogger@gmail.com</a></li>
+                    <li>- <a href="https://telegram.im/@sovka7" target="_blank"><?php echo esc_html__('write to me in Telegram', 'ip-get-logger'); ?></a></li>
+                </ul>
+                 
+            </p>
+            </div>
         </div>
         
         <div class="ip-get-logger-card">
@@ -35,6 +49,17 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="button"><?php echo esc_html__('Export', 'ip-get-logger'); ?></button>
+                </div>
+            </form>
+
+            <hr>
+            
+            <form id="ip-get-logger-update-from-github-form">
+                <div class="form-group">
+                    <label><?php echo esc_html__('Update database from repository:', 'ip-get-logger'); ?></label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="button"><?php echo esc_html__('Update Database', 'ip-get-logger'); ?></button>
                 </div>
             </form>
         </div>
@@ -241,6 +266,33 @@ jQuery(document).ready(function($) {
                 alert('<?php echo esc_js(__('An error occurred while exporting requests', 'ip-get-logger')); ?>');
             }
         });
+    });
+    
+    // Оновлення бази з GitHub
+    $('#ip-get-logger-update-from-github-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        if (confirm('<?php echo esc_js(__('Do you want to update the database from repository?', 'ip-get-logger')); ?>')) {
+            $.ajax({
+                url: ip_get_logger_params.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'ip_get_logger_update_from_github',
+                    nonce: ip_get_logger_params.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.data.message);
+                        window.location.reload();
+                    } else {
+                        alert(response.data);
+                    }
+                },
+                error: function() {
+                    alert('<?php echo esc_js(__('An error occurred while updating the database from GitHub', 'ip-get-logger')); ?>');
+                }
+            });
+        }
     });
 });
 </script> 
