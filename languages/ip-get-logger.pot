@@ -1,0 +1,534 @@
+# Copyright (C) 2024 WordPress Developer
+# This file is distributed under the same license as the IP GET Logger plugin.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: IP GET Logger 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ip-get-logger\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-03-30 03:28+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: ip-get-logger\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;"
+
+#: admin/partials/requests-page.php:52
+msgid "#"
+msgstr ""
+
+#: ip-get-logger.php:174 ip-get-logger.php:255
+#: admin/class-ip-get-logger-admin.php:301 includes/class-ip-get-logger.php:492
+msgid "A GET request matching your database has been detected: {request}"
+msgstr ""
+
+#: admin/partials/requests-page.php:54
+msgid "Actions"
+msgstr ""
+
+#: admin/partials/requests-page.php:6
+msgid "Add New Request"
+msgstr ""
+
+#: admin/partials/requests-page.php:13
+msgid "Add Request"
+msgstr ""
+
+#: admin/partials/requests-page.php:117
+msgid "An error occurred while adding the request"
+msgstr ""
+
+#: admin/partials/logs-page.php:102
+msgid "An error occurred while clearing logs"
+msgstr ""
+
+#: admin/partials/requests-page.php:143
+msgid "An error occurred while deleting the request"
+msgstr ""
+
+#: admin/partials/requests-page.php:188
+msgid "An error occurred while editing the request"
+msgstr ""
+
+#: admin/partials/requests-page.php:241
+msgid "An error occurred while exporting requests"
+msgstr ""
+
+#: admin/partials/requests-page.php:217
+msgid "An error occurred while importing requests"
+msgstr ""
+
+#: admin/partials/logs-page.php:86
+msgid "Are you sure you want to clear all logs?"
+msgstr ""
+
+#: admin/partials/requests-page.php:124
+msgid "Are you sure you want to delete this request?"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:153
+msgid "Auto-cleanup logs (days)"
+msgstr ""
+
+#: admin/partials/test-url-page.php:91
+msgid "Break it down into different variants (full URL, path, filename, etc.)"
+msgstr ""
+
+#: admin/partials/requests-page.php:87
+msgid "Cancel"
+msgstr ""
+
+#: admin/partials/test-url-page.php:92
+msgid "Check each variant against all your patterns"
+msgstr ""
+
+#: admin/partials/logs-page.php:36
+msgid "Clear Logs"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:326
+msgid "Configure database parameters"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:310
+msgid "Configure parameters for logging GET requests"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:270
+msgid ""
+"Configure parameters for sending email notifications when a GET request "
+"matches"
+msgstr ""
+
+#: admin/partials/settings-page.php:15
+msgid "Database Information"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:161
+msgid "Database Settings"
+msgstr ""
+
+#: admin/partials/settings-page.php:18
+msgid "Database Table"
+msgstr ""
+
+#: admin/partials/logs-page.php:48
+msgid "Date & Time"
+msgstr ""
+
+#: ip-get-logger.php:182 includes/class-ip-get-logger.php:500
+msgid "Date and Time:"
+msgstr ""
+
+#: admin/partials/logs-page.php:9
+msgid "Date:"
+msgstr ""
+
+#: admin/partials/requests-page.php:64
+msgid "Delete"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:168
+msgid "Delete data when uninstalling the plugin"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:334
+msgid "Delete database table when uninstalling the plugin"
+msgstr ""
+
+#: admin/partials/requests-page.php:63
+msgid "Edit"
+msgstr ""
+
+#: admin/partials/requests-page.php:78
+msgid "Edit GET Request"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:138
+msgid "Email Message"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:130
+msgid "Email Subject"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:114
+msgid "Enable Email Notifications"
+msgstr ""
+
+#: admin/partials/requests-page.php:10
+msgid "Enter URL or request pattern"
+msgstr ""
+
+#: admin/partials/test-url-page.php:9
+msgid "Enter URL to test:"
+msgstr ""
+
+#: admin/partials/requests-page.php:37
+msgid "Export"
+msgstr ""
+
+#: admin/partials/requests-page.php:34
+msgid "Export requests to file:"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:412
+msgid "Failed to read file"
+msgstr ""
+
+#: ip-get-logger.php:378 ip-get-logger.php:392
+msgid "File not found"
+msgstr ""
+
+#: admin/partials/logs-page.php:29
+msgid "Filter"
+msgstr ""
+
+#: admin/partials/logs-page.php:25
+msgid "Filter by HTTP code"
+msgstr ""
+
+#: admin/partials/logs-page.php:15
+msgid "Filter by IP"
+msgstr ""
+
+#: admin/partials/logs-page.php:20
+msgid "Filter by URL"
+msgstr ""
+
+#: admin/partials/requests-page.php:53
+msgid "GET Request"
+msgstr ""
+
+#: ip-get-logger.php:172 ip-get-logger.php:254
+#: admin/class-ip-get-logger-admin.php:293 includes/class-ip-get-logger.php:490
+msgid "GET Request Match Found"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:64
+#: admin/class-ip-get-logger-admin.php:65 admin/partials/requests-page.php:2
+msgid "GET Requests Database"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:73
+#: admin/class-ip-get-logger-admin.php:74 admin/partials/logs-page.php:2
+msgid "GET Requests Logs"
+msgstr ""
+
+#: admin/partials/test-url-page.php:86
+msgid "Help"
+msgstr ""
+
+#: admin/partials/logs-page.php:53
+msgid "HTTP code"
+msgstr ""
+
+#: admin/partials/logs-page.php:24
+msgid "HTTP code:"
+msgstr ""
+
+#: admin/partials/test-url-page.php:12
+msgid "https://example.com/wp-content/plugins/any-plugin/readme.txt"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/pekarskyi/ip-get-logger"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://inwebpress.com"
+msgstr ""
+
+#: admin/partials/requests-page.php:26
+msgid "Import"
+msgstr ""
+
+#: admin/partials/requests-page.php:19
+msgid "Import / Export"
+msgstr ""
+
+#: admin/partials/requests-page.php:22
+msgid "Import requests from file (.txt):"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:429
+msgid "Imported %d request"
+msgid_plural "Imported %d requests"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ip-get-logger.php:373
+msgid "Insufficient permissions"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:389
+#: admin/class-ip-get-logger-admin.php:445
+#: admin/class-ip-get-logger-admin.php:483
+#: admin/class-ip-get-logger-admin.php:504
+#: admin/class-ip-get-logger-admin.php:543
+#: admin/class-ip-get-logger-admin.php:592
+msgid "Insufficient permissions to perform this operation"
+msgstr ""
+
+#: ip-get-logger.php:384
+msgid "Invalid file"
+msgstr ""
+
+#. Author of the plugin
+msgid "InwebPress"
+msgstr ""
+
+#: admin/partials/logs-page.php:52
+msgid "IP"
+msgstr ""
+
+#: ip-get-logger.php:180 includes/class-ip-get-logger.php:498
+msgid "IP Address:"
+msgstr ""
+
+#. Name of the plugin
+msgid "IP GET Logger"
+msgstr ""
+
+#: admin/partials/settings-page.php:2
+msgid "IP GET Logger Settings"
+msgstr ""
+
+#: admin/partials/logs-page.php:14
+msgid "IP:"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:146
+msgid "Log Settings"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:492
+msgid "Logs cleared successfully"
+msgstr ""
+
+#: admin/partials/logs-page.php:40
+msgid "Logs List"
+msgstr ""
+
+#: admin/partials/test-url-page.php:31
+msgid "Match Found"
+msgstr ""
+
+#: admin/partials/test-url-page.php:73
+msgid "Matched"
+msgstr ""
+
+#: admin/partials/test-url-page.php:50
+msgid "Matched Pattern"
+msgstr ""
+
+#: admin/partials/test-url-page.php:45
+msgid "Matching Patterns"
+msgstr ""
+
+#: admin/partials/logs-page.php:49
+msgid "Method"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:395
+msgid "No file uploaded"
+msgstr ""
+
+#: admin/partials/test-url-page.php:38
+msgid "No matches found"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:452
+msgid "No requests to export"
+msgstr ""
+
+#: admin/partials/logs-page.php:43
+msgid "No saved logs."
+msgstr ""
+
+#: admin/partials/requests-page.php:47
+msgid "No saved requests."
+msgstr ""
+
+#: admin/partials/test-url-page.php:75
+msgid "Not matched"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:107
+msgid "Notification Settings"
+msgstr ""
+
+#: admin/partials/settings-page.php:27
+msgid "Number of Requests in Database"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:404
+msgid "Only .txt files are allowed"
+msgstr ""
+
+#: admin/partials/logs-page.php:51
+msgid "Pattern"
+msgstr ""
+
+#. Description of the plugin
+msgid "Plugin for tracking GET requests to the site and logging them"
+msgstr ""
+
+#: admin/partials/settings-page.php:36
+msgid "Plugin Information"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:122
+msgid "Recipient Email"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:529
+msgid "Request added successfully"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:512
+#: admin/class-ip-get-logger-admin.php:559
+msgid "Request cannot be empty"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:612
+msgid "Request deleted successfully"
+msgstr ""
+
+#: ip-get-logger.php:179 includes/class-ip-get-logger.php:497
+msgid "Request details:"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:551
+#: admin/class-ip-get-logger-admin.php:600
+msgid "Request not found"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:578
+msgid "Request updated successfully"
+msgstr ""
+
+#: admin/partials/logs-page.php:30
+msgid "Reset Filters"
+msgstr ""
+
+#: admin/partials/requests-page.php:86
+msgid "Save"
+msgstr ""
+
+#: admin/partials/settings-page.php:10
+msgid "Save Settings"
+msgstr ""
+
+#: admin/partials/requests-page.php:44
+msgid "Saved Requests List"
+msgstr ""
+
+#: ip-get-logger.php:368
+msgid "Security error"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:278
+msgid "Send email notifications when a GET request matches"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:82
+#: admin/class-ip-get-logger-admin.php:83
+msgid "Settings"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:375
+msgid "Settings saved successfully"
+msgstr ""
+
+#: admin/partials/test-url-page.php:93
+msgid "Show you which patterns matched and which variants were checked"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:319
+msgid "Specify the number of days to keep logs (0 - never delete)"
+msgstr ""
+
+#: admin/partials/test-url-page.php:23
+msgid "Test Results"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:91
+#: admin/class-ip-get-logger-admin.php:92 admin/partials/test-url-page.php:16
+msgid "Test URL"
+msgstr ""
+
+#: admin/partials/test-url-page.php:26
+msgid "Tested URL"
+msgstr ""
+
+#: admin/partials/test-url-page.php:95
+msgid ""
+"This can help you troubleshoot why certain URLs are not being detected or "
+"logged."
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:518
+#: admin/class-ip-get-logger-admin.php:566
+msgid "This request already exists in the database"
+msgstr ""
+
+#: admin/partials/test-url-page.php:88
+msgid ""
+"This tool allows you to test if a URL would be matched by any of your "
+"configured patterns."
+msgstr ""
+
+#: admin/partials/logs-page.php:50
+msgid "URL"
+msgstr ""
+
+#: admin/partials/test-url-page.php:2
+msgid "URL Matching Test"
+msgstr ""
+
+#: admin/partials/requests-page.php:9 admin/partials/requests-page.php:82
+msgid "URL or request pattern:"
+msgstr ""
+
+#: admin/partials/test-url-page.php:49
+msgid "URL Variant"
+msgstr ""
+
+#: admin/partials/logs-page.php:19
+msgid "URL:"
+msgstr ""
+
+#: admin/partials/test-url-page.php:66
+msgid "URLs Checked"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:303
+msgid "Use {request} to display the request URL"
+msgstr ""
+
+#: ip-get-logger.php:181 includes/class-ip-get-logger.php:499
+msgid "User Agent:"
+msgstr ""
+
+#: admin/partials/settings-page.php:39
+msgid "Version"
+msgstr ""
+
+#: admin/class-ip-get-logger-admin.php:335
+msgid ""
+"Warning! If this option is enabled, all requests and settings will be "
+"deleted along with the plugin!"
+msgstr ""
+
+#: admin/partials/test-url-page.php:89
+msgid "When you enter a URL, the system will:"
+msgstr ""
+
+#: admin/partials/test-url-page.php:34
+msgid "Yes, URL matched one or more patterns"
+msgstr ""

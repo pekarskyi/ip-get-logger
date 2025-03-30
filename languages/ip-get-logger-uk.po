@@ -1,0 +1,543 @@
+# Copyright (C) 2024 WordPress Developer
+# This file is distributed under the same license as the IP GET Logger plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: IP GET Logger 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ip-get-logger\n"
+"Last-Translator: Admin <admin@example.com>\n"
+"Language-Team: Українська\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-03-30T04:00:00+00:00\n"
+"PO-Revision-Date: 2025-03-30 03:38+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: ip-get-logger\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+
+#: admin/partials/requests-page.php:52
+msgid "#"
+msgstr "№"
+
+#: ip-get-logger.php:174 ip-get-logger.php:255
+#: admin/class-ip-get-logger-admin.php:301 includes/class-ip-get-logger.php:492
+msgid "A GET request matching your database has been detected: {request}"
+msgstr "Було виявлено GET-запит, який відповідає базі запитів: {request}"
+
+#: admin/partials/requests-page.php:54
+msgid "Actions"
+msgstr "Дії"
+
+#: admin/partials/requests-page.php:6
+msgid "Add New Request"
+msgstr "Додати новий запит"
+
+#: admin/partials/requests-page.php:13
+msgid "Add Request"
+msgstr "Додати запит"
+
+#: admin/partials/requests-page.php:117
+msgid "An error occurred while adding the request"
+msgstr "Виникла помилка при додаванні запиту"
+
+#: admin/partials/logs-page.php:102
+msgid "An error occurred while clearing logs"
+msgstr "Виникла помилка при очищенні логів\""
+
+#: admin/partials/requests-page.php:143
+msgid "An error occurred while deleting the request"
+msgstr "Виникла помилка при видаленні запиту"
+
+#: admin/partials/requests-page.php:188
+msgid "An error occurred while editing the request"
+msgstr "Виникла помилка при редагуванні запиту"
+
+#: admin/partials/requests-page.php:241
+msgid "An error occurred while exporting requests"
+msgstr "Виникла помилка при експорті запитів"
+
+#: admin/partials/requests-page.php:217
+msgid "An error occurred while importing requests"
+msgstr "Виникла помилка при імпорті запитів"
+
+#: admin/partials/logs-page.php:86
+msgid "Are you sure you want to clear all logs?"
+msgstr "Ви впевнені, що хочете очистити всі логи?"
+
+#: admin/partials/requests-page.php:124
+msgid "Are you sure you want to delete this request?"
+msgstr "Ви впевнені, що хочете видалити цей запит?"
+
+#: admin/class-ip-get-logger-admin.php:153
+msgid "Auto-cleanup logs (days)"
+msgstr "Автоочищення логів (днів)"
+
+#: admin/partials/test-url-page.php:91
+msgid "Break it down into different variants (full URL, path, filename, etc.)"
+msgstr ""
+"Розділить його на різні варіанти (повна URL-адреса, шлях, ім'я файлу тощо)."
+
+#: admin/partials/requests-page.php:87
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: admin/partials/test-url-page.php:92
+msgid "Check each variant against all your patterns"
+msgstr "Перевірить кожен варіант на всіх ваших шаблонах"
+
+#: admin/partials/logs-page.php:36
+msgid "Clear Logs"
+msgstr "Очистити логи"
+
+#: admin/class-ip-get-logger-admin.php:326
+msgid "Configure database parameters"
+msgstr "Налаштуйте параметри для роботи з базою даних"
+
+#: admin/class-ip-get-logger-admin.php:310
+msgid "Configure parameters for logging GET requests"
+msgstr "Налаштуйте параметри для логування GET-запитів"
+
+#: admin/class-ip-get-logger-admin.php:270
+msgid ""
+"Configure parameters for sending email notifications when a GET request "
+"matches"
+msgstr ""
+"Налаштуйте параметри для відправки email-сповіщень при співпадінні GET-запиту"
+
+#: admin/partials/settings-page.php:15
+msgid "Database Information"
+msgstr "Інформація про базу даних"
+
+#: admin/class-ip-get-logger-admin.php:161
+msgid "Database Settings"
+msgstr "Налаштування бази даних"
+
+#: admin/partials/settings-page.php:18
+msgid "Database Table"
+msgstr "Таблиця в базі даних"
+
+#: admin/partials/logs-page.php:48
+msgid "Date & Time"
+msgstr "Дата і час"
+
+#: ip-get-logger.php:182 includes/class-ip-get-logger.php:500
+msgid "Date and Time:"
+msgstr "Дата і час:"
+
+#: admin/partials/logs-page.php:9
+msgid "Date:"
+msgstr "Дата:"
+
+#: admin/partials/requests-page.php:64
+msgid "Delete"
+msgstr "Видалити"
+
+#: admin/class-ip-get-logger-admin.php:168
+msgid "Delete data when uninstalling the plugin"
+msgstr "Видалення даних при видаленні плагіна"
+
+#: admin/class-ip-get-logger-admin.php:334
+msgid "Delete database table when uninstalling the plugin"
+msgstr "Видаляти таблицю з бази даних при видаленні плагіна"
+
+#: admin/partials/requests-page.php:63
+msgid "Edit"
+msgstr "Редагувати"
+
+#: admin/partials/requests-page.php:78
+msgid "Edit GET Request"
+msgstr "Редагувати GET-запит"
+
+#: admin/class-ip-get-logger-admin.php:138
+msgid "Email Message"
+msgstr "Текст повідомлення"
+
+#: admin/class-ip-get-logger-admin.php:130
+msgid "Email Subject"
+msgstr "Тема листа"
+
+#: admin/class-ip-get-logger-admin.php:114
+msgid "Enable Email Notifications"
+msgstr "Увімкнути сповіщення"
+
+#: admin/partials/requests-page.php:10
+msgid "Enter URL or request pattern"
+msgstr "Введіть URL або шаблон запиту"
+
+#: admin/partials/test-url-page.php:9
+msgid "Enter URL to test:"
+msgstr "Введіть URL для перевірки:"
+
+#: admin/partials/requests-page.php:37
+msgid "Export"
+msgstr "Експортувати"
+
+#: admin/partials/requests-page.php:34
+msgid "Export requests to file:"
+msgstr "Експорт запитів у файл:"
+
+#: admin/class-ip-get-logger-admin.php:412
+msgid "Failed to read file"
+msgstr "Не вдалося прочитати файл"
+
+#: ip-get-logger.php:378 ip-get-logger.php:392
+msgid "File not found"
+msgstr "Файл не знайдено"
+
+#: admin/partials/logs-page.php:29
+msgid "Filter"
+msgstr "Фільтрувати"
+
+#: admin/partials/logs-page.php:25
+msgid "Filter by HTTP code"
+msgstr "Фільтр за HTTP-кодом"
+
+#: admin/partials/logs-page.php:15
+msgid "Filter by IP"
+msgstr "Фільтр за IP"
+
+#: admin/partials/logs-page.php:20
+msgid "Filter by URL"
+msgstr "Фільтр за URL"
+
+#: admin/partials/requests-page.php:53
+msgid "GET Request"
+msgstr "GET-запит"
+
+#: ip-get-logger.php:172 ip-get-logger.php:254
+#: admin/class-ip-get-logger-admin.php:293 includes/class-ip-get-logger.php:490
+msgid "GET Request Match Found"
+msgstr "Знайдено співпадіння GET-запиту"
+
+#: admin/class-ip-get-logger-admin.php:64
+#: admin/class-ip-get-logger-admin.php:65 admin/partials/requests-page.php:2
+msgid "GET Requests Database"
+msgstr "База GET-запитів"
+
+#: admin/class-ip-get-logger-admin.php:73
+#: admin/class-ip-get-logger-admin.php:74 admin/partials/logs-page.php:2
+msgid "GET Requests Logs"
+msgstr "Логи GET-запитів"
+
+#: admin/partials/test-url-page.php:86
+msgid "Help"
+msgstr "Довідка"
+
+#: admin/partials/logs-page.php:53
+msgid "HTTP code"
+msgstr "HTTP-код"
+
+#: admin/partials/logs-page.php:24
+msgid "HTTP code:"
+msgstr "HTTP-код:"
+
+#: admin/partials/test-url-page.php:12
+msgid "https://example.com/wp-content/plugins/any-plugin/readme.txt"
+msgstr "https://example.com/"
+
+#. URI of the plugin
+msgid "https://github.com/pekarskyi/ip-get-logger"
+msgstr "https://github.com/pekarskyi/ip-get-logger"
+
+#. Author URI of the plugin
+msgid "https://inwebpress.com"
+msgstr "https://inwebpress.com"
+
+#: admin/partials/requests-page.php:26
+msgid "Import"
+msgstr "Імпортувати"
+
+#: admin/partials/requests-page.php:19
+msgid "Import / Export"
+msgstr "Імпорт / Експорт"
+
+#: admin/partials/requests-page.php:22
+msgid "Import requests from file (.txt):"
+msgstr "Імпорт запитів з файлу (.txt):"
+
+#: admin/class-ip-get-logger-admin.php:429
+msgid "Imported %d request"
+msgid_plural "Imported %d requests"
+msgstr[0] "Імпортовано %d запит"
+msgstr[1] "Імпортовано %d запити"
+msgstr[2] "Імпортовано %d запитів"
+
+#: ip-get-logger.php:373
+msgid "Insufficient permissions"
+msgstr "Недостатньо прав"
+
+#: admin/class-ip-get-logger-admin.php:389
+#: admin/class-ip-get-logger-admin.php:445
+#: admin/class-ip-get-logger-admin.php:483
+#: admin/class-ip-get-logger-admin.php:504
+#: admin/class-ip-get-logger-admin.php:543
+#: admin/class-ip-get-logger-admin.php:592
+msgid "Insufficient permissions to perform this operation"
+msgstr "Недостатньо прав для виконання цієї операції"
+
+#: ip-get-logger.php:384
+msgid "Invalid file"
+msgstr "Недопустимий файл"
+
+#. Author of the plugin
+msgid "InwebPress"
+msgstr "InwebPress"
+
+#: admin/partials/logs-page.php:52
+msgid "IP"
+msgstr "IP"
+
+#: ip-get-logger.php:180 includes/class-ip-get-logger.php:498
+msgid "IP Address:"
+msgstr "IP-адреса:"
+
+#. Name of the plugin
+msgid "IP GET Logger"
+msgstr "IP GET Logger"
+
+#: admin/partials/settings-page.php:2
+msgid "IP GET Logger Settings"
+msgstr "Налаштування IP GET Logger"
+
+#: admin/partials/logs-page.php:14
+msgid "IP:"
+msgstr "IP:"
+
+#: admin/class-ip-get-logger-admin.php:146
+msgid "Log Settings"
+msgstr "Налаштування логів"
+
+#: admin/class-ip-get-logger-admin.php:492
+msgid "Logs cleared successfully"
+msgstr "Логи успішно очищено"
+
+#: admin/partials/logs-page.php:40
+msgid "Logs List"
+msgstr "Список логів"
+
+#: admin/partials/test-url-page.php:31
+msgid "Match Found"
+msgstr "Результат"
+
+#: admin/partials/test-url-page.php:73
+msgid "Matched"
+msgstr "Відповідає"
+
+#: admin/partials/test-url-page.php:50
+msgid "Matched Pattern"
+msgstr "Шаблон"
+
+#: admin/partials/test-url-page.php:45
+msgid "Matching Patterns"
+msgstr "Відповідні шаблони"
+
+#: admin/partials/logs-page.php:49
+msgid "Method"
+msgstr "Метод"
+
+#: admin/class-ip-get-logger-admin.php:395
+msgid "No file uploaded"
+msgstr "Файл не завантажено"
+
+#: admin/partials/test-url-page.php:38
+msgid "No matches found"
+msgstr "Збігів не знайдено"
+
+#: admin/class-ip-get-logger-admin.php:452
+msgid "No requests to export"
+msgstr "Немає запитів для експорту"
+
+#: admin/partials/logs-page.php:43
+msgid "No saved logs."
+msgstr "Немає збережених логів."
+
+#: admin/partials/requests-page.php:47
+msgid "No saved requests."
+msgstr "Немає збережених запитів."
+
+#: admin/partials/test-url-page.php:75
+msgid "Not matched"
+msgstr "Не збігається"
+
+#: admin/class-ip-get-logger-admin.php:107
+msgid "Notification Settings"
+msgstr "Налаштування сповіщень"
+
+#: admin/partials/settings-page.php:27
+msgid "Number of Requests in Database"
+msgstr "Кількість запитів у базі"
+
+#: admin/class-ip-get-logger-admin.php:404
+msgid "Only .txt files are allowed"
+msgstr "Дозволені тільки файли з розширенням .txt"
+
+#: admin/partials/logs-page.php:51
+msgid "Pattern"
+msgstr "Шаблон"
+
+#. Description of the plugin
+msgid "Plugin for tracking GET requests to the site and logging them"
+msgstr "Плагін відстежує та логує спеціальні GET-запити до сайту"
+
+#: admin/partials/settings-page.php:36
+msgid "Plugin Information"
+msgstr "Інформація про плагін"
+
+#: admin/class-ip-get-logger-admin.php:122
+msgid "Recipient Email"
+msgstr "Email отримувача"
+
+#: admin/class-ip-get-logger-admin.php:529
+msgid "Request added successfully"
+msgstr "Запит успішно додано"
+
+#: admin/class-ip-get-logger-admin.php:512
+#: admin/class-ip-get-logger-admin.php:559
+msgid "Request cannot be empty"
+msgstr "Запит не може бути порожнім"
+
+#: admin/class-ip-get-logger-admin.php:612
+msgid "Request deleted successfully"
+msgstr "Запит успішно видалено"
+
+#: ip-get-logger.php:179 includes/class-ip-get-logger.php:497
+msgid "Request details:"
+msgstr "Деталі:"
+
+#: admin/class-ip-get-logger-admin.php:551
+#: admin/class-ip-get-logger-admin.php:600
+msgid "Request not found"
+msgstr "Запит не знайдено"
+
+#: admin/class-ip-get-logger-admin.php:578
+msgid "Request updated successfully"
+msgstr "Запит успішно оновлено"
+
+#: admin/partials/logs-page.php:30
+msgid "Reset Filters"
+msgstr "Скинути фільтри"
+
+#: admin/partials/requests-page.php:86
+msgid "Save"
+msgstr "Зберегти"
+
+#: admin/partials/settings-page.php:10
+msgid "Save Settings"
+msgstr "Зберегти налаштування"
+
+#: admin/partials/requests-page.php:44
+msgid "Saved Requests List"
+msgstr "Список збережених запитів"
+
+#: ip-get-logger.php:368
+msgid "Security error"
+msgstr "Помилка безпеки"
+
+#: admin/class-ip-get-logger-admin.php:278
+msgid "Send email notifications when a GET request matches"
+msgstr "Надсилати сповіщення на email, якщо GET-запит збігається"
+
+#: admin/class-ip-get-logger-admin.php:82
+#: admin/class-ip-get-logger-admin.php:83
+msgid "Settings"
+msgstr "Налаштування"
+
+#: admin/class-ip-get-logger-admin.php:375
+msgid "Settings saved successfully"
+msgstr "Налаштування успішно збережено"
+
+#: admin/partials/test-url-page.php:93
+msgid "Show you which patterns matched and which variants were checked"
+msgstr "Покаже, які шаблони збіглися і які варіанти були перевірені"
+
+#: admin/class-ip-get-logger-admin.php:319
+msgid "Specify the number of days to keep logs (0 - never delete)"
+msgstr "Вкажіть кількість днів для зберігання логів (0 - не видаляти)"
+
+#: admin/partials/test-url-page.php:23
+msgid "Test Results"
+msgstr "Результати тестування"
+
+#: admin/class-ip-get-logger-admin.php:91
+#: admin/class-ip-get-logger-admin.php:92 admin/partials/test-url-page.php:16
+msgid "Test URL"
+msgstr "Перевірити"
+
+#: admin/partials/test-url-page.php:26
+msgid "Tested URL"
+msgstr "Перевірена URL-адреса"
+
+#: admin/partials/test-url-page.php:95
+msgid ""
+"This can help you troubleshoot why certain URLs are not being detected or "
+"logged."
+msgstr ""
+"Це може допомогти вам з'ясувати, чому певні URL-адреси не виявляються або не "
+"реєструються."
+
+#: admin/class-ip-get-logger-admin.php:518
+#: admin/class-ip-get-logger-admin.php:566
+msgid "This request already exists in the database"
+msgstr "Цей запит вже існує в базі"
+
+#: admin/partials/test-url-page.php:88
+msgid ""
+"This tool allows you to test if a URL would be matched by any of your "
+"configured patterns."
+msgstr ""
+"Цей інструмент дозволяє перевірити, чи відповідає URL-адреса будь-якому з "
+"налаштованих шаблонів."
+
+#: admin/partials/logs-page.php:50
+msgid "URL"
+msgstr "URL"
+
+#: admin/partials/test-url-page.php:2
+msgid "URL Matching Test"
+msgstr "Тест на відповідність URL-адреси"
+
+#: admin/partials/requests-page.php:9 admin/partials/requests-page.php:82
+msgid "URL or request pattern:"
+msgstr "URL або шаблон запиту:"
+
+#: admin/partials/test-url-page.php:49
+msgid "URL Variant"
+msgstr "Варіант URL-адреси"
+
+#: admin/partials/logs-page.php:19
+msgid "URL:"
+msgstr "URL:"
+
+#: admin/partials/test-url-page.php:66
+msgid "URLs Checked"
+msgstr "Перевірені URL-адреси"
+
+#: admin/class-ip-get-logger-admin.php:303
+msgid "Use {request} to display the request URL"
+msgstr "Використовуйте {request} для відображення URL запиту"
+
+#: ip-get-logger.php:181 includes/class-ip-get-logger.php:499
+msgid "User Agent:"
+msgstr "User Agent:"
+
+#: admin/partials/settings-page.php:39
+msgid "Version"
+msgstr "Версія"
+
+#: admin/class-ip-get-logger-admin.php:335
+msgid ""
+"Warning! If this option is enabled, all requests and settings will be "
+"deleted along with the plugin!"
+msgstr ""
+"Увага! Якщо цей параметр активовано, всі запити та налаштування будуть "
+"видалені разом з плагіном!"
+
+#: admin/partials/test-url-page.php:89
+msgid "When you enter a URL, the system will:"
+msgstr "Коли ви введете URL-адресу, система зробить наступне:"
+
+#: admin/partials/test-url-page.php:34
+msgid "Yes, URL matched one or more patterns"
+msgstr "Так, URL-адреса відповідає одному або декільком шаблонам"
