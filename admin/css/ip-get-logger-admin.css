@@ -57,6 +57,32 @@
     margin-right: 5px;
 }
 
+.button.green {
+    background-color: #018749;
+    color: #FFF;
+    border: none;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.button.green:hover {
+    background-color: #006A4E;
+    color: #FFF;
+}
+
+.button.red {
+    background-color: #C40233;
+    color: #FFF;
+    border: none;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.button.red:hover {
+    background-color: #A31F34;
+    color: #FFF;
+}
+
 /* Стилі для чергування кольору рядків */
 .ip-get-logger-requests-list tr:nth-child(even) {
     background-color: #E7E7E7;

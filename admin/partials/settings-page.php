@@ -24,7 +24,7 @@
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php echo esc_html__('Number of Requests in Database', 'ip-get-logger'); ?></th>
+                <th scope="row"><?php echo esc_html__('Number of patterns in Database', 'ip-get-logger'); ?></th>
                 <td>
                     <?php echo count($this->get_requests); ?>
                 </td>

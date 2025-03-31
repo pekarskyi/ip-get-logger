@@ -44,6 +44,7 @@ class IP_Get_Logger_Admin {
         add_action('wp_ajax_ip_get_logger_delete_request', array($this, 'ajax_delete_request'));
         add_action('wp_ajax_ip_get_logger_edit_request', array($this, 'ajax_edit_request'));
         add_action('wp_ajax_ip_get_logger_update_from_github', array($this, 'ajax_update_from_github'));
+        add_action('wp_ajax_ip_get_logger_clear_database', array($this, 'ajax_clear_database'));
     }
 
     /**
@@ -55,27 +56,27 @@ class IP_Get_Logger_Admin {
             'IP GET Logger',
             'manage_options',
             'ip-get-logger',
-            array($this, 'display_requests_page'),
+            array($this, 'display_logs_page'),
             'dashicons-list-view',
             100
         );
         
         add_submenu_page(
             'ip-get-logger',
-            __('GET Requests Database', 'ip-get-logger'),
-            __('GET Requests Database', 'ip-get-logger'),
+            __('GET Requests Logs', 'ip-get-logger'),
+            __('GET Requests Logs', 'ip-get-logger'),
             'manage_options',
             'ip-get-logger',
-            array($this, 'display_requests_page')
+            array($this, 'display_logs_page')
         );
         
         add_submenu_page(
             'ip-get-logger',
-            __('GET Requests Logs', 'ip-get-logger'),
-            __('GET Requests Logs', 'ip-get-logger'),
+            __('Patterns', 'ip-get-logger'),
+            __('Patterns', 'ip-get-logger'),
             'manage_options',
-            'ip-get-logger-logs',
-            array($this, 'display_logs_page')
+            'ip-get-logger-db',
+            array($this, 'display_requests_page')
         );
         
         add_submenu_page(
@@ -187,6 +188,50 @@ class IP_Get_Logger_Admin {
         
         // Отримуємо збережені запити
         $get_requests = $this->get_requests;
+        
+        // Зберігаємо повну кількість записів незалежно від пошуку
+        $total_requests_count = count($get_requests);
+        
+        // Отримуємо кількість записів з віддаленого репозиторію
+        $remote_requests_count = $this->get_remote_requests_count();
+        
+        // Параметри пошуку
+        $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+        
+        // Зберігаємо оригінальні індекси при фільтрації
+        $filtered_requests = array();
+        
+        // Фільтруємо запити за пошуковим запитом
+        if (!empty($search)) {
+            foreach ($get_requests as $index => $request) {
+                if (stripos($request, $search) !== false) {
+                    $filtered_requests[] = array(
+                        'index' => $index,
+                        'request' => $request
+                    );
+                }
+            }
+        } else {
+            // Якщо немає пошуку, просто додаємо всі запити з оригінальними індексами
+            foreach ($get_requests as $index => $request) {
+                $filtered_requests[] = array(
+                    'index' => $index,
+                    'request' => $request
+                );
+            }
+        }
+        
+        // Параметри пагінації
+        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 20;
+        $per_page = max(10, min(100, $per_page)); // Обмежуємо значення від 10 до 100
+        
+        $total_items = count($filtered_requests);
+        $total_pages = ceil($total_items / $per_page);
+        $current_page = isset($_GET['paged']) ? max(1, min($total_pages, intval($_GET['paged']))) : 1;
+        
+        // Отримуємо запити для поточної сторінки
+        $offset = ($current_page - 1) * $per_page;
+        $paged_requests = array_slice($filtered_requests, $offset, $per_page);
         
         // Виводимо шаблон
         include(IP_GET_LOGGER_PLUGIN_DIR . 'admin/partials/requests-page.php');
@@ -333,7 +378,7 @@ class IP_Get_Logger_Admin {
     public function delete_table_callback() {
         $delete_table = isset($this->options['delete_table_on_uninstall']) ? intval($this->options['delete_table_on_uninstall']) : 1;
         echo '<label><input type="checkbox" id="delete_table_on_uninstall" name="ip_get_logger_form_settings[delete_table_on_uninstall]" value="1" ' . checked(1, $delete_table, false) . ' /> ' . __('Delete database table when uninstalling the plugin', 'ip-get-logger') . '</label>';
-        echo '<p class="description">' . __('Warning! If this option is enabled, all requests and settings will be deleted along with the plugin!', 'ip-get-logger') . '</p>';
+        echo '<p class="description">' . __('Warning! If this option is enabled, all patterns and settings will be deleted along with the plugin!', 'ip-get-logger') . '</p>';
     }
     
     /**
@@ -427,7 +472,7 @@ class IP_Get_Logger_Admin {
         
         wp_send_json_success(array(
             'message' => sprintf(
-                _n('Imported %d request', 'Imported %d requests', count($lines), 'ip-get-logger'),
+                _n('Imported %d pattern', 'Imported %d patterns', count($lines), 'ip-get-logger'),
                 count($lines)
             ),
             'requests' => $this->get_requests
@@ -450,7 +495,7 @@ class IP_Get_Logger_Admin {
         $get_requests = $this->get_requests;
         
         if (empty($get_requests)) {
-            wp_send_json_error(__('No requests to export', 'ip-get-logger'));
+            wp_send_json_error(__('No patterns to export', 'ip-get-logger'));
             return;
         }
         
@@ -510,13 +555,13 @@ class IP_Get_Logger_Admin {
         $request = isset($_POST['request']) ? sanitize_text_field($_POST['request']) : '';
         
         if (empty($request)) {
-            wp_send_json_error(__('Request cannot be empty', 'ip-get-logger'));
+            wp_send_json_error(__('Pattern cannot be empty', 'ip-get-logger'));
             return;
         }
         
         // Перевіряємо чи запит вже існує
         if (in_array($request, $this->get_requests)) {
-            wp_send_json_error(__('This request already exists in the database', 'ip-get-logger'));
+            wp_send_json_error(__('This pattern already exists in the database', 'ip-get-logger'));
             return;
         }
         
@@ -527,7 +572,7 @@ class IP_Get_Logger_Admin {
         ip_get_logger_update_option('get_requests', $this->get_requests);
         
         wp_send_json_success(array(
-            'message' => __('Request added successfully', 'ip-get-logger'),
+            'message' => __('Pattern added successfully', 'ip-get-logger'),
             'requests' => $this->get_requests
         ));
     }
@@ -548,8 +593,11 @@ class IP_Get_Logger_Admin {
         // Отримуємо індекс запиту
         $index = isset($_POST['index']) ? intval($_POST['index']) : -1;
         
-        if ($index < 0 || !isset($this->get_requests[$index])) {
-            wp_send_json_error(__('Request not found', 'ip-get-logger'));
+        // Отримуємо актуальний список запитів з опцій
+        $all_requests = ip_get_logger_get_option('get_requests', array());
+        
+        if ($index < 0 || !isset($all_requests[$index])) {
+            wp_send_json_error(__('Pattern not found', 'ip-get-logger'));
             return;
         }
         
@@ -557,27 +605,30 @@ class IP_Get_Logger_Admin {
         $request = isset($_POST['request']) ? sanitize_text_field($_POST['request']) : '';
         
         if (empty($request)) {
-            wp_send_json_error(__('Request cannot be empty', 'ip-get-logger'));
+            wp_send_json_error(__('Patterns cannot be empty', 'ip-get-logger'));
             return;
         }
         
         // Перевіряємо чи запит вже існує в іншому індексі
-        foreach ($this->get_requests as $i => $existing_request) {
+        foreach ($all_requests as $i => $existing_request) {
             if ($i != $index && $existing_request === $request) {
-                wp_send_json_error(__('This request already exists in the database', 'ip-get-logger'));
+                wp_send_json_error(__('This pattern already exists in the database', 'ip-get-logger'));
                 return;
             }
         }
         
         // Оновлюємо запит
-        $this->get_requests[$index] = $request;
+        $all_requests[$index] = $request;
         
         // Зберігаємо оновлені запити
-        ip_get_logger_update_option('get_requests', $this->get_requests);
+        ip_get_logger_update_option('get_requests', $all_requests);
+        
+        // Оновлюємо локальний масив запитів
+        $this->get_requests = $all_requests;
         
         wp_send_json_success(array(
-            'message' => __('Request updated successfully', 'ip-get-logger'),
-            'requests' => $this->get_requests
+            'message' => __('Pattern updated successfully', 'ip-get-logger'),
+            'requests' => $all_requests
         ));
     }
     
@@ -597,20 +648,26 @@ class IP_Get_Logger_Admin {
         // Отримуємо індекс запиту
         $index = isset($_POST['index']) ? intval($_POST['index']) : -1;
         
-        if ($index < 0 || !isset($this->get_requests[$index])) {
-            wp_send_json_error(__('Request not found', 'ip-get-logger'));
+        // Отримуємо актуальний список запитів з опцій
+        $all_requests = ip_get_logger_get_option('get_requests', array());
+        
+        if ($index < 0 || !isset($all_requests[$index])) {
+            wp_send_json_error(__('Pattern not found', 'ip-get-logger'));
             return;
         }
         
         // Видаляємо запит
-        array_splice($this->get_requests, $index, 1);
+        array_splice($all_requests, $index, 1);
         
         // Зберігаємо оновлені запити
-        ip_get_logger_update_option('get_requests', $this->get_requests);
+        ip_get_logger_update_option('get_requests', $all_requests);
+        
+        // Оновлюємо локальний масив запитів
+        $this->get_requests = $all_requests;
         
         wp_send_json_success(array(
-            'message' => __('Request deleted successfully', 'ip-get-logger'),
-            'requests' => $this->get_requests
+            'message' => __('Pattern deleted successfully', 'ip-get-logger'),
+            'requests' => $all_requests
         ));
     }
     
@@ -690,7 +747,7 @@ class IP_Get_Logger_Admin {
             
             wp_send_json_success(array(
                 'message' => sprintf(
-                    __('Database updated successfully: %d new requests added, %d duplicates skipped.', 'ip-get-logger'),
+                    __('Database updated successfully: %d new patterns added, %d duplicates skipped.', 'ip-get-logger'),
                     $added_count,
                     $duplicated_count
                 ),
@@ -699,12 +756,33 @@ class IP_Get_Logger_Admin {
         } else {
             wp_send_json_success(array(
                 'message' => sprintf(
-                    __('Your database is up to date. No new requests added. %d duplicates skipped.', 'ip-get-logger'),
+                    __('Your database is up to date. No new patterns added. %d duplicates skipped.', 'ip-get-logger'),
                     $duplicated_count
                 ),
                 'requests' => $current_requests
             ));
         }
+    }
+
+    /**
+     * AJAX-обробник для очищення бази даних
+     */
+    public function ajax_clear_database() {
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('You do not have sufficient permissions to perform this action.', 'ip-get-logger'));
+        }
+        
+        // Очищаємо масив запитів
+        $this->get_requests = array();
+        
+        // Зберігаємо оновлений масив
+        ip_get_logger_update_option('get_requests', array());
+        
+        wp_send_json_success(array(
+            'message' => __('The list of patterns is successfully cleared.', 'ip-get-logger')
+        ));
     }
 
     /**
@@ -755,5 +833,31 @@ class IP_Get_Logger_Admin {
         
         // Виводимо шаблон
         include(IP_GET_LOGGER_PLUGIN_DIR . 'admin/partials/test-url-page.php');
+    }
+
+    /**
+     * Отримання кількості записів з віддаленого репозиторію
+     *
+     * @return int|string Кількість записів або повідомлення про помилку
+     */
+    private function get_remote_requests_count() {
+        $remote_url = 'https://raw.githubusercontent.com/pekarskyi/ip-get-logger-db/main/ip-get-logger-import.txt';
+        
+        $response = wp_remote_get($remote_url);
+        
+        if (is_wp_error($response)) {
+            return __('Error fetching remote data', 'ip-get-logger');
+        }
+        
+        $body = wp_remote_retrieve_body($response);
+        
+        if (empty($body)) {
+            return __('No data available', 'ip-get-logger');
+        }
+        
+        // Розбиваємо текст на рядки та фільтруємо порожні
+        $lines = array_filter(explode("\n", $body));
+        
+        return count($lines);
     }
 } 

@@ -26,14 +26,14 @@
             </div>
             
             <div class="ip-get-logger-filter-controls">
-                <button type="submit" class="button"><?php echo esc_html__('Filter', 'ip-get-logger'); ?></button>
-                <a href="?page=ip-get-logger-logs" class="button"><?php echo esc_html__('Reset Filters', 'ip-get-logger'); ?></a>
+                <button type="submit" class="button button-primary"><?php echo esc_html__('Filter', 'ip-get-logger'); ?></button>
+                <a href="?page=ip-get-logger-logs" class="button button-primary"><?php echo esc_html__('Reset Filters', 'ip-get-logger'); ?></a>
             </div>
         </form>
     </div>
     
     <div class="ip-get-logger-clear-logs">
-        <button id="ip-get-logger-clear-logs-btn" class="button button-secondary"><?php echo esc_html__('Clear Logs', 'ip-get-logger'); ?></button>
+        <button id="ip-get-logger-clear-logs-btn" class="button button-primary"><?php echo esc_html__('Clear Logs', 'ip-get-logger'); ?></button>
     </div>
     
     <div class="ip-get-logger-logs-list">
