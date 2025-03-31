@@ -112,7 +112,6 @@
                 <li><?php echo esc_html__('Check each variant against all your patterns', 'ip-get-logger'); ?></li>
                 <li><?php echo esc_html__('Show you which patterns matched and which variants were checked', 'ip-get-logger'); ?></li>
             </ol>
-            <p><strong><?php echo esc_html__('HTML Tag Testing:', 'ip-get-logger'); ?></strong> <?php echo esc_html__('If you check the "Test with HTML tags" option, ?q=<iframe> will be added to your URL to test special handling of HTML tags.', 'ip-get-logger'); ?></p>
             <p><?php echo esc_html__('This can help you troubleshoot why certain URLs are not being detected or logged.', 'ip-get-logger'); ?></p>
         </div>
     </div>

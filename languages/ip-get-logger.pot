@@ -10,30 +10,30 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-31 09:59+0000\n"
+"POT-Creation-Date: 2025-03-31 12:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: ip-get-logger\n"
 "Language: \n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;"
 
-#: admin/partials/requests-page.php:128
+#: admin/partials/requests-page.php:130
 msgid "#"
 msgstr ""
 
-#: admin/partials/requests-page.php:109 admin/partials/requests-page.php:156
+#: admin/partials/requests-page.php:111 admin/partials/requests-page.php:158
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ip-get-logger.php:158 ip-get-logger.php:246
-#: admin/class-ip-get-logger-admin.php:347 includes/class-ip-get-logger.php:348
+#: ip-get-logger.php:223 ip-get-logger.php:310
+#: admin/class-ip-get-logger-admin.php:347 includes/class-ip-get-logger.php:459
 msgid "A GET request matching your database has been detected: {request}"
 msgstr ""
 
-#: admin/partials/requests-page.php:130
+#: admin/partials/requests-page.php:132
 msgid "Actions"
 msgstr ""
 
@@ -41,11 +41,11 @@ msgstr ""
 msgid "Add New Pattern"
 msgstr ""
 
-#: admin/partials/requests-page.php:13
+#: admin/partials/requests-page.php:14
 msgid "Add Pattern"
 msgstr ""
 
-#: admin/partials/requests-page.php:236
+#: admin/partials/requests-page.php:243
 msgid "An error occurred while adding the pattern"
 msgstr ""
 
@@ -53,27 +53,27 @@ msgstr ""
 msgid "An error occurred while clearing logs"
 msgstr ""
 
-#: admin/partials/requests-page.php:413
+#: admin/partials/requests-page.php:420
 msgid "An error occurred while clearing the list of patterns."
 msgstr ""
 
-#: admin/partials/requests-page.php:262
+#: admin/partials/requests-page.php:269
 msgid "An error occurred while deleting the pattern"
 msgstr ""
 
-#: admin/partials/requests-page.php:307
+#: admin/partials/requests-page.php:314
 msgid "An error occurred while editing the pattern"
 msgstr ""
 
-#: admin/partials/requests-page.php:360
+#: admin/partials/requests-page.php:367
 msgid "An error occurred while exporting patterns"
 msgstr ""
 
-#: admin/partials/requests-page.php:336
+#: admin/partials/requests-page.php:343
 msgid "An error occurred while importing patterns"
 msgstr ""
 
-#: admin/partials/requests-page.php:386
+#: admin/partials/requests-page.php:393
 msgid ""
 "An error occurred while updating the list of patterns from the repository!"
 msgstr ""
@@ -82,11 +82,11 @@ msgstr ""
 msgid "Are you sure you want to clear all logs?"
 msgstr ""
 
-#: admin/partials/requests-page.php:396
+#: admin/partials/requests-page.php:403
 msgid "Are you sure you want to clear the list of patterns?"
 msgstr ""
 
-#: admin/partials/requests-page.php:243
+#: admin/partials/requests-page.php:250
 msgid "Are you sure you want to delete this pattern?"
 msgstr ""
 
@@ -94,15 +94,15 @@ msgstr ""
 msgid "Auto-cleanup logs (days)"
 msgstr ""
 
-#: admin/partials/test-url-page.php:91
+#: admin/partials/test-url-page.php:111
 msgid "Break it down into different variants (full URL, path, filename, etc.)"
 msgstr ""
 
-#: admin/partials/requests-page.php:188
+#: admin/partials/requests-page.php:191
 msgid "Cancel"
 msgstr ""
 
-#: admin/partials/test-url-page.php:92
+#: admin/partials/test-url-page.php:112
 msgid "Check each variant against all your patterns"
 msgstr ""
 
@@ -110,11 +110,11 @@ msgstr ""
 msgid "Clear Logs"
 msgstr ""
 
-#: admin/partials/requests-page.php:74
+#: admin/partials/requests-page.php:75
 msgid "Clear Patterns"
 msgstr ""
 
-#: admin/partials/requests-page.php:70
+#: admin/partials/requests-page.php:71
 msgid "Clear patterns:"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgstr ""
 msgid "Database Table"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:750
+#: admin/class-ip-get-logger-admin.php:756
 msgid ""
 "Database updated successfully: %d new patterns added, %d duplicates skipped."
 msgstr ""
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Date & Time"
 msgstr ""
 
-#: ip-get-logger.php:187 includes/class-ip-get-logger.php:356
+#: ip-get-logger.php:251
 msgid "Date and Time:"
 msgstr ""
 
@@ -161,7 +161,7 @@ msgstr ""
 msgid "Date:"
 msgstr ""
 
-#: admin/partials/requests-page.php:147
+#: admin/partials/requests-page.php:149
 msgid "Delete"
 msgstr ""
 
@@ -173,16 +173,16 @@ msgstr ""
 msgid "Delete database table when uninstalling the plugin"
 msgstr ""
 
-#: admin/partials/requests-page.php:369
+#: admin/partials/requests-page.php:376
 msgid "Do you want to update the list of patterns from the repository?"
 msgstr ""
 
-#: admin/partials/requests-page.php:146
+#: admin/partials/requests-page.php:148
 msgid "Edit"
 msgstr ""
 
-#: admin/partials/requests-page.php:179
-msgid "Edit pattern"
+#: admin/partials/requests-page.php:181
+msgid "Edit GET Pattern"
 msgstr ""
 
 #: admin/class-ip-get-logger-admin.php:140
@@ -193,7 +193,7 @@ msgstr ""
 msgid "Email Subject"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:716
+#: admin/class-ip-get-logger-admin.php:722
 msgid "Empty response from GitHub"
 msgstr ""
 
@@ -209,24 +209,24 @@ msgstr ""
 msgid "Enter URL to test:"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:849
+#: admin/class-ip-get-logger-admin.php:881
 msgid "Error fetching remote data"
 msgstr ""
 
-#: admin/partials/requests-page.php:50
+#: admin/partials/requests-page.php:51
 msgid "Export"
 msgstr ""
 
-#: admin/partials/requests-page.php:47
+#: admin/partials/requests-page.php:48
 msgid "Export patterns to file:"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:706
+#: admin/class-ip-get-logger-admin.php:712
 #, php-format
 msgid "Failed to fetch data from GitHub. HTTP Response Code: %s"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:696
+#: admin/class-ip-get-logger-admin.php:702
 #, php-format
 msgid "Failed to fetch data from GitHub: %s"
 msgstr ""
@@ -235,7 +235,7 @@ msgstr ""
 msgid "Failed to read file"
 msgstr ""
 
-#: ip-get-logger.php:369 ip-get-logger.php:383
+#: ip-get-logger.php:433 ip-get-logger.php:447
 msgid "File not found"
 msgstr ""
 
@@ -255,8 +255,8 @@ msgstr ""
 msgid "Filter by URL"
 msgstr ""
 
-#: ip-get-logger.php:157 ip-get-logger.php:245
-#: admin/class-ip-get-logger-admin.php:339 includes/class-ip-get-logger.php:346
+#: ip-get-logger.php:222 ip-get-logger.php:309
+#: admin/class-ip-get-logger-admin.php:339 includes/class-ip-get-logger.php:458
 msgid "GET Request Match Found"
 msgstr ""
 
@@ -265,8 +265,16 @@ msgstr ""
 msgid "GET Requests Logs"
 msgstr ""
 
-#: admin/partials/test-url-page.php:86
+#: admin/partials/test-url-page.php:106
 msgid "Help"
+msgstr ""
+
+#: admin/partials/test-url-page.php:115
+msgid "HTML Tag Testing:"
+msgstr ""
+
+#: admin/partials/requests-page.php:11 admin/partials/requests-page.php:187
+msgid "HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>"
 msgstr ""
 
 #: admin/partials/logs-page.php:53
@@ -278,7 +286,7 @@ msgid "HTTP code:"
 msgstr ""
 
 #: admin/partials/test-url-page.php:12
-msgid "https://example.com/wp-content/plugins/any-plugin/readme.txt"
+msgid "https://example.com/ or just example.com"
 msgstr ""
 
 #. URI of the plugin
@@ -289,17 +297,23 @@ msgstr ""
 msgid "https://inwebpress.com"
 msgstr ""
 
-#: admin/partials/requests-page.php:19
+#: admin/partials/test-url-page.php:115
+msgid ""
+"If you check the \"Test with HTML tags\" option, ?q=<iframe> will be added "
+"to your URL to test special handling of HTML tags."
+msgstr ""
+
+#: admin/partials/requests-page.php:20
 msgid ""
 "If you discover new malicious GET requests, please inform me so that I can "
 "add them to the patterns database."
 msgstr ""
 
-#: admin/partials/requests-page.php:39
+#: admin/partials/requests-page.php:40
 msgid "Import"
 msgstr ""
 
-#: admin/partials/requests-page.php:35
+#: admin/partials/requests-page.php:36
 msgid "Import patterns from file (.txt):"
 msgstr ""
 
@@ -309,7 +323,7 @@ msgid_plural "Imported %d patterns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ip-get-logger.php:364
+#: ip-get-logger.php:428
 msgid "Insufficient permissions"
 msgstr ""
 
@@ -317,13 +331,13 @@ msgstr ""
 #: admin/class-ip-get-logger-admin.php:491
 #: admin/class-ip-get-logger-admin.php:529
 #: admin/class-ip-get-logger-admin.php:550
-#: admin/class-ip-get-logger-admin.php:589
-#: admin/class-ip-get-logger-admin.php:644
-#: admin/class-ip-get-logger-admin.php:683
+#: admin/class-ip-get-logger-admin.php:592
+#: admin/class-ip-get-logger-admin.php:650
+#: admin/class-ip-get-logger-admin.php:689
 msgid "Insufficient permissions to perform this operation"
 msgstr ""
 
-#: ip-get-logger.php:375
+#: ip-get-logger.php:439
 msgid "Invalid file"
 msgstr ""
 
@@ -335,7 +349,7 @@ msgstr ""
 msgid "IP"
 msgstr ""
 
-#: ip-get-logger.php:185 includes/class-ip-get-logger.php:354
+#: ip-get-logger.php:249
 msgid "IP Address:"
 msgstr ""
 
@@ -351,7 +365,7 @@ msgstr ""
 msgid "IP:"
 msgstr ""
 
-#: admin/partials/requests-page.php:99
+#: admin/partials/requests-page.php:101
 msgid "Items per page:"
 msgstr ""
 
@@ -367,19 +381,19 @@ msgstr ""
 msgid "Logs List"
 msgstr ""
 
-#: admin/partials/test-url-page.php:31
+#: admin/partials/test-url-page.php:39
 msgid "Match Found"
 msgstr ""
 
-#: admin/partials/test-url-page.php:73
+#: admin/partials/test-url-page.php:93
 msgid "Matched"
 msgstr ""
 
-#: admin/partials/test-url-page.php:50
+#: admin/partials/test-url-page.php:58
 msgid "Matched Pattern"
 msgstr ""
 
-#: admin/partials/test-url-page.php:45
+#: admin/partials/test-url-page.php:53
 msgid "Matching Patterns"
 msgstr ""
 
@@ -387,7 +401,7 @@ msgstr ""
 msgid "Method"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:855
+#: admin/class-ip-get-logger-admin.php:887
 msgid "No data available"
 msgstr ""
 
@@ -395,7 +409,7 @@ msgstr ""
 msgid "No file uploaded"
 msgstr ""
 
-#: admin/partials/test-url-page.php:38
+#: admin/partials/test-url-page.php:46
 msgid "No matches found"
 msgstr ""
 
@@ -407,11 +421,11 @@ msgstr ""
 msgid "No saved logs."
 msgstr ""
 
-#: admin/partials/requests-page.php:84
+#: admin/partials/requests-page.php:85
 msgid "No saved patterns."
 msgstr ""
 
-#: admin/partials/test-url-page.php:75
+#: admin/partials/test-url-page.php:95
 msgid "Not matched"
 msgstr ""
 
@@ -423,7 +437,7 @@ msgstr ""
 msgid "Number of patterns in Database"
 msgstr ""
 
-#: admin/partials/requests-page.php:22
+#: admin/partials/requests-page.php:23
 msgid "on Github - Issues - New issue"
 msgstr ""
 
@@ -431,28 +445,29 @@ msgstr ""
 msgid "Only .txt files are allowed"
 msgstr ""
 
-#: admin/partials/logs-page.php:51 admin/partials/requests-page.php:129
+#: admin/partials/logs-page.php:51 admin/partials/requests-page.php:131
 msgid "Pattern"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:575
+#: admin/class-ip-get-logger-admin.php:578
 msgid "Pattern added successfully"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:558
+#: admin/class-ip-get-logger-admin.php:561
+#: admin/class-ip-get-logger-admin.php:614
 msgid "Pattern cannot be empty"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:669
+#: admin/class-ip-get-logger-admin.php:675
 msgid "Pattern deleted successfully"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:600
-#: admin/class-ip-get-logger-admin.php:655
+#: admin/class-ip-get-logger-admin.php:603
+#: admin/class-ip-get-logger-admin.php:661
 msgid "Pattern not found"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:630
+#: admin/class-ip-get-logger-admin.php:636
 msgid "Pattern updated successfully"
 msgstr ""
 
@@ -461,12 +476,12 @@ msgstr ""
 msgid "Patterns"
 msgstr ""
 
-#: admin/partials/requests-page.php:59 admin/partials/requests-page.php:71
+#: admin/partials/requests-page.php:60 admin/partials/requests-page.php:72
 msgid "patterns"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:608
-msgid "Patterns cannot be empty"
+#: admin/partials/test-url-page.php:75
+msgid "Patterns with HTML Tags"
 msgstr ""
 
 #. Description of the plugin
@@ -481,11 +496,11 @@ msgstr ""
 msgid "Recipient Email"
 msgstr ""
 
-#: admin/partials/requests-page.php:20
+#: admin/partials/requests-page.php:21
 msgid "Report a new malicious pattern:"
 msgstr ""
 
-#: ip-get-logger.php:184 includes/class-ip-get-logger.php:353
+#: ip-get-logger.php:248
 msgid "Request details:"
 msgstr ""
 
@@ -493,7 +508,7 @@ msgstr ""
 msgid "Reset Filters"
 msgstr ""
 
-#: admin/partials/requests-page.php:187
+#: admin/partials/requests-page.php:190
 msgid "Save"
 msgstr ""
 
@@ -501,19 +516,19 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: admin/partials/requests-page.php:81
+#: admin/partials/requests-page.php:82
 msgid "Saved Patterns List"
 msgstr ""
 
-#: admin/partials/requests-page.php:92
+#: admin/partials/requests-page.php:94
 msgid "Search"
 msgstr ""
 
-#: admin/partials/requests-page.php:91
+#: admin/partials/requests-page.php:93
 msgid "Search patterns..."
 msgstr ""
 
-#: ip-get-logger.php:359
+#: ip-get-logger.php:423
 msgid "Security error"
 msgstr ""
 
@@ -521,7 +536,7 @@ msgstr ""
 msgid "Send email notifications when a GET request matches"
 msgstr ""
 
-#: admin/partials/requests-page.php:23
+#: admin/partials/requests-page.php:24
 msgid "send me an email:"
 msgstr ""
 
@@ -534,7 +549,7 @@ msgstr ""
 msgid "Settings saved successfully"
 msgstr ""
 
-#: admin/partials/test-url-page.php:93
+#: admin/partials/test-url-page.php:113
 msgid "Show you which patterns matched and which variants were checked"
 msgstr ""
 
@@ -542,51 +557,59 @@ msgstr ""
 msgid "Specify the number of days to keep logs (0 - never delete)"
 msgstr ""
 
-#: admin/partials/test-url-page.php:23
+#: admin/partials/test-url-page.php:31
 msgid "Test Results"
 msgstr ""
 
 #: admin/class-ip-get-logger-admin.php:93
-#: admin/class-ip-get-logger-admin.php:94 admin/partials/test-url-page.php:16
+#: admin/class-ip-get-logger-admin.php:94 admin/partials/test-url-page.php:24
 msgid "Test URL"
 msgstr ""
 
-#: admin/partials/test-url-page.php:26
+#: admin/partials/test-url-page.php:19
+msgid "Test with HTML tags (will add ?q=<iframe> to URL)"
+msgstr ""
+
+#: admin/partials/test-url-page.php:34
 msgid "Tested URL"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:784
+#: admin/class-ip-get-logger-admin.php:790
 msgid "The list of patterns is successfully cleared."
 msgstr ""
 
-#: admin/partials/requests-page.php:18
+#: admin/partials/requests-page.php:19
 msgid ""
 "The plugin does not track or collect anonymous data about websites, users, "
 "or requests."
 msgstr ""
 
-#: admin/partials/test-url-page.php:95
+#: admin/partials/test-url-page.php:76
+msgid "These patterns in your database contain HTML tags:"
+msgstr ""
+
+#: admin/partials/test-url-page.php:116
 msgid ""
 "This can help you troubleshoot why certain URLs are not being detected or "
 "logged."
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:564
-#: admin/class-ip-get-logger-admin.php:615
+#: admin/class-ip-get-logger-admin.php:567
+#: admin/class-ip-get-logger-admin.php:621
 msgid "This pattern already exists in the database"
 msgstr ""
 
-#: admin/partials/test-url-page.php:88
+#: admin/partials/test-url-page.php:108
 msgid ""
 "This tool allows you to test if a URL would be matched by any of your "
 "configured patterns."
 msgstr ""
 
-#: admin/partials/requests-page.php:62
+#: admin/partials/requests-page.php:63
 msgid "Update patterns"
 msgstr ""
 
-#: admin/partials/requests-page.php:58
+#: admin/partials/requests-page.php:59
 msgid "Update patterns from repository:"
 msgstr ""
 
@@ -598,11 +621,11 @@ msgstr ""
 msgid "URL Matching Test"
 msgstr ""
 
-#: admin/partials/requests-page.php:9 admin/partials/requests-page.php:183
+#: admin/partials/requests-page.php:9 admin/partials/requests-page.php:185
 msgid "URL or request pattern:"
 msgstr ""
 
-#: admin/partials/test-url-page.php:49
+#: admin/partials/test-url-page.php:57
 msgid "URL Variant"
 msgstr ""
 
@@ -610,7 +633,7 @@ msgstr ""
 msgid "URL:"
 msgstr ""
 
-#: admin/partials/test-url-page.php:66
+#: admin/partials/test-url-page.php:86
 msgid "URLs Checked"
 msgstr ""
 
@@ -618,7 +641,7 @@ msgstr ""
 msgid "Use {request} to display the request URL"
 msgstr ""
 
-#: ip-get-logger.php:186 includes/class-ip-get-logger.php:355
+#: ip-get-logger.php:250
 msgid "User Agent:"
 msgstr ""
 
@@ -632,23 +655,23 @@ msgid ""
 "deleted along with the plugin!"
 msgstr ""
 
-#: admin/partials/test-url-page.php:89
+#: admin/partials/test-url-page.php:109
 msgid "When you enter a URL, the system will:"
 msgstr ""
 
-#: admin/partials/requests-page.php:24
+#: admin/partials/requests-page.php:25
 msgid "write to me in Telegram"
 msgstr ""
 
-#: admin/partials/test-url-page.php:34
+#: admin/partials/test-url-page.php:42
 msgid "Yes, URL matched one or more patterns"
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:774
+#: admin/class-ip-get-logger-admin.php:780
 msgid "You do not have sufficient permissions to perform this action."
 msgstr ""
 
-#: admin/class-ip-get-logger-admin.php:759
+#: admin/class-ip-get-logger-admin.php:765
 msgid ""
 "Your database is up to date. No new patterns added. %d duplicates skipped."
 msgstr ""
