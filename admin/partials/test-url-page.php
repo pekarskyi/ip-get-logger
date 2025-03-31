@@ -9,7 +9,15 @@
                 <label for="test_url"><?php echo esc_html__('Enter URL to test:', 'ip-get-logger'); ?></label>
                 <input type="text" id="test_url" name="test_url" class="regular-text" 
                     value="<?php echo isset($_POST['test_url']) ? esc_attr($_POST['test_url']) : ''; ?>" 
-                    placeholder="<?php echo esc_attr__('https://example.com/wp-content/plugins/any-plugin/readme.txt', 'ip-get-logger'); ?>" required>
+                    placeholder="<?php echo esc_attr__('https://example.com/ or just example.com', 'ip-get-logger'); ?>" required>
+            </div>
+            
+            <div class="ip-get-logger-form-group">
+                <label for="test_html_tag" class="checkbox-label">
+                    <input type="checkbox" id="test_html_tag" name="test_html_tag" 
+                        <?php checked(isset($_POST['test_html_tag'])); ?>>
+                    <?php echo esc_html__('Test with HTML tags (will add ?q=<iframe> to URL)', 'ip-get-logger'); ?>
+                </label>
             </div>
             
             <div class="ip-get-logger-form-group">
@@ -62,6 +70,18 @@
                 </div>
             <?php endif; ?>
             
+            <?php if (!empty($test_results['html_tag_patterns'])) : ?>
+                <div class="ip-get-logger-result-section">
+                    <h3><?php echo esc_html__('Patterns with HTML Tags', 'ip-get-logger'); ?></h3>
+                    <p><?php echo esc_html__('These patterns in your database contain HTML tags:', 'ip-get-logger'); ?></p>
+                    <ul class="ip-get-logger-html-patterns">
+                        <?php foreach ($test_results['html_tag_patterns'] as $pattern) : ?>
+                            <li><code><?php echo esc_html($pattern); ?></code></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            
             <div class="ip-get-logger-result-section">
                 <h3><?php echo esc_html__('URLs Checked', 'ip-get-logger'); ?></h3>
                 <div class="ip-get-logger-urls-checked">
@@ -92,6 +112,7 @@
                 <li><?php echo esc_html__('Check each variant against all your patterns', 'ip-get-logger'); ?></li>
                 <li><?php echo esc_html__('Show you which patterns matched and which variants were checked', 'ip-get-logger'); ?></li>
             </ol>
+            <p><strong><?php echo esc_html__('HTML Tag Testing:', 'ip-get-logger'); ?></strong> <?php echo esc_html__('If you check the "Test with HTML tags" option, ?q=<iframe> will be added to your URL to test special handling of HTML tags.', 'ip-get-logger'); ?></p>
             <p><?php echo esc_html__('This can help you troubleshoot why certain URLs are not being detected or logged.', 'ip-get-logger'); ?></p>
         </div>
     </div>
@@ -105,6 +126,12 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+}
+.checkbox-label {
+    font-weight: normal !important;
+    display: flex !important;
+    align-items: center;
+    gap: 5px;
 }
 .ip-get-logger-test-results {
     margin-top: 30px;
@@ -124,15 +151,37 @@
     color: red;
     font-weight: bold;
 }
-.ip-get-logger-urls-checked ul {
+.ip-get-logger-urls-checked ul,
+.ip-get-logger-html-patterns,
+.ip-get-logger-patterns-list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
-.ip-get-logger-urls-checked li {
+.ip-get-logger-urls-checked li,
+.ip-get-logger-patterns-list li {
     margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 .ip-get-logger-help-section {
     margin-top: 30px;
+}
+.ip-get-logger-html-tag-icon {
+    color: #0073aa;
+}
+.ip-get-logger-add-html-pattern {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+#add-html-pattern-result.success {
+    color: green;
+    font-weight: bold;
+}
+#add-html-pattern-result.error {
+    color: red;
+    font-weight: bold;
 }
 </style> 

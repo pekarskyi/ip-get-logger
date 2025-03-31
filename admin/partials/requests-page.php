@@ -8,6 +8,7 @@
                 <div class="form-group">
                     <label for="get-request"><?php echo esc_html__('URL or request pattern:', 'ip-get-logger'); ?></label>
                     <input type="text" id="get-request" name="get-request" class="regular-text" placeholder="<?php echo esc_attr__('Enter URL or request pattern', 'ip-get-logger'); ?>" required>
+                    <p class="description"><?php echo esc_html__('HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>', 'ip-get-logger'); ?></p>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="button button-primary"><?php echo esc_html__('Add Pattern', 'ip-get-logger'); ?></button>
@@ -142,7 +143,7 @@
                     ?>
                         <tr>
                             <td><?php echo $page_offset + $index + 1; ?></td>
-                            <td data-request="<?php echo esc_attr($request); ?>"><?php echo esc_html($request); ?></td>
+                            <td data-request="<?php echo esc_attr($request); ?>"><?php echo htmlspecialchars($request); ?></td>
                             <td>
                                 <button class="button button-small ip-get-logger-edit-btn" data-index="<?php echo $original_index; ?>"><?php echo esc_html__('Edit', 'ip-get-logger'); ?></button>
                                 <button class="button button-small ip-get-logger-delete-btn" data-index="<?php echo $original_index; ?>"><?php echo esc_html__('Delete', 'ip-get-logger'); ?></button>
@@ -177,12 +178,13 @@
 <div id="ip-get-logger-edit-modal" class="ip-get-logger-modal" style="display: none;">
     <div class="ip-get-logger-modal-content">
         <span class="ip-get-logger-modal-close">&times;</span>
-        <h3><?php echo esc_html__('Edit pattern', 'ip-get-logger'); ?></h3>
+        <h3><?php echo esc_html__('Edit GET Pattern', 'ip-get-logger'); ?></h3>
         <form id="ip-get-logger-edit-form">
             <input type="hidden" id="edit-request-index" name="edit-request-index">
             <div class="form-group">
                 <label for="edit-request"><?php echo esc_html__('URL or request pattern:', 'ip-get-logger'); ?></label>
                 <input type="text" id="edit-request" name="edit-request" class="regular-text" required>
+                <p class="description"><?php echo esc_html__('HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>', 'ip-get-logger'); ?></p>
             </div>
             <div class="form-group">
                 <button type="submit" class="button button-primary"><?php echo esc_html__('Save', 'ip-get-logger'); ?></button>

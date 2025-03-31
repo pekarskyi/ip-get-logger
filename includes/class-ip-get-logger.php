@@ -54,45 +54,114 @@ class IP_Get_Logger {
     }
 
     /**
-     * Перевірка GET-запитів
+     * Перевірка запиту на відповідність шаблонам
+     *
+     * @param WP_REST_Request|null $request Запит для перевірки (лише для REST API)
+     * @return boolean True, якщо запит відповідає шаблону
      */
-    public function check_request() {
+    public function check_request($request = null) {
         global $ip_get_logger_processed_requests;
         
-        // Отримуємо URL запиту
-        $request_url = $this->get_current_url();
+        // Отримуємо дані запиту
+        $request_method = $_SERVER['REQUEST_METHOD'];
+        $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+        
+        // Отримуємо повний URL запиту
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+        $request_url = $protocol . '://' . $host . $request_uri;
+        
+        // Декодуємо URL для порівняння з патернами, що містять HTML-теги
+        $decoded_request_url = urldecode($request_url);
+        $double_decoded_url = urldecode($decoded_request_url);
         
         // Якщо цей URL вже було оброблено, пропускаємо
-        if (in_array($request_url, $ip_get_logger_processed_requests)) {
-            return;
+        if (isset($ip_get_logger_processed_requests) && in_array($request_url, $ip_get_logger_processed_requests)) {
+            return false;
         }
         
-        // Перевіряємо метод запиту
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            return;
+        // Ініціалізуємо масив оброблених запитів, якщо він не існує
+        if (!isset($ip_get_logger_processed_requests)) {
+            $ip_get_logger_processed_requests = array();
         }
         
-        // Визначаємо через який хук зараз виконується
-        $current_hook = current_filter();
+        // Перевіряємо чи відстежуємо всі запити або лише GET
+        $track_get_only = ip_get_logger_get_option('track_get_only', false);
         
-        // Додаємо URL до оброблених
-        $ip_get_logger_processed_requests[] = $request_url;
+        if ($track_get_only && $request_method !== 'GET') {
+            return false;
+        }
         
-        // Перевіряємо URL на співпадіння з шаблонами
-        $urls_to_check = $this->get_urls_to_check($request_url);
+        // Отримуємо шаблони для перевірки
+        $get_requests = ip_get_logger_get_option('get_requests', array());
         
-        foreach ($urls_to_check as $url) {
-            $match = $this->match_request($url);
-            if ($match) {
-                // Логуємо запит
-                $this->log_request($request_url, $match, $current_hook);
-                
-                // Надсилаємо сповіщення
-                $this->send_notification($request_url);
-                
-                return;
+        // Створюємо масив URL для перевірки
+        $urls_to_check = array($request_url, $decoded_request_url, $double_decoded_url);
+        
+        // Якщо це REST API запит, додатково перевіряємо URL без базового шляху REST API
+        if ($request instanceof WP_REST_Request) {
+            $rest_url = $request->get_route();
+            $decoded_rest_url = urldecode($rest_url);
+            $double_decoded_rest_url = urldecode($decoded_rest_url);
+            
+            $urls_to_check[] = $rest_url;
+            $urls_to_check[] = $decoded_rest_url;
+            $urls_to_check[] = $double_decoded_rest_url;
+        }
+        
+        // Перевіряємо всі шаблони
+        $matched_pattern = false;
+        
+        foreach ($get_requests as $pattern) {
+            // Перевіряємо за допомогою методу match_request
+            if ($this->match_request($request_url) || 
+                $this->match_request($decoded_request_url) || 
+                $this->match_request($double_decoded_url)) {
+                $matched_pattern = $this->match_request($request_url) ?: 
+                                   $this->match_request($decoded_request_url) ?: 
+                                   $this->match_request($double_decoded_url);
+                break;
             }
         }
+        
+        // Якщо знайдено відповідність шаблону
+        if ($matched_pattern) {
+            // Додаємо URL до оброблених
+            $ip_get_logger_processed_requests[] = $request_url;
+            
+            // Отримуємо статус-код відповіді
+            $status_code = http_response_code();
+            
+            // Записуємо в лог
+            $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
+            
+            // Перевіряємо чи існує директорія для логів
+            if (!file_exists(IP_GET_LOGGER_LOGS_DIR)) {
+                wp_mkdir_p(IP_GET_LOGGER_LOGS_DIR);
+            }
+            
+            $log_data = array(
+                'method' => $request_method,
+                'url' => $request_url,
+                'matched_pattern' => $matched_pattern,
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+                'status_code' => $status_code,
+                'timestamp' => current_time('mysql'),
+                'hook' => current_filter()
+            );
+            
+            // Записуємо в лог-файл
+            $log_entry = json_encode($log_data) . PHP_EOL;
+            file_put_contents($log_file, $log_entry, FILE_APPEND);
+            
+            // Відправляємо сповіщення, якщо потрібно
+            $this->maybe_send_notification($request_url);
+            
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -105,16 +174,64 @@ class IP_Get_Logger {
         // Отримуємо шаблони для перевірки
         $get_requests = ip_get_logger_get_option('get_requests', array());
         
+        // Декодуємо URL для порівняння з патернами, що містять HTML-теги
+        $decoded_url = urldecode($url);
+        
+        // Додаткове декодування для випадків подвійного кодування
+        $double_decoded_url = urldecode($decoded_url);
+        
         foreach ($get_requests as $pattern) {
             // Перевіряємо пряме співпадіння
-            if (strpos($url, $pattern) !== false) {
+            if (strpos($url, $pattern) !== false || 
+                strpos($decoded_url, $pattern) !== false || 
+                strpos($double_decoded_url, $pattern) !== false) {
                 return $pattern;
+            }
+            
+            // Спеціальна обробка для патернів, які містять HTML-теги
+            if (strpos($pattern, '<') !== false || strpos($pattern, '>') !== false) {
+                // Перевіряємо пряме співпадіння без preg_quote, щоб збереглися HTML-теги
+                $pattern_regex = str_replace('/', '\/', $pattern);
+                
+                if (preg_match('/' . $pattern_regex . '/', $url) || 
+                    preg_match('/' . $pattern_regex . '/', $decoded_url) ||
+                    preg_match('/' . $pattern_regex . '/', $double_decoded_url)) {
+                    return $pattern;
+                }
+                
+                // Додаткова перевірка для URL-кодованих тегів
+                $encoded_pattern = str_replace(['<', '>'], ['%3C', '%3E'], $pattern);
+                $partial_encoded_pattern_1 = str_replace('<', '%3C', $pattern);
+                $partial_encoded_pattern_2 = str_replace('>', '%3E', $pattern);
+                
+                if (strpos($url, $encoded_pattern) !== false || 
+                    strpos($url, $partial_encoded_pattern_1) !== false || 
+                    strpos($url, $partial_encoded_pattern_2) !== false) {
+                    return $pattern;
+                }
+                
+                // Додаткова перевірка для подвійного URL-кодування
+                $double_encoded_pattern = str_replace(
+                    ['<', '>'], 
+                    ['%253C', '%253E'], 
+                    $pattern
+                );
+                
+                if (strpos($url, $double_encoded_pattern) !== false) {
+                    return $pattern;
+                }
             }
             
             // Перевіряємо шаблони з зірочками
             if (strpos($pattern, '*') !== false) {
-                $pattern_regex = str_replace('*', '.*', $pattern);
-                if (preg_match('/' . preg_quote($pattern_regex, '/') . '/', $url)) {
+                // Екрануємо все, крім зірочок, для використання в регулярному виразі
+                $pattern_safe = preg_quote($pattern, '/');
+                // Замінюємо зірочки на .* (будь-які символи)
+                $pattern_regex = str_replace('\*', '.*', $pattern_safe);
+                
+                if (preg_match('/' . $pattern_regex . '/', $url) || 
+                   preg_match('/' . $pattern_regex . '/', $decoded_url) ||
+                   preg_match('/' . $pattern_regex . '/', $double_decoded_url)) {
                     return $pattern;
                 }
             }
@@ -326,41 +443,43 @@ class IP_Get_Logger {
     }
 
     /**
-     * Відправка сповіщення
-     *
-     * @param string $url URL запиту
-     * @return bool Результат відправки
+     * Відправляє сповіщення про збіг шаблону, якщо це налаштовано
+     * 
+     * @param string $request_url URL, який відповідає шаблону
      */
-    private function send_notification($url) {
-        // Перевіряємо наявність адреси отримувача
-        if (empty($this->options['email_recipient'])) {
-            return false;
+    private function maybe_send_notification($request_url) {
+        // Перевіряємо, чи потрібно відправляти сповіщення
+        $settings = ip_get_logger_get_option('settings', array());
+        $send_notifications = isset($settings['send_notifications']) ? $settings['send_notifications'] : 1;
+        
+        if ($send_notifications && !empty($settings['email_recipient'])) {
+            // Підготовка даних для відправки
+            $to = $settings['email_recipient'];
+            $subject = isset($settings['email_subject']) ? $settings['email_subject'] : __('GET Request Match Found', 'ip-get-logger');
+            $message_template = isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger');
+            
+            // Замінюємо змінні у повідомленні
+            $message = str_replace(
+                array('{request}', '{ip}', '{date}', '{time}', '{user_agent}'),
+                array(
+                    $request_url,
+                    $_SERVER['REMOTE_ADDR'],
+                    current_time('Y-m-d'),
+                    current_time('H:i:s'),
+                    isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided'
+                ),
+                $message_template
+            );
+            
+            // Встановлюємо заголовки
+            $headers = array(
+                'Content-Type: text/html; charset=UTF-8',
+                'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>'
+            );
+            
+            // Відправляємо повідомлення
+            wp_mail($to, $subject, $message, $headers);
         }
-        
-        // Перевіряємо наявність опції для відправки сповіщень
-        if (isset($this->options['send_notifications']) && $this->options['send_notifications'] == 0) {
-            return false;
-        }
-        
-        $to = $this->options['email_recipient'];
-        $subject = isset($this->options['email_subject']) ? $this->options['email_subject'] : __('GET Request Match Found', 'ip-get-logger');
-        
-        $message = isset($this->options['email_message']) ? $this->options['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger');
-        $message = str_replace('{request}', $url, $message);
-        
-        // Додаємо додаткову інформацію до повідомлення
-        $message .= '<br><br>';
-        $message .= __('Request details:', 'ip-get-logger') . '<br>';
-        $message .= __('IP Address:', 'ip-get-logger') . ' ' . $this->get_client_ip() . '<br>';
-        $message .= __('User Agent:', 'ip-get-logger') . ' ' . (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided') . '<br>';
-        $message .= __('Date and Time:', 'ip-get-logger') . ' ' . current_time('mysql') . '<br>';
-        
-        $headers = array('Content-Type: text/html; charset=UTF-8');
-        
-        // Відправка електронного листа
-        $mail_sent = wp_mail($to, $subject, $message, $headers);
-        
-        return $mail_sent;
     }
 
     /**
@@ -432,6 +551,12 @@ class IP_Get_Logger {
         $parsed_url = parse_url($test_url);
         $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
         $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+        $query = isset($parsed_url['query']) ? $parsed_url['query'] : '';
+        
+        // Повний URL та його декодовані версії
+        $full_path = $path . ($query ? '?' . $query : '');
+        $decoded_full_path = urldecode($full_path);
+        $double_decoded_full_path = urldecode($decoded_full_path);
         
         // Очищаємо шлях від / на початку
         $path_without_domain = ltrim($path, '/');
@@ -450,23 +575,69 @@ class IP_Get_Logger {
             $additional_paths[] = $current_path;
         }
         
-        // Додаємо варіанти з readme.txt окремо, оскільки це часто шукають
-        if ($filename === 'readme.txt') {
-            $additional_paths[] = 'wp-content/plugins/*/' . $filename;
-            $additional_paths[] = '*/' . $filename;
-            $additional_paths[] = '*' . $filename;
+        // Додаємо запит, якщо він є
+        if (!empty($query)) {
+            $query_part = '?' . $query;
+            $decoded_query = urldecode($query_part);
+            $double_decoded_query = urldecode($decoded_query);
+            
+            $additional_paths[] = $query_part;
+            $additional_paths[] = $decoded_query;
+            $additional_paths[] = $double_decoded_query;
+            
+            // Додаємо варіанти з HTML-тегами в запиті
+            if (strpos($query, '<') !== false || strpos($query, '>') !== false || 
+                strpos($decoded_query, '<') !== false || strpos($decoded_query, '>') !== false ||
+                strpos($double_decoded_query, '<') !== false || strpos($double_decoded_query, '>') !== false) {
+                
+                // Додаємо URL з повним запитом
+                $additional_paths[] = $path . $query_part;
+                $additional_paths[] = $path . $decoded_query;
+                $additional_paths[] = $path . $double_decoded_query;
+                
+                // Додаємо тільки запит для перевірки
+                $additional_paths[] = $query;
+                $additional_paths[] = urldecode($query);
+                $additional_paths[] = urldecode(urldecode($query));
+                
+                // Додаємо варіанти з закодованими HTML-тегами
+                if (strpos($query, '<') !== false || strpos($query, '>') !== false) {
+                    $encoded_query = str_replace(['<', '>'], ['%3C', '%3E'], $query);
+                    $additional_paths[] = '?' . $encoded_query;
+                    $additional_paths[] = $encoded_query;
+                }
+                
+                if (strpos($decoded_query, '<') !== false || strpos($decoded_query, '>') !== false) {
+                    $encoded_decoded_query = str_replace(['<', '>'], ['%3C', '%3E'], urldecode($query));
+                    $additional_paths[] = '?' . $encoded_decoded_query;
+                    $additional_paths[] = $encoded_decoded_query;
+                }
+            }
         }
         
         // Створюємо список URL для перевірки
         $urls_to_check = array_merge(
             array(
-                $test_url,          // Повний URL
-                $path,              // Шлях
-                $path_without_domain, // Шлях без домену
-                $filename           // Тільки ім'я файлу
+                $test_url,                // Повний URL
+                $full_path,               // Повний шлях з запитом
+                $decoded_full_path,       // Декодований повний шлях
+                $double_decoded_full_path, // Двічі декодований повний шлях
+                $path,                    // Шлях
+                $path_without_domain,     // Шлях без домену
+                $filename                 // Тільки ім'я файлу
             ),
             $additional_paths
         );
+        
+        // Додаємо специфічний паттерн для запиту з iframe
+        if (strpos($test_url, 'iframe') !== false || 
+            strpos($decoded_full_path, 'iframe') !== false || 
+            strpos($double_decoded_full_path, 'iframe') !== false) {
+            $urls_to_check[] = '/?q=<iframe>';
+            $urls_to_check[] = '?q=<iframe>';
+            $urls_to_check[] = 'q=<iframe>';
+            $urls_to_check[] = '<iframe>';
+        }
         
         // Видаляємо дублікати
         $urls_to_check = array_unique($urls_to_check);
@@ -493,84 +664,99 @@ class IP_Get_Logger {
     /**
      * Перевірка REST API запитів
      *
-     * @param mixed $result Результат запиту, за замовчуванням null
-     * @param WP_REST_Server $server Об'єкт REST сервера
-     * @param WP_REST_Request $request Об'єкт REST запиту
-     * @return mixed Початковий результат (для подальшої обробки)
+     * @param WP_REST_Response $response Відповідь REST API
+     * @param WP_REST_Server $server Сервер REST API
+     * @param WP_REST_Request $request Запит REST API
+     * @return WP_REST_Response Відповідь REST API без змін
      */
-    public function check_rest_request($result, $server, $request) {
+    public function check_rest_request($response, $server, $request) {
         global $ip_get_logger_processed_requests;
         
-        // Отримуємо шлях до REST API ендпоінта
-        $route = $request->get_route();
-        
-        // Отримуємо повний URL запиту
+        // Отримуємо URL запиту
         $request_url = $this->get_current_url();
+        $decoded_request_url = urldecode($request_url);
+        $double_decoded_url = urldecode($decoded_request_url);
         
         // Якщо цей URL вже було оброблено, пропускаємо
-        if (in_array($request_url, $ip_get_logger_processed_requests)) {
-            return $result;
+        if (isset($ip_get_logger_processed_requests) && in_array($request_url, $ip_get_logger_processed_requests)) {
+            return $response;
         }
         
-        // Якщо це не GET запит, пропускаємо
-        if ($request->get_method() !== 'GET') {
-            return $result;
+        // Ініціалізуємо масив оброблених запитів, якщо він не існує
+        if (!isset($ip_get_logger_processed_requests)) {
+            $ip_get_logger_processed_requests = array();
         }
         
-        // Додаткові варіанти для перевірки REST запиту
+        // Перевіряємо чи відстежуємо всі запити або лише GET
+        $track_get_only = ip_get_logger_get_option('track_get_only', false);
+        
+        if ($track_get_only && $request->get_method() !== 'GET') {
+            return $response;
+        }
+        
+        // Отримуємо шлях запиту
+        $route = $request->get_route();
+        $decoded_route = urldecode($route);
+        $double_decoded_route = urldecode($decoded_route);
+        
+        // Створюємо масив URL для перевірки
         $urls_to_check = array(
+            $request_url,
+            $decoded_request_url,
+            $double_decoded_url,
             $route,
-            '*' . $route,
-            '*/' . $route,
-            $route . '*',
-            'wp-json' . $route,
-            '/wp-json' . $route,
-            'wp-json' . $route . '*',
-            '*wp-json' . $route,
-            '*' . 'wp-json' . $route,
+            $decoded_route,
+            $double_decoded_route
         );
         
-        // Перевіряємо кожен URL
-        $matched_request = false;
-        foreach ($urls_to_check as $url) {
-            $match = $this->match_request($url);
-            if ($match) {
-                $matched_request = $match;
-                break;
+        // Перевіряємо за допомогою методу check_request
+        $result = $this->check_request($request);
+        
+        // Якщо не знайдено співпадіння, перевіряємо окремо шлях запиту
+        if (!$result) {
+            // Перевіряємо всі URL у масиві
+            foreach ($urls_to_check as $url) {
+                $matched_pattern = $this->match_request($url);
+                
+                if ($matched_pattern) {
+                    // Додаємо URL до оброблених
+                    $ip_get_logger_processed_requests[] = $request_url;
+                    
+                    // Отримуємо статус-код відповіді
+                    $status_code = isset($response->status) ? $response->status : 200;
+                    
+                    // Записуємо в лог
+                    $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
+                    
+                    // Перевіряємо чи існує директорія для логів
+                    if (!file_exists(IP_GET_LOGGER_LOGS_DIR)) {
+                        wp_mkdir_p(IP_GET_LOGGER_LOGS_DIR);
+                    }
+                    
+                    $log_data = array(
+                        'method' => $request->get_method(),
+                        'url' => $request_url,
+                        'route' => $route,
+                        'matched_pattern' => $matched_pattern,
+                        'ip' => $_SERVER['REMOTE_ADDR'],
+                        'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+                        'status_code' => $status_code,
+                        'timestamp' => current_time('mysql'),
+                        'hook' => 'rest_api_init'
+                    );
+                    
+                    // Записуємо в лог-файл
+                    $log_entry = json_encode($log_data) . PHP_EOL;
+                    file_put_contents($log_file, $log_entry, FILE_APPEND);
+                    
+                    // Відправляємо сповіщення, якщо потрібно
+                    $this->maybe_send_notification($request_url);
+                    
+                    break;
+                }
             }
         }
         
-        if ($matched_request) {
-            // Додаємо URL до оброблених запитів
-            $ip_get_logger_processed_requests[] = $request_url;
-            
-            // Визначаємо статус-код використовуючи спільну функцію
-            $status_code = $this->get_http_status_code();
-            
-            // Логуємо запит
-            $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
-            
-            $log_data = array(
-                'method' => 'GET',
-                'url' => $request_url,
-                'matched_pattern' => $matched_request,
-                'ip' => $this->get_client_ip(),
-                'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
-                'status_code' => $status_code,
-                'timestamp' => current_time('mysql'),
-                'hook' => 'rest_pre_dispatch'
-            );
-            
-            // Форматуємо лог у одну строку
-            $log_entry = json_encode($log_data) . PHP_EOL;
-            
-            // Записуємо в лог-файл
-            file_put_contents($log_file, $log_entry, FILE_APPEND);
-            
-            // Надсилаємо сповіщення
-            $this->send_notification($request_url);
-        }
-        
-        return $result;
+        return $response;
     }
 }

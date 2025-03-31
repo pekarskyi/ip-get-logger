@@ -551,8 +551,11 @@ class IP_Get_Logger_Admin {
             return;
         }
         
-        // Отримуємо і валідуємо запит
-        $request = isset($_POST['request']) ? sanitize_text_field($_POST['request']) : '';
+        // Отримуємо і валідуємо запит, без видалення HTML-тегів
+        $request = isset($_POST['request']) ? wp_unslash($_POST['request']) : '';
+        
+        // Базова валідація, видаляємо контрольні символи та зайві пробіли
+        $request = trim(preg_replace('/[\x00-\x1F\x7F]/', '', $request));
         
         if (empty($request)) {
             wp_send_json_error(__('Pattern cannot be empty', 'ip-get-logger'));
@@ -601,11 +604,14 @@ class IP_Get_Logger_Admin {
             return;
         }
         
-        // Отримуємо і валідуємо запит
-        $request = isset($_POST['request']) ? sanitize_text_field($_POST['request']) : '';
+        // Отримуємо і валідуємо запит, без видалення HTML-тегів
+        $request = isset($_POST['request']) ? wp_unslash($_POST['request']) : '';
+        
+        // Базова валідація, видаляємо контрольні символи та зайві пробіли
+        $request = trim(preg_replace('/[\x00-\x1F\x7F]/', '', $request));
         
         if (empty($request)) {
-            wp_send_json_error(__('Patterns cannot be empty', 'ip-get-logger'));
+            wp_send_json_error(__('Pattern cannot be empty', 'ip-get-logger'));
             return;
         }
         
@@ -815,20 +821,46 @@ class IP_Get_Logger_Admin {
     }
 
     /**
-     * Виведення сторінки тестування URL
+     * Відображення сторінки тестування URL
      */
     public function display_test_url_page() {
         $test_results = null;
+        $test_html_tag = false;
         
         // Перевіряємо чи була надіслана форма
         if (isset($_POST['test_url']) && isset($_POST['test_url_nonce']) && wp_verify_nonce($_POST['test_url_nonce'], 'ip_get_logger_test_url')) {
             $test_url = sanitize_text_field($_POST['test_url']);
+            $test_html_tag = isset($_POST['test_html_tag']) ? true : false;
+            
+            // Якщо користувач вибрав тестування HTML-тегів, додаємо <iframe> до URL
+            if ($test_html_tag && strpos($test_url, '<iframe>') === false) {
+                // Якщо URL містить параметри запиту
+                if (strpos($test_url, '?') !== false) {
+                    // Додаємо iframe як додатковий параметр
+                    $test_url .= '&q=<iframe>';
+                } else {
+                    // Додаємо iframe як перший параметр
+                    $test_url .= '?q=<iframe>';
+                }
+            }
             
             // Створюємо об'єкт класу IP_Get_Logger
             $logger = new IP_Get_Logger();
             
             // Тестуємо URL
             $test_results = $logger->test_url_matching($test_url);
+            
+            // Додатково перевіряємо наявність HTML-тегів у шаблонах
+            $get_requests = ip_get_logger_get_option('get_requests', array());
+            $html_tag_patterns = array();
+            
+            foreach ($get_requests as $pattern) {
+                if (strpos($pattern, '<') !== false || strpos($pattern, '>') !== false) {
+                    $html_tag_patterns[] = $pattern;
+                }
+            }
+            
+            $test_results['html_tag_patterns'] = $html_tag_patterns;
         }
         
         // Виводимо шаблон
