@@ -314,6 +314,10 @@ register_activation_hook(__FILE__, 'ip_get_logger_activate');
 function ip_get_logger_activate() {
     global $wpdb;
     
+    // Перевіряємо, чи існує таблиця плагіна (для визначення, чи це нова установка, чи оновлення)
+    $table_name = $wpdb->prefix . IP_GET_LOGGER_TABLE;
+    $table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") === $table_name;
+    
     // Створення директорії для логів
     if (!file_exists(IP_GET_LOGGER_LOGS_DIR)) {
         wp_mkdir_p(IP_GET_LOGGER_LOGS_DIR);
@@ -339,8 +343,7 @@ function ip_get_logger_activate() {
         file_put_contents($log_file, '');
     }
     
-    // Створення таблиці в базі даних
-    $table_name = $wpdb->prefix . IP_GET_LOGGER_TABLE;
+    // Створення таблиці в базі даних, якщо вона не існує
     $charset_collate = $wpdb->get_charset_collate();
     
     $sql = "CREATE TABLE $table_name (
@@ -354,21 +357,27 @@ function ip_get_logger_activate() {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
     
-    // Додавання початкових налаштувань
-    $default_options = array(
-        'email_recipient' => get_option('admin_email'),
-        'email_subject' => __('Suspicious request detected on your site', 'ip-get-logger'),
-        'email_message' => __('A GET request matching your database has been detected: {request}', 'ip-get-logger'),
-        'auto_cleanup_days' => 30,
-        'delete_table_on_uninstall' => 1,
-        'send_notifications' => 1,
-    );
-    
-    // Зберігаємо опції в новій таблиці
-    ip_get_logger_update_option('settings', $default_options);
-    
-    // Створюємо порожній масив для запитів
-    ip_get_logger_update_option('get_requests', array());
+    // Додавання початкових налаштувань тільки для нової установки
+    if (!$table_exists) {
+        // Якщо це нова установка, встановлюємо значення за замовчуванням
+        $default_options = array(
+            'email_recipient' => get_option('admin_email'),
+            'email_subject' => __('Suspicious request detected on your site', 'ip-get-logger'),
+            'email_message' => __('A GET request matching your database has been detected: {request}', 'ip-get-logger'),
+            'auto_cleanup_days' => 30,
+            'delete_table_on_uninstall' => 1,
+            'send_notifications' => 1,
+        );
+        
+        // Зберігаємо опції в новій таблиці
+        ip_get_logger_update_option('settings', $default_options);
+        
+        // Створюємо порожній масив для запитів
+        ip_get_logger_update_option('get_requests', array());
+        
+        // Створюємо порожній масив для шаблонів виключення, якщо вони підтримуються
+        ip_get_logger_update_option('exclude_patterns', array());
+    }
 }
 
 // Деактивація плагіна
@@ -382,12 +391,18 @@ register_uninstall_hook(__FILE__, 'ip_get_logger_uninstall');
 function ip_get_logger_uninstall() {
     global $wpdb;
     
+    // Перевіряємо, чи це справжнє видалення плагіна, а не оновлення
+    // При оновленні зазвичай WP_UNINSTALL_PLUGIN не визначено або не встановлено на шлях плагіна
+    if (!defined('WP_UNINSTALL_PLUGIN') || WP_UNINSTALL_PLUGIN !== plugin_basename(__FILE__)) {
+        return; // Це оновлення або інша ситуація, не видаляємо дані
+    }
+    
     // Перевіряємо чи потрібно видаляти таблицю
     $delete_table = ip_get_logger_get_option('settings', array());
     $delete_table = isset($delete_table['delete_table_on_uninstall']) ? $delete_table['delete_table_on_uninstall'] : 0;
     
     if ($delete_table) {
-        // Видаляємо таблицю
+        // Видаляємо таблицю тільки при справжньому видаленні плагіна
         $table_name = $wpdb->prefix . IP_GET_LOGGER_TABLE;
         $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
     }
