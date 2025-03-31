@@ -407,6 +407,7 @@ class IP_Get_Logger_Admin {
         $settings['email_message'] = sanitize_textarea_field($input['email_message']);
         $settings['auto_cleanup_days'] = intval($input['auto_cleanup_days']);
         $settings['delete_table_on_uninstall'] = isset($input['delete_table_on_uninstall']) ? 1 : 0;
+        $settings['send_notifications'] = isset($input['send_notifications']) ? 1 : 0;
         
         // Зберігаємо налаштування
         ip_get_logger_update_option('settings', $settings);
