@@ -71,6 +71,12 @@ This will track requests that might be attempting code injection.
 
 The plugin supports the creation of localization for any language.
 
+## Do you have any questions?
+
+The plugin may skip some requests or display the HTTP code incorrectly. The author continues to improve it. At the same time, the plugin remains a reliable tool for early threat detection when an attacker attempts to find vulnerabilities on your site.
+
+If you have any questions, suggestions, found bugs, or discovered new malicious requests, please report them on GitHub in the [Issues section](https://github.com/pekarskyi/ip-get-logger/issues).
+
 ## Changelog
 
 1.2.0 - 31.03.2025:
