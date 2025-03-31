@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: IP GET Logger 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ip-get-logger\n"
 "POT-Creation-Date: 2024-03-30T04:00:00+00:00\n"
-"PO-Revision-Date: 2025-03-31 12:43+0000\n"
+"PO-Revision-Date: 2025-03-31 13:21+0000\n"
 "Last-Translator: \n"
 "Language-Team: Українська\n"
 "Language: uk\n"
@@ -30,8 +30,8 @@ msgstr[0] "%s шаблон"
 msgstr[1] "%s шаблони"
 msgstr[2] "%s шаблонів"
 
-#: ip-get-logger.php:223 ip-get-logger.php:310
-#: admin/class-ip-get-logger-admin.php:347 includes/class-ip-get-logger.php:459
+#: ip-get-logger.php:235 ip-get-logger.php:326
+#: admin/class-ip-get-logger-admin.php:383 includes/class-ip-get-logger.php:470
 msgid "A GET request matching your database has been detected: {request}"
 msgstr "Було виявлено GET-запит, який відповідає шаблону: {request}"
 
@@ -47,12 +47,16 @@ msgstr "Додати новий шаблон"
 msgid "Add Pattern"
 msgstr "Додати шаблон"
 
+#: admin/partials/logs-page.php:36
+msgid "All devices"
+msgstr "Всі пристрої"
+
 #: admin/partials/requests-page.php:243
 #| msgid "An error occurred while adding the request"
 msgid "An error occurred while adding the pattern"
 msgstr "Виникла помилка під час додавання шаблону"
 
-#: admin/partials/logs-page.php:111
+#: admin/partials/logs-page.php:128
 msgid "An error occurred while clearing logs"
 msgstr "Виникла помилка при очищенні логів"
 
@@ -85,7 +89,7 @@ msgid ""
 "An error occurred while updating the list of patterns from the repository!"
 msgstr "Виникла помилка при оновленні списку шаблонів з репозиторію"
 
-#: admin/partials/logs-page.php:95
+#: admin/partials/logs-page.php:112
 msgid "Are you sure you want to clear all logs?"
 msgstr "Ви впевнені, що хочете очистити всі логи?"
 
@@ -102,6 +106,10 @@ msgstr "Ви впевнені, що хочете видалити цей шаб�
 msgid "Auto-cleanup logs (days)"
 msgstr "Автоочищення логів (днів)"
 
+#: includes/class-ip-get-logger.php:800 admin/partials/logs-page.php:40
+msgid "Bot"
+msgstr "Бот"
+
 #: admin/partials/test-url-page.php:111
 msgid "Break it down into different variants (full URL, path, filename, etc.)"
 msgstr ""
@@ -115,7 +123,7 @@ msgstr "Скасувати"
 msgid "Check each variant against all your patterns"
 msgstr "Перевірить кожен варіант на всіх ваших шаблонах"
 
-#: admin/partials/logs-page.php:36
+#: admin/partials/logs-page.php:52
 msgid "Clear Logs"
 msgstr "Очистити логи"
 
@@ -127,20 +135,28 @@ msgstr "Очистити список"
 msgid "Clear patterns:"
 msgstr "Очистити список шаблонів:"
 
-#: admin/class-ip-get-logger-admin.php:372
+#: admin/class-ip-get-logger-admin.php:408
 msgid "Configure database parameters"
 msgstr "Налаштуйте параметри для роботи з базою даних"
 
-#: admin/class-ip-get-logger-admin.php:356
+#: admin/class-ip-get-logger-admin.php:392
 msgid "Configure parameters for logging GET requests"
 msgstr "Налаштуйте параметри для логування GET-запитів"
 
-#: admin/class-ip-get-logger-admin.php:316
+#: admin/class-ip-get-logger-admin.php:352
 msgid ""
 "Configure parameters for sending email notifications when a GET request "
 "matches"
 msgstr ""
 "Налаштуйте параметри для відправки email-сповіщень при співпадінні GET-запиту"
+
+#: admin/partials/logs-page.php:69
+msgid "Country"
+msgstr "Країна"
+
+#: ip-get-logger.php:264 admin/partials/logs-page.php:19
+msgid "Country:"
+msgstr "Країна:"
 
 #: admin/partials/settings-page.php:15
 msgid "Database Information"
@@ -154,7 +170,7 @@ msgstr "Налаштування бази даних"
 msgid "Database Table"
 msgstr "Таблиця в базі даних"
 
-#: admin/class-ip-get-logger-admin.php:756
+#: admin/class-ip-get-logger-admin.php:793
 #| msgid ""
 #| "Database updated successfully: %d new requests added, %d duplicates "
 #| "skipped."
@@ -163,11 +179,11 @@ msgid ""
 msgstr ""
 "База успішно оновлена: додано %d нових шаблонів, пропущено %d дублікатів."
 
-#: admin/partials/logs-page.php:48
+#: admin/partials/logs-page.php:64
 msgid "Date & Time"
 msgstr "Дата і час"
 
-#: ip-get-logger.php:251
+#: ip-get-logger.php:267
 msgid "Date and Time:"
 msgstr "Дата і час:"
 
@@ -183,9 +199,25 @@ msgstr "Видалити"
 msgid "Delete data when uninstalling the plugin"
 msgstr "Видалення даних при видаленні плагіна"
 
-#: admin/class-ip-get-logger-admin.php:380
+#: admin/class-ip-get-logger-admin.php:416
 msgid "Delete database table when uninstalling the plugin"
 msgstr "Видаляти таблицю з бази даних при видаленні плагіна"
+
+#: includes/class-ip-get-logger.php:817 admin/partials/logs-page.php:37
+msgid "Desktop"
+msgstr "ПК"
+
+#: admin/partials/logs-page.php:70
+msgid "Device"
+msgstr "Пристрій"
+
+#: ip-get-logger.php:265
+msgid "Device Type:"
+msgstr "Тип пристрою:"
+
+#: admin/partials/logs-page.php:34
+msgid "Device:"
+msgstr "Пристрій:"
 
 #: admin/partials/requests-page.php:376
 msgid "Do you want to update the list of patterns from the repository?"
@@ -196,7 +228,6 @@ msgid "Edit"
 msgstr "Редагувати"
 
 #: admin/partials/requests-page.php:181
-#, fuzzy
 #| msgid "Edit pattern"
 msgid "Edit GET Pattern"
 msgstr "Редагувати шаблон"
@@ -209,7 +240,7 @@ msgstr "Текст повідомлення"
 msgid "Email Subject"
 msgstr "Тема листа"
 
-#: admin/class-ip-get-logger-admin.php:722
+#: admin/class-ip-get-logger-admin.php:759
 msgid "Empty response from GitHub"
 msgstr "Порожня відповідь від GitHub"
 
@@ -225,7 +256,7 @@ msgstr "Введіть URL або шаблон запиту"
 msgid "Enter URL to test:"
 msgstr "Введіть URL для перевірки:"
 
-#: admin/class-ip-get-logger-admin.php:881
+#: admin/class-ip-get-logger-admin.php:918
 msgid "Error fetching remote data"
 msgstr "Помилка отримання віддалених даних"
 
@@ -237,29 +268,33 @@ msgstr "Експортувати"
 msgid "Export patterns to file:"
 msgstr "Експортуйте шаблони у файл:"
 
-#: admin/class-ip-get-logger-admin.php:712
+#: admin/class-ip-get-logger-admin.php:749
 #, php-format
 msgid "Failed to fetch data from GitHub. HTTP Response Code: %s"
 msgstr "Не вдалося отримати дані з GitHub. Код відповіді HTTP: %s"
 
-#: admin/class-ip-get-logger-admin.php:702
+#: admin/class-ip-get-logger-admin.php:739
 #, php-format
 msgid "Failed to fetch data from GitHub: %s"
 msgstr "Не вдалося отримати дані з GitHub: %s"
 
-#: admin/class-ip-get-logger-admin.php:458
+#: admin/class-ip-get-logger-admin.php:495
 msgid "Failed to read file"
 msgstr "Не вдалося прочитати файл"
 
-#: ip-get-logger.php:433 ip-get-logger.php:447
+#: ip-get-logger.php:449 ip-get-logger.php:463
 msgid "File not found"
 msgstr "Файл не знайдено"
 
-#: admin/partials/logs-page.php:29
+#: admin/partials/logs-page.php:45
 msgid "Filter"
 msgstr "Фільтрувати"
 
-#: admin/partials/logs-page.php:25
+#: admin/partials/logs-page.php:20
+msgid "Filter by Country"
+msgstr "Фільтр за країною"
+
+#: admin/partials/logs-page.php:30
 msgid "Filter by HTTP code"
 msgstr "Фільтр за HTTP-кодом"
 
@@ -267,12 +302,12 @@ msgstr "Фільтр за HTTP-кодом"
 msgid "Filter by IP"
 msgstr "Фільтр за IP"
 
-#: admin/partials/logs-page.php:20
+#: admin/partials/logs-page.php:25
 msgid "Filter by URL"
 msgstr "Фільтр за URL"
 
-#: ip-get-logger.php:222 ip-get-logger.php:309
-#: admin/class-ip-get-logger-admin.php:339 includes/class-ip-get-logger.php:458
+#: ip-get-logger.php:234 ip-get-logger.php:325
+#: admin/class-ip-get-logger-admin.php:375 includes/class-ip-get-logger.php:469
 msgid "GET Request Match Found"
 msgstr "Знайдено співпадіння GET-запиту"
 
@@ -285,20 +320,16 @@ msgstr "Логи GET-запитів"
 msgid "Help"
 msgstr "Довідка"
 
-#: admin/partials/test-url-page.php:115
-msgid "HTML Tag Testing:"
-msgstr "Тестування тегів HTML:"
-
 #: admin/partials/requests-page.php:11 admin/partials/requests-page.php:187
 msgid "HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>"
 msgstr ""
 "Підтримуються HTML-теги, наприклад, /?q=<iframe> або /?q=<script></iframe>."
 
-#: admin/partials/logs-page.php:53
+#: admin/partials/logs-page.php:71
 msgid "HTTP code"
 msgstr "HTTP-код"
 
-#: admin/partials/logs-page.php:24
+#: admin/partials/logs-page.php:29
 msgid "HTTP code:"
 msgstr "HTTP-код:"
 
@@ -313,12 +344,6 @@ msgstr "https://github.com/pekarskyi/ip-get-logger"
 #. Author URI of the plugin
 msgid "https://inwebpress.com"
 msgstr "https://inwebpress.com"
-
-#: admin/partials/test-url-page.php:115
-msgid ""
-"If you check the \"Test with HTML tags\" option, ?q=<iframe> will be added "
-"to your URL to test special handling of HTML tags."
-msgstr ""
 
 #: admin/partials/requests-page.php:20
 #| msgid ""
@@ -340,28 +365,28 @@ msgstr "Імпортувати"
 msgid "Import patterns from file (.txt):"
 msgstr "Імпорт шаблонів з файлу (.txt):"
 
-#: admin/class-ip-get-logger-admin.php:475
+#: admin/class-ip-get-logger-admin.php:512
 msgid "Imported %d pattern"
 msgid_plural "Imported %d patterns"
 msgstr[0] "Імпортовано %d шаблон"
 msgstr[1] "Імпортовано %d шаблони"
 msgstr[2] "Імпортовано %d шаблонів"
 
-#: ip-get-logger.php:428
+#: ip-get-logger.php:444
 msgid "Insufficient permissions"
 msgstr "Недостатньо прав"
 
-#: admin/class-ip-get-logger-admin.php:435
-#: admin/class-ip-get-logger-admin.php:491
-#: admin/class-ip-get-logger-admin.php:529
-#: admin/class-ip-get-logger-admin.php:550
-#: admin/class-ip-get-logger-admin.php:592
-#: admin/class-ip-get-logger-admin.php:650
-#: admin/class-ip-get-logger-admin.php:689
+#: admin/class-ip-get-logger-admin.php:472
+#: admin/class-ip-get-logger-admin.php:528
+#: admin/class-ip-get-logger-admin.php:566
+#: admin/class-ip-get-logger-admin.php:587
+#: admin/class-ip-get-logger-admin.php:629
+#: admin/class-ip-get-logger-admin.php:687
+#: admin/class-ip-get-logger-admin.php:726
 msgid "Insufficient permissions to perform this operation"
 msgstr "Недостатньо прав для виконання цієї операції"
 
-#: ip-get-logger.php:439
+#: ip-get-logger.php:455
 msgid "Invalid file"
 msgstr "Недопустимий файл"
 
@@ -369,11 +394,11 @@ msgstr "Недопустимий файл"
 msgid "InwebPress"
 msgstr "InwebPress"
 
-#: admin/partials/logs-page.php:52
+#: admin/partials/logs-page.php:68
 msgid "IP"
 msgstr "IP"
 
-#: ip-get-logger.php:249
+#: ip-get-logger.php:263
 msgid "IP Address:"
 msgstr "IP-адреса:"
 
@@ -393,15 +418,19 @@ msgstr "IP:"
 msgid "Items per page:"
 msgstr "на сторінці:"
 
+#: includes/class-ip-get-logger.php:836
+msgid "Local"
+msgstr "Локально"
+
 #: admin/class-ip-get-logger-admin.php:148
 msgid "Log Settings"
 msgstr "Налаштування логів"
 
-#: admin/class-ip-get-logger-admin.php:538
+#: admin/class-ip-get-logger-admin.php:575
 msgid "Logs cleared successfully"
 msgstr "Логи успішно очищено"
 
-#: admin/partials/logs-page.php:40
+#: admin/partials/logs-page.php:56
 msgid "Logs List"
 msgstr "Список логів"
 
@@ -421,15 +450,19 @@ msgstr "Шаблон"
 msgid "Matching Patterns"
 msgstr "Відповідні шаблони"
 
-#: admin/partials/logs-page.php:49
+#: admin/partials/logs-page.php:65
 msgid "Method"
 msgstr "Метод"
 
-#: admin/class-ip-get-logger-admin.php:887
+#: includes/class-ip-get-logger.php:805 admin/partials/logs-page.php:38
+msgid "Mobile"
+msgstr "Мобільний"
+
+#: admin/class-ip-get-logger-admin.php:924
 msgid "No data available"
 msgstr "Дані відсутні"
 
-#: admin/class-ip-get-logger-admin.php:441
+#: admin/class-ip-get-logger-admin.php:478
 msgid "No file uploaded"
 msgstr "Файл не завантажено"
 
@@ -437,11 +470,11 @@ msgstr "Файл не завантажено"
 msgid "No matches found"
 msgstr "Збігів не знайдено"
 
-#: admin/class-ip-get-logger-admin.php:498
+#: admin/class-ip-get-logger-admin.php:535
 msgid "No patterns to export"
 msgstr "Немає шаблонів для експорту"
 
-#: admin/partials/logs-page.php:43
+#: admin/partials/logs-page.php:59
 msgid "No saved logs."
 msgstr "Немає збережених логів."
 
@@ -466,35 +499,35 @@ msgstr "Кількість шаблонів в базі"
 msgid "on Github - Issues - New issue"
 msgstr "на Github - Issues - New issue"
 
-#: admin/class-ip-get-logger-admin.php:450
+#: admin/class-ip-get-logger-admin.php:487
 msgid "Only .txt files are allowed"
 msgstr "Дозволені тільки файли з розширенням .txt"
 
-#: admin/partials/logs-page.php:51 admin/partials/requests-page.php:131
+#: admin/partials/logs-page.php:67 admin/partials/requests-page.php:131
 msgid "Pattern"
 msgstr "Шаблон"
 
-#: admin/class-ip-get-logger-admin.php:578
+#: admin/class-ip-get-logger-admin.php:615
 #| msgid "Request added successfully"
 msgid "Pattern added successfully"
 msgstr "Шаблон успішно додано"
 
-#: admin/class-ip-get-logger-admin.php:561
-#: admin/class-ip-get-logger-admin.php:614
+#: admin/class-ip-get-logger-admin.php:598
+#: admin/class-ip-get-logger-admin.php:651
 msgid "Pattern cannot be empty"
 msgstr "Шаблон не може бути порожнім"
 
-#: admin/class-ip-get-logger-admin.php:675
+#: admin/class-ip-get-logger-admin.php:712
 #| msgid "Request deleted successfully"
 msgid "Pattern deleted successfully"
 msgstr "Шаблон успішно видалено"
 
-#: admin/class-ip-get-logger-admin.php:603
-#: admin/class-ip-get-logger-admin.php:661
+#: admin/class-ip-get-logger-admin.php:640
+#: admin/class-ip-get-logger-admin.php:698
 msgid "Pattern not found"
 msgstr "Шаблон не знайдено"
 
-#: admin/class-ip-get-logger-admin.php:636
+#: admin/class-ip-get-logger-admin.php:673
 #| msgid "Request updated successfully"
 msgid "Pattern updated successfully"
 msgstr "Шаблон успішно оновлено"
@@ -529,11 +562,11 @@ msgstr "Email отримувача"
 msgid "Report a new malicious pattern:"
 msgstr "Повідомте про новий шкідливий запит:"
 
-#: ip-get-logger.php:248
+#: ip-get-logger.php:262
 msgid "Request details:"
 msgstr "Деталі:"
 
-#: admin/partials/logs-page.php:30
+#: admin/partials/logs-page.php:46
 msgid "Reset Filters"
 msgstr "Скинути фільтри"
 
@@ -557,11 +590,11 @@ msgstr "Пошук"
 msgid "Search patterns..."
 msgstr "Пошук..."
 
-#: ip-get-logger.php:423
+#: ip-get-logger.php:439
 msgid "Security error"
 msgstr "Помилка безпеки"
 
-#: admin/class-ip-get-logger-admin.php:324
+#: admin/class-ip-get-logger-admin.php:360
 msgid "Send email notifications when a GET request matches"
 msgstr "Надсилати сповіщення на email, якщо GET-запит збігається"
 
@@ -574,7 +607,7 @@ msgstr "Email:"
 msgid "Settings"
 msgstr "Налаштування"
 
-#: admin/class-ip-get-logger-admin.php:421
+#: admin/class-ip-get-logger-admin.php:458
 msgid "Settings saved successfully"
 msgstr "Налаштування успішно збережено"
 
@@ -582,9 +615,13 @@ msgstr "Налаштування успішно збережено"
 msgid "Show you which patterns matched and which variants were checked"
 msgstr "Покаже, які шаблони збіглися і які варіанти були перевірені"
 
-#: admin/class-ip-get-logger-admin.php:365
+#: admin/class-ip-get-logger-admin.php:401
 msgid "Specify the number of days to keep logs (0 - never delete)"
 msgstr "Вкажіть кількість днів для зберігання логів (0 - не видаляти)"
+
+#: includes/class-ip-get-logger.php:812 admin/partials/logs-page.php:39
+msgid "Tablet"
+msgstr "Планшет"
 
 #: admin/partials/test-url-page.php:31
 msgid "Test Results"
@@ -603,7 +640,7 @@ msgstr "Тестувати з тегами HTML"
 msgid "Tested URL"
 msgstr "Перевірена URL-адреса"
 
-#: admin/class-ip-get-logger-admin.php:790
+#: admin/class-ip-get-logger-admin.php:827
 msgid "The list of patterns is successfully cleared."
 msgstr "Список шаблонів успішно очищено."
 
@@ -619,7 +656,7 @@ msgstr ""
 msgid "These patterns in your database contain HTML tags:"
 msgstr "Ці шаблони у вашій базі даних містять HTML-теги:"
 
-#: admin/partials/test-url-page.php:116
+#: admin/partials/test-url-page.php:115
 msgid ""
 "This can help you troubleshoot why certain URLs are not being detected or "
 "logged."
@@ -627,8 +664,8 @@ msgstr ""
 "Це може допомогти вам з'ясувати, чому певні URL-адреси не виявляються або не "
 "реєструються."
 
-#: admin/class-ip-get-logger-admin.php:567
-#: admin/class-ip-get-logger-admin.php:621
+#: admin/class-ip-get-logger-admin.php:604
+#: admin/class-ip-get-logger-admin.php:658
 #| msgid "This request already exists in the database"
 msgid "This pattern already exists in the database"
 msgstr "Цей шаблон вже існує в базі даних"
@@ -641,6 +678,11 @@ msgstr ""
 "Цей інструмент дозволяє перевірити, чи відповідає URL-адреса будь-якому з "
 "шаблонів."
 
+#: includes/class-ip-get-logger.php:821 includes/class-ip-get-logger.php:856
+#: includes/class-ip-get-logger.php:886 admin/partials/logs-page.php:98
+msgid "Unknown"
+msgstr "Невідомо"
+
 #: admin/partials/requests-page.php:63
 msgid "Update patterns"
 msgstr "Оновити шаблони"
@@ -650,7 +692,7 @@ msgstr "Оновити шаблони"
 msgid "Update patterns from repository:"
 msgstr "Оновлення шаблонів з репозиторію:"
 
-#: admin/partials/logs-page.php:50
+#: admin/partials/logs-page.php:66
 msgid "URL"
 msgstr "URL"
 
@@ -666,7 +708,7 @@ msgstr "URL або шаблон запиту:"
 msgid "URL Variant"
 msgstr "Варіант URL-адреси"
 
-#: admin/partials/logs-page.php:19
+#: admin/partials/logs-page.php:24
 msgid "URL:"
 msgstr "URL:"
 
@@ -674,11 +716,11 @@ msgstr "URL:"
 msgid "URLs Checked"
 msgstr "Перевірені URL-адреси"
 
-#: admin/class-ip-get-logger-admin.php:349
+#: admin/class-ip-get-logger-admin.php:385
 msgid "Use {request} to display the request URL"
 msgstr "Використовуйте {request} для відображення URL запиту"
 
-#: ip-get-logger.php:250
+#: ip-get-logger.php:266
 msgid "User Agent:"
 msgstr "User Agent:"
 
@@ -686,7 +728,7 @@ msgstr "User Agent:"
 msgid "Version"
 msgstr "Версія"
 
-#: admin/class-ip-get-logger-admin.php:381
+#: admin/class-ip-get-logger-admin.php:417
 #| msgid ""
 #| "Warning! If this option is enabled, all requests and settings will be "
 #| "deleted along with the plugin!"
@@ -709,11 +751,11 @@ msgstr "написати в Telegram"
 msgid "Yes, URL matched one or more patterns"
 msgstr "Так, URL-адреса відповідає одному або декільком шаблонам"
 
-#: admin/class-ip-get-logger-admin.php:780
+#: admin/class-ip-get-logger-admin.php:817
 msgid "You do not have sufficient permissions to perform this action."
 msgstr "Ви не маєте достатніх прав для виконання цієї дії."
 
-#: admin/class-ip-get-logger-admin.php:765
+#: admin/class-ip-get-logger-admin.php:802
 #| msgid ""
 #| "Your database is up to date. No new requests added. %d duplicates skipped."
 msgid ""

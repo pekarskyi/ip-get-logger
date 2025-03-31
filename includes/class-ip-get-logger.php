@@ -140,12 +140,23 @@ class IP_Get_Logger {
                 wp_mkdir_p(IP_GET_LOGGER_LOGS_DIR);
             }
             
+            // Отримуємо User-Agent
+            $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided';
+            
+            // Визначаємо тип пристрою
+            $device_type = $this->get_device_type($user_agent);
+            
+            // Визначаємо країну за IP
+            $country_code = $this->get_country_by_ip($_SERVER['REMOTE_ADDR']);
+            
             $log_data = array(
                 'method' => $request_method,
                 'url' => $request_url,
                 'matched_pattern' => $matched_pattern,
                 'ip' => $_SERVER['REMOTE_ADDR'],
-                'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+                'country' => $country_code,
+                'user_agent' => $user_agent,
+                'device_type' => $device_type,
                 'status_code' => $status_code,
                 'timestamp' => current_time('mysql'),
                 'hook' => current_filter()
@@ -458,15 +469,19 @@ class IP_Get_Logger {
             $subject = isset($settings['email_subject']) ? $settings['email_subject'] : __('GET Request Match Found', 'ip-get-logger');
             $message_template = isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger');
             
+            // Отримуємо країну за IP
+            $country_code = $this->get_country_by_ip($_SERVER['REMOTE_ADDR']);
+            
             // Замінюємо змінні у повідомленні
             $message = str_replace(
-                array('{request}', '{ip}', '{date}', '{time}', '{user_agent}'),
+                array('{request}', '{ip}', '{date}', '{time}', '{user_agent}', '{country}'),
                 array(
                     $request_url,
                     $_SERVER['REMOTE_ADDR'],
                     current_time('Y-m-d'),
                     current_time('H:i:s'),
-                    isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided'
+                    isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+                    $country_code
                 ),
                 $message_template
             );
@@ -733,13 +748,24 @@ class IP_Get_Logger {
                         wp_mkdir_p(IP_GET_LOGGER_LOGS_DIR);
                     }
                     
+                    // Отримуємо User-Agent
+                    $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided';
+                    
+                    // Визначаємо тип пристрою
+                    $device_type = $this->get_device_type($user_agent);
+                    
+                    // Визначаємо країну за IP
+                    $country_code = $this->get_country_by_ip($_SERVER['REMOTE_ADDR']);
+                    
                     $log_data = array(
                         'method' => $request->get_method(),
                         'url' => $request_url,
                         'route' => $route,
                         'matched_pattern' => $matched_pattern,
                         'ip' => $_SERVER['REMOTE_ADDR'],
-                        'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+                        'country' => $country_code,
+                        'user_agent' => $user_agent,
+                        'device_type' => $device_type,
                         'status_code' => $status_code,
                         'timestamp' => current_time('mysql'),
                         'hook' => 'rest_api_init'
@@ -758,5 +784,105 @@ class IP_Get_Logger {
         }
         
         return $response;
+    }
+
+    /**
+     * Визначає тип пристрою на основі User-Agent
+     * 
+     * @param string $user_agent Рядок User-Agent
+     * @return string Тип пристрою (Desktop, Mobile, Tablet, Bot, Unknown)
+     */
+    public function get_device_type($user_agent) {
+        $user_agent = strtolower($user_agent);
+        
+        // Боти
+        if (preg_match('/(googlebot|bingbot|yandexbot|slurp|duckduckbot|baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator|whatsapp)/i', $user_agent)) {
+            return __('Bot', 'ip-get-logger');
+        }
+        
+        // Мобільні пристрої
+        if (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i', $user_agent)) {
+            return __('Mobile', 'ip-get-logger');
+        }
+        
+        // Планшети
+        if (preg_match('/(android|bb\d+|meego).+tablet|ipad|playbook|silk/i', $user_agent) || 
+            (preg_match('/tablet/i', $user_agent) && !preg_match('/RX-34/i', $user_agent)) || 
+            preg_match('/FOLIO/i', $user_agent)) {
+            return __('Tablet', 'ip-get-logger');
+        }
+        
+        // Десктопи
+        if (preg_match('/(mozilla|chrome|safari|firefox|msie|trident)/i', $user_agent) && !preg_match('/(android|ipad|playbook|silk|mobile|tablet)/i', $user_agent)) {
+            return __('Desktop', 'ip-get-logger');
+        }
+        
+        // Якщо жоден з патернів не співпав
+        return __('Unknown', 'ip-get-logger');
+    }
+
+    /**
+     * Визначає країну за IP-адресою
+     * 
+     * @param string $ip IP-адреса
+     * @return string Код країни або 'Unknown'
+     */
+    public function get_country_by_ip($ip) {
+        // Перевірка на локальні IP-адреси
+        if (in_array($ip, array('127.0.0.1', '::1')) || 
+            strpos($ip, '192.168.') === 0 || 
+            strpos($ip, '10.') === 0 || 
+            strpos($ip, '172.16.') === 0) {
+            return __('Local', 'ip-get-logger');
+        }
+        
+        // Спробуємо отримати інформацію через безкоштовний GeoIP API
+        $api_url = 'http://ip-api.com/json/' . $ip . '?fields=status,countryCode,country';
+        
+        // Створюємо транзієнт для кешування результатів
+        $transient_name = 'ip_geo_' . md5($ip);
+        $cached_result = get_transient($transient_name);
+        
+        if ($cached_result !== false) {
+            return $cached_result;
+        }
+        
+        $response = wp_remote_get($api_url, array(
+            'timeout' => 5,
+            'sslverify' => false
+        ));
+        
+        if (is_wp_error($response)) {
+            return __('Unknown', 'ip-get-logger');
+        }
+        
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+        
+        if (isset($data['status']) && $data['status'] === 'success' && !empty($data['countryCode'])) {
+            // Зберігаємо результат в кеш на 7 днів
+            set_transient($transient_name, $data['countryCode'], 7 * DAY_IN_SECONDS);
+            return $data['countryCode'];
+        }
+        
+        // Альтернативний API, якщо перший не відповів
+        $api_url_alt = 'https://ipapi.co/' . $ip . '/country/';
+        
+        $response_alt = wp_remote_get($api_url_alt, array(
+            'timeout' => 5,
+            'sslverify' => false
+        ));
+        
+        if (!is_wp_error($response_alt)) {
+            $country_code = trim(wp_remote_retrieve_body($response_alt));
+            
+            if (!empty($country_code) && strlen($country_code) === 2) {
+                // Зберігаємо результат в кеш на 7 днів
+                set_transient($transient_name, $country_code, 7 * DAY_IN_SECONDS);
+                return $country_code;
+            }
+        }
+        
+        return __('Unknown', 'ip-get-logger');
     }
 }

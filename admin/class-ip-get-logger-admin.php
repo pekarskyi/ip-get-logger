@@ -249,47 +249,83 @@ class IP_Get_Logger_Admin {
             'nonce' => wp_create_nonce('ip-get-logger-nonce')
         ));
         
-        // Отримуємо логи
-        $logs = $this->get_logs();
-        
-        // Параметри фільтрації
         $filter_date = isset($_GET['filter_date']) ? sanitize_text_field($_GET['filter_date']) : '';
         $filter_ip = isset($_GET['filter_ip']) ? sanitize_text_field($_GET['filter_ip']) : '';
+        $filter_country = isset($_GET['filter_country']) ? sanitize_text_field($_GET['filter_country']) : '';
         $filter_url = isset($_GET['filter_url']) ? sanitize_text_field($_GET['filter_url']) : '';
         $filter_status = isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '';
+        $filter_device = isset($_GET['filter_device']) ? sanitize_text_field($_GET['filter_device']) : '';
         
-        // Фільтруємо логи
-        if (!empty($filter_date) || !empty($filter_ip) || !empty($filter_url) || !empty($filter_status)) {
-            $filtered_logs = array();
+        // Отримання логів
+        $logs = $this->get_logs();
+        $processed_logs = array();
+        
+        // Створюємо екземпляр класу IP_Get_Logger для використання його методів
+        $logger = new IP_Get_Logger();
+        
+        foreach ($logs as $log_entry) {
+            $log_data = json_decode($log_entry, true);
             
-            foreach ($logs as $log) {
-                $log_data = json_decode($log, true);
-                
-                // Перевіряємо чи лог відповідає всім фільтрам
-                $match = true;
-                
-                if (!empty($filter_date) && strpos($log_data['timestamp'], $filter_date) === false) {
-                    $match = false;
+            // Додаємо тип пристрою, якщо його немає
+            if (!isset($log_data['device_type']) && isset($log_data['user_agent'])) {
+                $log_data['device_type'] = $logger->get_device_type($log_data['user_agent']);
+            }
+            
+            // Додаємо країну, якщо її немає
+            if (!isset($log_data['country']) && isset($log_data['ip'])) {
+                $log_data['country'] = $logger->get_country_by_ip($log_data['ip']);
+            }
+            
+            // Фільтрація логів
+            $match = true;
+            
+            if (!empty($filter_date) || !empty($filter_ip) || !empty($filter_country) || !empty($filter_url) || !empty($filter_status) || !empty($filter_device)) {
+                if (!empty($filter_date)) {
+                    if (isset($log_data['timestamp'])) {
+                        $log_date = date('Y-m-d', strtotime($log_data['timestamp']));
+                        if ($log_date !== $filter_date) {
+                            $match = false;
+                        }
+                    } else {
+                        $match = false;
+                    }
                 }
                 
-                if (!empty($filter_ip) && strpos($log_data['ip'], $filter_ip) === false) {
-                    $match = false;
+                if (!empty($filter_ip)) {
+                    if (!isset($log_data['ip']) || strpos($log_data['ip'], $filter_ip) === false) {
+                        $match = false;
+                    }
                 }
                 
-                if (!empty($filter_url) && strpos($log_data['url'], $filter_url) === false) {
-                    $match = false;
+                if (!empty($filter_country)) {
+                    if (!isset($log_data['country']) || stripos($log_data['country'], $filter_country) === false) {
+                        $match = false;
+                    }
                 }
                 
-                if (!empty($filter_status) && $log_data['status_code'] != $filter_status) {
-                    $match = false;
+                if (!empty($filter_url)) {
+                    if (!isset($log_data['url']) || strpos($log_data['url'], $filter_url) === false) {
+                        $match = false;
+                    }
                 }
                 
-                if ($match) {
-                    $filtered_logs[] = $log;
+                if (!empty($filter_status)) {
+                    if (!isset($log_data['status_code']) || strpos($log_data['status_code'], $filter_status) === false) {
+                        $match = false;
+                    }
+                }
+                
+                if (!empty($filter_device)) {
+                    if (!isset($log_data['device_type']) || 
+                        strpos(strtolower($log_data['device_type']), strtolower($filter_device)) === false) {
+                        $match = false;
+                    }
                 }
             }
             
-            $logs = $filtered_logs;
+            if ($match) {
+                $processed_logs[] = $log_data;
+            }
         }
         
         // Виводимо шаблон

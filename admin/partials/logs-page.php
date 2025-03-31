@@ -16,6 +16,11 @@
             </div>
             
             <div class="ip-get-logger-filter-group">
+                <label for="filter_country"><?php echo esc_html__('Country:', 'ip-get-logger'); ?></label>
+                <input type="text" id="filter_country" name="filter_country" value="<?php echo esc_attr($filter_country); ?>" placeholder="<?php echo esc_attr__('Filter by Country', 'ip-get-logger'); ?>">
+            </div>
+            
+            <div class="ip-get-logger-filter-group">
                 <label for="filter_url"><?php echo esc_html__('URL:', 'ip-get-logger'); ?></label>
                 <input type="text" id="filter_url" name="filter_url" value="<?php echo esc_attr($filter_url); ?>" placeholder="<?php echo esc_attr__('Filter by URL', 'ip-get-logger'); ?>">
             </div>
@@ -23,6 +28,17 @@
             <div class="ip-get-logger-filter-group">
                 <label for="filter_status"><?php echo esc_html__('HTTP code:', 'ip-get-logger'); ?></label>
                 <input type="text" id="filter_status" name="filter_status" value="<?php echo esc_attr($filter_status); ?>" placeholder="<?php echo esc_attr__('Filter by HTTP code', 'ip-get-logger'); ?>">
+            </div>
+            
+            <div class="ip-get-logger-filter-group">
+                <label for="filter_device"><?php echo esc_html__('Device:', 'ip-get-logger'); ?></label>
+                <select id="filter_device" name="filter_device">
+                    <option value=""><?php echo esc_html__('All devices', 'ip-get-logger'); ?></option>
+                    <option value="desktop" <?php selected($filter_device, 'desktop'); ?>><?php echo esc_html__('Desktop', 'ip-get-logger'); ?></option>
+                    <option value="mobile" <?php selected($filter_device, 'mobile'); ?>><?php echo esc_html__('Mobile', 'ip-get-logger'); ?></option>
+                    <option value="tablet" <?php selected($filter_device, 'tablet'); ?>><?php echo esc_html__('Tablet', 'ip-get-logger'); ?></option>
+                    <option value="bot" <?php selected($filter_device, 'bot'); ?>><?php echo esc_html__('Bot', 'ip-get-logger'); ?></option>
+                </select>
             </div>
             
             <div class="ip-get-logger-filter-controls">
@@ -39,7 +55,7 @@
     <div class="ip-get-logger-logs-list">
         <h2><?php echo esc_html__('Logs List', 'ip-get-logger'); ?></h2>
         
-        <?php if (empty($logs)) : ?>
+        <?php if (empty($processed_logs)) : ?>
             <p><?php echo esc_html__('No saved logs.', 'ip-get-logger'); ?></p>
         <?php else : ?>
             <table class="wp-list-table widefat fixed striped">
@@ -50,14 +66,13 @@
                         <th scope="col"><?php echo esc_html__('URL', 'ip-get-logger'); ?></th>
                         <th scope="col"><?php echo esc_html__('Pattern', 'ip-get-logger'); ?></th>
                         <th scope="col"><?php echo esc_html__('IP', 'ip-get-logger'); ?></th>
+                        <th scope="col"><?php echo esc_html__('Country', 'ip-get-logger'); ?></th>
+                        <th scope="col"><?php echo esc_html__('Device', 'ip-get-logger'); ?></th>
                         <th scope="col"><?php echo esc_html__('HTTP code', 'ip-get-logger'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($logs as $log) : 
-                        $log_data = json_decode($log, true);
-                        if (empty($log_data)) continue;
-                    ?>
+                    <?php foreach ($processed_logs as $log_data) : ?>
                         <tr>
                             <td>
                                 <?php 
@@ -79,6 +94,8 @@
                             </td>
                             <td><?php echo esc_html($log_data['matched_pattern'] ?? ''); ?></td>
                             <td><?php echo esc_html($log_data['ip'] ?? ''); ?></td>
+                            <td><?php echo esc_html($log_data['country'] ?? ''); ?></td>
+                            <td><?php echo esc_html($log_data['device_type'] ?? __('Unknown', 'ip-get-logger')); ?></td>
                             <td><?php echo esc_html($log_data['status_code'] ?? ''); ?></td>
                         </tr>
                     <?php endforeach; ?>

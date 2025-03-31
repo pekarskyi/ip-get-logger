@@ -18,7 +18,7 @@ Attackers may use specific GET requests to search for vulnerabilities in your sy
 - Rapid detection of threats (SQL injections, XSS, LFI/RFI/RCE, CSRF attacks, etc.)  
 - Quick response capabilities  
 
-With this plugin, you can enhance your website’s security and proactively prevent potential attacks.
+With this plugin, you can enhance your website's security and proactively prevent potential attacks.
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/pekarskyi/ip-get-logger?style=for-the-badge)](https://GitHub.com/pekarskyi/ip-get-logger/releases/)
 
@@ -38,6 +38,8 @@ IP GET Logger is a powerful WordPress plugin designed to help website administra
 - **User-friendly Admin Interface**: Intuitive settings page for easy configuration
 - **Test URL**: Test your URL against defined patterns
 - **Plugin update system**: Stay updated with the latest version
+- **Device Detection**: Identify and log the device type (Desktop, Mobile, Tablet, Bot)
+- **Geolocation**: Determine and log the country from which requests originate
 
 ## Screenshots
 
@@ -78,6 +80,14 @@ The plugin may skip some requests or display the HTTP code incorrectly. The auth
 If you have any questions, suggestions, found bugs, or discovered new malicious requests, please report them on GitHub in the [Issues section](https://github.com/pekarskyi/ip-get-logger/issues).
 
 ## Changelog
+
+1.2.1 - 31.03.2025:
+- Added device type detection (Desktop, Mobile, Tablet, Bot)
+- Added geolocation to identify the country of origin for requests
+- Added country filter in the logs page
+- Improved matching of patterns containing HTML tags
+- Enhanced email notifications with device and country information
+- Fixed various bugs and improved pattern matching
 
 1.2.0 - 31.03.2025:
 - Added pagination for patterns list

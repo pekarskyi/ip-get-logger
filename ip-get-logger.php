@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IP GET Logger
  * Description: Plugin for tracking GET requests to the site and logging them
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: InwebPress
  * Author URI: https://inwebpress.com
  * Plugin URI: https://github.com/pekarskyi/ip-get-logger
@@ -191,12 +191,24 @@ function ip_get_logger_log_match($pattern) {
         }
     }
     
+    // Отримуємо User-Agent
+    $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided';
+    
+    // Визначаємо тип пристрою за допомогою класу IP_Get_Logger
+    $logger = new IP_Get_Logger();
+    $device_type = $logger->get_device_type($user_agent);
+    
+    // Визначаємо країну за IP
+    $country_code = $logger->get_country_by_ip($_SERVER['REMOTE_ADDR']);
+    
     $log_data = array(
         'method' => $_SERVER['REQUEST_METHOD'],
         'url' => $request_url,
         'matched_pattern' => $pattern,
         'ip' => $_SERVER['REMOTE_ADDR'],
-        'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+        'country' => $country_code,
+        'user_agent' => $user_agent,
+        'device_type' => $device_type,
         'status_code' => $status_code,
         'timestamp' => current_time('mysql'),
         'hook' => 'early_capture'
@@ -223,7 +235,9 @@ function ip_get_logger_log_match($pattern) {
             'message' => isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger'),
             'request_url' => $request_url,
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
+            'country' => $country_code,
+            'user_agent' => $user_agent,
+            'device_type' => $device_type,
             'timestamp' => current_time('mysql')
         );
         
@@ -247,6 +261,8 @@ function ip_get_logger_send_notifications() {
             $message .= '<br><br>';
             $message .= __('Request details:', 'ip-get-logger') . '<br>';
             $message .= __('IP Address:', 'ip-get-logger') . ' ' . $notification['ip'] . '<br>';
+            $message .= __('Country:', 'ip-get-logger') . ' ' . $notification['country'] . '<br>';
+            $message .= __('Device Type:', 'ip-get-logger') . ' ' . $notification['device_type'] . '<br>';
             $message .= __('User Agent:', 'ip-get-logger') . ' ' . $notification['user_agent'] . '<br>';
             $message .= __('Date and Time:', 'ip-get-logger') . ' ' . $notification['timestamp'] . '<br>';
             

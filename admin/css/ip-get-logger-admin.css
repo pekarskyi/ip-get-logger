@@ -147,10 +147,18 @@
 }
 
 .ip-get-logger-logs-list th:nth-child(5) {
-    width: 120px;
+    width: 100px;
 }
 
 .ip-get-logger-logs-list th:nth-child(6) {
+    width: 60px;
+}
+
+.ip-get-logger-logs-list th:nth-child(7) {
+    width: 80px;
+}
+
+.ip-get-logger-logs-list th:nth-child(8) {
     width: 80px;
 }
 
