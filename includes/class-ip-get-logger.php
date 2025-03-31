@@ -5,25 +5,18 @@
 class IP_Get_Logger {
 
     /**
-     * Опції плагіна
+     * Налаштування
      *
      * @var array
      */
     private $options;
 
     /**
-     * Запити для відстеження
+     * Список GET-запитів
      *
      * @var array
      */
     private $get_requests;
-
-    /**
-     * Кеш статус-кодів URL
-     *
-     * @var array
-     */
-    private static $status_code_cache = array();
 
     /**
      * Конструктор
@@ -92,6 +85,18 @@ class IP_Get_Logger {
             return false;
         }
         
+        // Перевіряємо URL на відповідність шаблонам виключення
+        $exclude_patterns = ip_get_logger_get_option('exclude_patterns', array());
+        
+        foreach ($exclude_patterns as $pattern) {
+            if (strpos($request_url, $pattern) !== false || 
+                strpos($decoded_request_url, $pattern) !== false || 
+                strpos($double_decoded_url, $pattern) !== false) {
+                // URL містить шаблон виключення, пропускаємо його
+                return false;
+            }
+        }
+        
         // Отримуємо шаблони для перевірки
         $get_requests = ip_get_logger_get_option('get_requests', array());
         
@@ -129,9 +134,6 @@ class IP_Get_Logger {
             // Додаємо URL до оброблених
             $ip_get_logger_processed_requests[] = $request_url;
             
-            // Отримуємо статус-код відповіді
-            $status_code = http_response_code();
-            
             // Записуємо в лог
             $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
             
@@ -157,7 +159,6 @@ class IP_Get_Logger {
                 'country' => $country_code,
                 'user_agent' => $user_agent,
                 'device_type' => $device_type,
-                'status_code' => $status_code,
                 'timestamp' => current_time('mysql'),
                 'hook' => current_filter()
             );
@@ -297,110 +298,6 @@ class IP_Get_Logger {
     }
 
     /**
-     * Отримати поточний HTTP статус-код
-     *
-     * @return string|int HTTP статус-код або "Невідомо" для статичних файлів
-     */
-    private function get_http_status_code() {
-        // Отримуємо відносний шлях із запиту
-        $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-        $request_url = $this->get_current_url();
-        
-        // Перевіряємо чи запит до статичного файлу (включно з PHP)
-        $file_extensions = array('.txt', '.log', '.sql', '.php', '.js', '.json', '.xml', '.css', '.svg', '.html', '.htm');
-        $is_static_file = false;
-        
-        foreach ($file_extensions as $extension) {
-            if (strpos($request_uri, $extension) !== false) {
-                $is_static_file = true;
-                break;
-            }
-        }
-        
-        // Для статичних файлів перевіряємо чи вони існують
-        if ($is_static_file) {
-            // Отримуємо відносний шлях із запиту
-            $path = parse_url($request_uri, PHP_URL_PATH);
-            
-            // Формуємо повний шлях до файлу
-            $file_path = ABSPATH . ltrim($path, '/');
-            
-            // Якщо файл існує, повертаємо 200, інакше 404
-            if (file_exists($file_path) && is_file($file_path)) {
-                return 200;
-            } else {
-                return 404;
-            }
-        }
-        
-        // Для нестатичних файлів визначаємо код через стандартні механізми
-        $cache_key = md5($request_url);
-        if (isset(self::$status_code_cache[$cache_key])) {
-            return self::$status_code_cache[$cache_key];
-        }
-        
-        // 1. Перевіряємо стандартний спосіб отримання коду
-        $current_code = http_response_code();
-        
-        // 2. Перевіряємо функції WordPress
-        if (function_exists('is_404') && is_404()) {
-            self::$status_code_cache[$cache_key] = 404;
-            return 404;
-        }
-        
-        // 3. Для адміністративної частини повертаємо звичайний код
-        if (is_admin()) {
-            self::$status_code_cache[$cache_key] = $current_code;
-            return $current_code;
-        }
-        
-        // 4. Якщо це redirect у WordPress
-        if (function_exists('wp_redirect_status') && wp_redirect_status() !== 0) {
-            $redirect_code = wp_redirect_status();
-            self::$status_code_cache[$cache_key] = $redirect_code;
-            return $redirect_code;
-        }
-        
-        // За замовчуванням повертаємо поточний код статусу
-        self::$status_code_cache[$cache_key] = $current_code;
-        return $current_code;
-    }
-
-    /**
-     * Конвертує URL в шлях до файлу
-     *
-     * @param string $url URL для конвертації
-     * @return string|bool Шлях до файлу або false у випадку помилки
-     */
-    private function convert_url_to_path($url) {
-        // Отримуємо шлях без параметрів
-        $clean_url = parse_url($url, PHP_URL_PATH);
-        
-        // Базові шляхи для пошуку
-        $possible_paths = array(
-            ABSPATH . ltrim($clean_url, '/'),
-            WP_CONTENT_DIR . '/plugins/' . basename($clean_url),
-            WP_CONTENT_DIR . '/themes/' . basename($clean_url),
-            get_template_directory() . '/' . basename($clean_url)
-        );
-        
-        // Якщо це шлях до wp-content
-        if (strpos($clean_url, '/wp-content/') !== false) {
-            $content_path = str_replace('/wp-content/', '', $clean_url);
-            $possible_paths[] = WP_CONTENT_DIR . '/' . ltrim($content_path, '/');
-        }
-        
-        // Перевіряємо всі можливі шляхи
-        foreach ($possible_paths as $path) {
-            if (file_exists($path) && is_file($path)) {
-                return $path;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
      * Логування запиту
      *
      * @param string $url URL запиту
@@ -410,16 +307,12 @@ class IP_Get_Logger {
     private function log_request($url, $matched_pattern, $hook = '') {
         $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
         
-        // Отримуємо статус-код або "Невідомо" для статичних файлів
-        $status_code = $this->get_http_status_code();
-        
         $log_data = array(
             'method' => 'GET',
             'url' => $url,
             'matched_pattern' => $matched_pattern,
             'ip' => $this->get_client_ip(),
             'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
-            'status_code' => $status_code,
             'timestamp' => current_time('mysql'),
             'hook' => $hook
         );
@@ -466,25 +359,50 @@ class IP_Get_Logger {
         if ($send_notifications && !empty($settings['email_recipient'])) {
             // Підготовка даних для відправки
             $to = $settings['email_recipient'];
-            $subject = isset($settings['email_subject']) ? $settings['email_subject'] : __('GET Request Match Found', 'ip-get-logger');
+            $subject = isset($settings['email_subject']) ? $settings['email_subject'] : __('Suspicious request detected on your site', 'ip-get-logger');
             $message_template = isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger');
             
-            // Отримуємо країну за IP
+            // Отримуємо додаткову інформацію
+            $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided';
+            $device_type = $this->get_device_type($user_agent);
             $country_code = $this->get_country_by_ip($_SERVER['REMOTE_ADDR']);
+            $date = current_time('Y-m-d');
+            $time = current_time('H:i:s');
             
             // Замінюємо змінні у повідомленні
             $message = str_replace(
-                array('{request}', '{ip}', '{date}', '{time}', '{user_agent}', '{country}'),
+                array('{request}', '{ip}', '{date}', '{time}', '{user_agent}', '{country}', '{device_type}'),
                 array(
                     $request_url,
                     $_SERVER['REMOTE_ADDR'],
-                    current_time('Y-m-d'),
-                    current_time('H:i:s'),
-                    isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided',
-                    $country_code
+                    $date,
+                    $time,
+                    $user_agent,
+                    $country_code,
+                    $device_type
                 ),
                 $message_template
             );
+            
+            // Додаємо детальну інформацію про запит у вигляді HTML-таблиці
+            $message .= '<br><br>';
+            $message .= '<h3>' . __('Request details:', 'ip-get-logger') . '</h3>';
+            $message .= '<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">';
+            $message .= '<tr><th style="text-align: left; background-color: #f2f2f2;">' . __('Parameter', 'ip-get-logger') . '</th><th style="text-align: left; background-color: #f2f2f2;">' . __('Value', 'ip-get-logger') . '</th></tr>';
+            $message .= '<tr><td>' . __('URL', 'ip-get-logger') . '</td><td>' . $request_url . '</td></tr>';
+            $message .= '<tr><td>' . __('IP Address', 'ip-get-logger') . '</td><td>' . $_SERVER['REMOTE_ADDR'] . '</td></tr>';
+            $message .= '<tr><td>' . __('Country', 'ip-get-logger') . '</td><td>' . $country_code . '</td></tr>';
+            $message .= '<tr><td>' . __('Device Type', 'ip-get-logger') . '</td><td>' . $device_type . '</td></tr>';
+            $message .= '<tr><td>' . __('Date', 'ip-get-logger') . '</td><td>' . $date . '</td></tr>';
+            $message .= '<tr><td>' . __('Time', 'ip-get-logger') . '</td><td>' . $time . '</td></tr>';
+            $message .= '<tr><td>' . __('User Agent', 'ip-get-logger') . '</td><td>' . $user_agent . '</td></tr>';
+            
+            // Додаємо інформацію про метод та HTTP_HOST
+            $http_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'Not provided';
+            $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'Not provided';
+            $message .= '<tr><td>' . __('Request Method', 'ip-get-logger') . '</td><td>' . $request_method . '</td></tr>';
+            $message .= '<tr><td>' . __('HTTP Host', 'ip-get-logger') . '</td><td>' . $http_host . '</td></tr>';
+            $message .= '</table>';
             
             // Встановлюємо заголовки
             $headers = array(
@@ -737,9 +655,6 @@ class IP_Get_Logger {
                     // Додаємо URL до оброблених
                     $ip_get_logger_processed_requests[] = $request_url;
                     
-                    // Отримуємо статус-код відповіді
-                    $status_code = isset($response->status) ? $response->status : 200;
-                    
                     // Записуємо в лог
                     $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
                     
@@ -766,7 +681,6 @@ class IP_Get_Logger {
                         'country' => $country_code,
                         'user_agent' => $user_agent,
                         'device_type' => $device_type,
-                        'status_code' => $status_code,
                         'timestamp' => current_time('mysql'),
                         'hook' => 'rest_api_init'
                     );
@@ -797,28 +711,28 @@ class IP_Get_Logger {
         
         // Боти
         if (preg_match('/(googlebot|bingbot|yandexbot|slurp|duckduckbot|baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator|whatsapp)/i', $user_agent)) {
-            return __('Bot', 'ip-get-logger');
+            return 'Bot';
         }
         
         // Мобільні пристрої
         if (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i', $user_agent)) {
-            return __('Mobile', 'ip-get-logger');
+            return 'Mobile';
         }
         
         // Планшети
         if (preg_match('/(android|bb\d+|meego).+tablet|ipad|playbook|silk/i', $user_agent) || 
             (preg_match('/tablet/i', $user_agent) && !preg_match('/RX-34/i', $user_agent)) || 
             preg_match('/FOLIO/i', $user_agent)) {
-            return __('Tablet', 'ip-get-logger');
+            return 'Tablet';
         }
         
         // Десктопи
         if (preg_match('/(mozilla|chrome|safari|firefox|msie|trident)/i', $user_agent) && !preg_match('/(android|ipad|playbook|silk|mobile|tablet)/i', $user_agent)) {
-            return __('Desktop', 'ip-get-logger');
+            return 'Desktop';
         }
         
         // Якщо жоден з патернів не співпав
-        return __('Unknown', 'ip-get-logger');
+        return 'Unknown';
     }
 
     /**
@@ -833,7 +747,7 @@ class IP_Get_Logger {
             strpos($ip, '192.168.') === 0 || 
             strpos($ip, '10.') === 0 || 
             strpos($ip, '172.16.') === 0) {
-            return __('Local', 'ip-get-logger');
+            return 'Local';
         }
         
         // Спробуємо отримати інформацію через безкоштовний GeoIP API
@@ -853,7 +767,7 @@ class IP_Get_Logger {
         ));
         
         if (is_wp_error($response)) {
-            return __('Unknown', 'ip-get-logger');
+            return 'Unknown';
         }
         
         $body = wp_remote_retrieve_body($response);
@@ -883,6 +797,6 @@ class IP_Get_Logger {
             }
         }
         
-        return __('Unknown', 'ip-get-logger');
+        return 'Unknown';
     }
 }

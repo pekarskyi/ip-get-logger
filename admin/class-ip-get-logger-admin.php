@@ -19,11 +19,19 @@ class IP_Get_Logger_Admin {
     private $get_requests;
 
     /**
+     * Шаблони для виключення
+     *
+     * @var array
+     */
+    private $exclude_patterns;
+
+    /**
      * Конструктор
      */
     public function __construct() {
         $this->options = ip_get_logger_get_option('settings', array());
         $this->get_requests = ip_get_logger_get_option('get_requests', array());
+        $this->exclude_patterns = ip_get_logger_get_option('exclude_patterns', array());
     }
 
     /**
@@ -45,6 +53,13 @@ class IP_Get_Logger_Admin {
         add_action('wp_ajax_ip_get_logger_edit_request', array($this, 'ajax_edit_request'));
         add_action('wp_ajax_ip_get_logger_update_from_github', array($this, 'ajax_update_from_github'));
         add_action('wp_ajax_ip_get_logger_clear_database', array($this, 'ajax_clear_database'));
+        
+        // AJAX-хендлери для шаблонів виключень
+        add_action('wp_ajax_ip_get_logger_add_exclude_pattern', array($this, 'ajax_add_exclude_pattern'));
+        add_action('wp_ajax_ip_get_logger_edit_exclude_pattern', array($this, 'ajax_edit_exclude_pattern'));
+        add_action('wp_ajax_ip_get_logger_delete_exclude_pattern', array($this, 'ajax_delete_exclude_pattern'));
+        add_action('wp_ajax_ip_get_logger_clear_exclude_patterns', array($this, 'ajax_clear_exclude_patterns'));
+        add_action('wp_ajax_ip_get_logger_update_exclude_patterns_from_github', array($this, 'ajax_update_exclude_patterns_from_github'));
     }
 
     /**
@@ -77,6 +92,15 @@ class IP_Get_Logger_Admin {
             'manage_options',
             'ip-get-logger-db',
             array($this, 'display_requests_page')
+        );
+        
+        add_submenu_page(
+            'ip-get-logger',
+            __('Exclude Patterns', 'ip-get-logger'),
+            __('Exclude Patterns', 'ip-get-logger'),
+            'manage_options',
+            'ip-get-logger-exclude',
+            array($this, 'display_exclude_page')
         );
         
         add_submenu_page(
@@ -253,12 +277,15 @@ class IP_Get_Logger_Admin {
         $filter_ip = isset($_GET['filter_ip']) ? sanitize_text_field($_GET['filter_ip']) : '';
         $filter_country = isset($_GET['filter_country']) ? sanitize_text_field($_GET['filter_country']) : '';
         $filter_url = isset($_GET['filter_url']) ? sanitize_text_field($_GET['filter_url']) : '';
-        $filter_status = isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '';
         $filter_device = isset($_GET['filter_device']) ? sanitize_text_field($_GET['filter_device']) : '';
+        
+        // Параметри пагінації
+        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 20;
+        $per_page = max(10, min(100, $per_page)); // Обмежуємо значення від 10 до 100
         
         // Отримання логів
         $logs = $this->get_logs();
-        $processed_logs = array();
+        $all_logs = array();
         
         // Створюємо екземпляр класу IP_Get_Logger для використання його методів
         $logger = new IP_Get_Logger();
@@ -271,15 +298,46 @@ class IP_Get_Logger_Admin {
                 $log_data['device_type'] = $logger->get_device_type($log_data['user_agent']);
             }
             
+            // Конвертуємо старі локалізовані значення типів пристроїв на нові англійські
+            if (isset($log_data['device_type'])) {
+                // Масив відповідностей локалізованих значень до англійських
+                $device_type_map = array(
+                    'Desktop' => 'Desktop',
+                    'Mobile' => 'Mobile',
+                    'Tablet' => 'Tablet',
+                    'Bot' => 'Bot',
+                    'Unknown' => 'Unknown'
+                );
+                
+                // Якщо значення перекладене, замінюємо його на англійське
+                if (isset($device_type_map[$log_data['device_type']])) {
+                    $log_data['device_type'] = $device_type_map[$log_data['device_type']];
+                }
+            }
+            
             // Додаємо країну, якщо її немає
             if (!isset($log_data['country']) && isset($log_data['ip'])) {
                 $log_data['country'] = $logger->get_country_by_ip($log_data['ip']);
             }
             
+            // Конвертуємо старі локалізовані значення країн на англійські
+            if (isset($log_data['country'])) {
+                // Масив відповідностей локалізованих значень до англійських
+                $country_map = array(
+                    'Local' => 'Local',
+                    'Unknown' => 'Unknown'
+                );
+                
+                // Якщо значення перекладене, замінюємо його на англійське
+                if (isset($country_map[$log_data['country']])) {
+                    $log_data['country'] = $country_map[$log_data['country']];
+                }
+            }
+            
             // Фільтрація логів
             $match = true;
             
-            if (!empty($filter_date) || !empty($filter_ip) || !empty($filter_country) || !empty($filter_url) || !empty($filter_status) || !empty($filter_device)) {
+            if (!empty($filter_date) || !empty($filter_ip) || !empty($filter_country) || !empty($filter_url) || !empty($filter_device)) {
                 if (!empty($filter_date)) {
                     if (isset($log_data['timestamp'])) {
                         $log_date = date('Y-m-d', strtotime($log_data['timestamp']));
@@ -309,24 +367,34 @@ class IP_Get_Logger_Admin {
                     }
                 }
                 
-                if (!empty($filter_status)) {
-                    if (!isset($log_data['status_code']) || strpos($log_data['status_code'], $filter_status) === false) {
-                        $match = false;
-                    }
-                }
-                
                 if (!empty($filter_device)) {
                     if (!isset($log_data['device_type']) || 
-                        strpos(strtolower($log_data['device_type']), strtolower($filter_device)) === false) {
+                        strtolower($log_data['device_type']) !== strtolower($filter_device)) {
                         $match = false;
                     }
                 }
             }
             
             if ($match) {
-                $processed_logs[] = $log_data;
+                $all_logs[] = $log_data;
             }
         }
+        
+        // Сортування логів за часом (від найновіших до найстаріших)
+        usort($all_logs, function($a, $b) {
+            $time_a = isset($a['timestamp']) ? strtotime($a['timestamp']) : 0;
+            $time_b = isset($b['timestamp']) ? strtotime($b['timestamp']) : 0;
+            return $time_b - $time_a; // За спаданням (найновіші вгорі)
+        });
+        
+        // Пагінація
+        $total_items = count($all_logs);
+        $total_pages = ceil($total_items / $per_page);
+        $current_page = isset($_GET['paged']) ? max(1, min($total_pages, intval($_GET['paged']))) : 1;
+        
+        // Отримуємо логи для поточної сторінки
+        $offset = ($current_page - 1) * $per_page;
+        $processed_logs = array_slice($all_logs, $offset, $per_page);
         
         // Виводимо шаблон
         include(IP_GET_LOGGER_PLUGIN_DIR . 'admin/partials/logs-page.php');
@@ -372,7 +440,7 @@ class IP_Get_Logger_Admin {
      * Колбек для поля теми листа
      */
     public function email_subject_callback() {
-        $subject = isset($this->options['email_subject']) ? $this->options['email_subject'] : __('GET Request Match Found', 'ip-get-logger');
+        $subject = isset($this->options['email_subject']) ? $this->options['email_subject'] : __('Suspicious request detected on your site', 'ip-get-logger');
         echo '<input type="text" id="email_subject" name="ip_get_logger_form_settings[email_subject]" value="' . esc_attr($subject) . '" class="regular-text" />';
     }
     
@@ -382,7 +450,6 @@ class IP_Get_Logger_Admin {
     public function email_message_callback() {
         $message = isset($this->options['email_message']) ? $this->options['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger');
         echo '<textarea id="email_message" name="ip_get_logger_form_settings[email_message]" rows="5" class="large-text">' . esc_textarea($message) . '</textarea>';
-        echo '<p class="description">' . __('Use {request} to display the request URL', 'ip-get-logger') . '</p>';
     }
     
     /**
@@ -928,5 +995,346 @@ class IP_Get_Logger_Admin {
         $lines = array_filter(explode("\n", $body));
         
         return count($lines);
+    }
+    
+    /**
+     * Отримання кількості шаблонів виключення з віддаленого репозиторію
+     *
+     * @return int|string Кількість шаблонів або повідомлення про помилку
+     */
+    private function get_remote_exclude_patterns_count() {
+        $remote_url = 'https://raw.githubusercontent.com/pekarskyi/ip-get-logger-db/main/ip-get-logger-exclude.txt';
+        
+        $response = wp_remote_get($remote_url);
+        
+        if (is_wp_error($response)) {
+            return __('Error fetching remote data', 'ip-get-logger');
+        }
+        
+        $body = wp_remote_retrieve_body($response);
+        
+        if (empty($body)) {
+            return __('No data available', 'ip-get-logger');
+        }
+        
+        // Розбиваємо текст на рядки та фільтруємо порожні та коментарі
+        $lines = array_filter(explode("\n", $body), function($line) {
+            return !empty(trim($line)) && strpos(trim($line), '#') !== 0;
+        });
+        
+        return count($lines);
+    }
+
+    /**
+     * Виведення сторінки з шаблонами виключень
+     */
+    public function display_exclude_page() {
+        // Підключаємо необхідні скрипти і стилі
+        wp_enqueue_style('ip-get-logger-admin', IP_GET_LOGGER_PLUGIN_URL . 'admin/css/ip-get-logger-admin.css', array(), IP_GET_LOGGER_VERSION);
+        wp_enqueue_script('ip-get-logger-admin', IP_GET_LOGGER_PLUGIN_URL . 'admin/js/ip-get-logger-admin.js', array('jquery'), IP_GET_LOGGER_VERSION, true);
+        wp_localize_script('ip-get-logger-admin', 'ip_get_logger_params', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('ip-get-logger-nonce')
+        ));
+        
+        // Отримуємо збережені шаблони виключень
+        $exclude_patterns = $this->exclude_patterns;
+        
+        // Зберігаємо повну кількість записів незалежно від пошуку
+        $total_patterns_count = count($exclude_patterns);
+        
+        // Отримуємо кількість шаблонів з віддаленого репозиторію
+        $remote_patterns_count = $this->get_remote_exclude_patterns_count();
+        
+        // Параметри пошуку
+        $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+        
+        // Зберігаємо оригінальні індекси при фільтрації
+        $filtered_patterns = array();
+        
+        // Фільтруємо запити за пошуковим запитом
+        if (!empty($search)) {
+            foreach ($exclude_patterns as $index => $pattern) {
+                if (stripos($pattern, $search) !== false) {
+                    $filtered_patterns[] = array(
+                        'index' => $index,
+                        'pattern' => $pattern
+                    );
+                }
+            }
+        } else {
+            // Якщо немає пошуку, просто додаємо всі запити з оригінальними індексами
+            foreach ($exclude_patterns as $index => $pattern) {
+                $filtered_patterns[] = array(
+                    'index' => $index,
+                    'pattern' => $pattern
+                );
+            }
+        }
+        
+        // Параметри пагінації
+        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 20;
+        $per_page = max(10, min(100, $per_page)); // Обмежуємо значення від 10 до 100
+        
+        $total_items = count($filtered_patterns);
+        $total_pages = ceil($total_items / $per_page);
+        $current_page = isset($_GET['paged']) ? max(1, min($total_pages, intval($_GET['paged']))) : 1;
+        
+        // Отримуємо запити для поточної сторінки
+        $offset = ($current_page - 1) * $per_page;
+        $paged_patterns = array_slice($filtered_patterns, $offset, $per_page);
+        
+        // Виводимо шаблон
+        include(IP_GET_LOGGER_PLUGIN_DIR . 'admin/partials/exclude-page.php');
+    }
+
+    /**
+     * AJAX-обробник для додавання шаблону виключення
+     */
+    public function ajax_add_exclude_pattern() {
+        // Перевіряємо nonce
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        // Перевіряємо права
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions to perform this operation', 'ip-get-logger'));
+            return;
+        }
+        
+        // Отримуємо і валідуємо шаблон виключення
+        $pattern = isset($_POST['pattern']) ? wp_unslash($_POST['pattern']) : '';
+        
+        // Базова валідація, видаляємо контрольні символи та зайві пробіли
+        $pattern = trim(preg_replace('/[\x00-\x1F\x7F]/', '', $pattern));
+        
+        if (empty($pattern)) {
+            wp_send_json_error(__('Exclude pattern cannot be empty', 'ip-get-logger'));
+            return;
+        }
+        
+        // Перевіряємо чи шаблон вже існує
+        if (in_array($pattern, $this->exclude_patterns)) {
+            wp_send_json_error(__('This exclude pattern already exists', 'ip-get-logger'));
+            return;
+        }
+        
+        // Додаємо шаблон
+        $this->exclude_patterns[] = $pattern;
+        
+        // Зберігаємо оновлені шаблони
+        ip_get_logger_update_option('exclude_patterns', $this->exclude_patterns);
+        
+        wp_send_json_success(array(
+            'message' => __('Exclude pattern added successfully', 'ip-get-logger'),
+            'patterns' => $this->exclude_patterns
+        ));
+    }
+    
+    /**
+     * AJAX-обробник для редагування шаблону виключення
+     */
+    public function ajax_edit_exclude_pattern() {
+        // Перевіряємо nonce
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        // Перевіряємо права
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions to perform this operation', 'ip-get-logger'));
+            return;
+        }
+        
+        // Отримуємо індекс шаблону
+        $index = isset($_POST['index']) ? intval($_POST['index']) : -1;
+        
+        // Отримуємо актуальний список шаблонів з опцій
+        $all_patterns = ip_get_logger_get_option('exclude_patterns', array());
+        
+        if ($index < 0 || !isset($all_patterns[$index])) {
+            wp_send_json_error(__('Exclude pattern not found', 'ip-get-logger'));
+            return;
+        }
+        
+        // Отримуємо і валідуємо шаблон
+        $pattern = isset($_POST['pattern']) ? wp_unslash($_POST['pattern']) : '';
+        
+        // Базова валідація, видаляємо контрольні символи та зайві пробіли
+        $pattern = trim(preg_replace('/[\x00-\x1F\x7F]/', '', $pattern));
+        
+        if (empty($pattern)) {
+            wp_send_json_error(__('Exclude pattern cannot be empty', 'ip-get-logger'));
+            return;
+        }
+        
+        // Перевіряємо чи шаблон вже існує в іншому індексі
+        foreach ($all_patterns as $i => $existing_pattern) {
+            if ($i != $index && $existing_pattern === $pattern) {
+                wp_send_json_error(__('This exclude pattern already exists', 'ip-get-logger'));
+                return;
+            }
+        }
+        
+        // Оновлюємо шаблон
+        $all_patterns[$index] = $pattern;
+        
+        // Зберігаємо оновлені шаблони
+        ip_get_logger_update_option('exclude_patterns', $all_patterns);
+        
+        // Оновлюємо локальний масив шаблонів
+        $this->exclude_patterns = $all_patterns;
+        
+        wp_send_json_success(array(
+            'message' => __('Exclude pattern updated successfully', 'ip-get-logger'),
+            'patterns' => $all_patterns
+        ));
+    }
+    
+    /**
+     * AJAX-обробник для видалення шаблону виключення
+     */
+    public function ajax_delete_exclude_pattern() {
+        // Перевіряємо nonce
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        // Перевіряємо права
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions to perform this operation', 'ip-get-logger'));
+            return;
+        }
+        
+        // Отримуємо індекс шаблону
+        $index = isset($_POST['index']) ? intval($_POST['index']) : -1;
+        
+        // Отримуємо актуальний список шаблонів з опцій
+        $all_patterns = ip_get_logger_get_option('exclude_patterns', array());
+        
+        if ($index < 0 || !isset($all_patterns[$index])) {
+            wp_send_json_error(__('Exclude pattern not found', 'ip-get-logger'));
+            return;
+        }
+        
+        // Видаляємо шаблон
+        array_splice($all_patterns, $index, 1);
+        
+        // Зберігаємо оновлені шаблони
+        ip_get_logger_update_option('exclude_patterns', $all_patterns);
+        
+        // Оновлюємо локальний масив шаблонів
+        $this->exclude_patterns = $all_patterns;
+        
+        wp_send_json_success(array(
+            'message' => __('Exclude pattern deleted successfully', 'ip-get-logger'),
+            'patterns' => $all_patterns
+        ));
+    }
+    
+    /**
+     * AJAX-обробник для очищення всіх шаблонів виключень
+     */
+    public function ajax_clear_exclude_patterns() {
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('You do not have sufficient permissions to perform this action.', 'ip-get-logger'));
+        }
+        
+        // Очищаємо масив шаблонів
+        $this->exclude_patterns = array();
+        
+        // Зберігаємо оновлений масив
+        ip_get_logger_update_option('exclude_patterns', array());
+        
+        wp_send_json_success(array(
+            'message' => __('The list of exclude patterns is successfully cleared.', 'ip-get-logger')
+        ));
+    }
+    
+    /**
+     * AJAX-обробник для оновлення шаблонів виключень з репозиторію GitHub
+     */
+    public function ajax_update_exclude_patterns_from_github() {
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('You do not have sufficient permissions to perform this action.', 'ip-get-logger'));
+        }
+        
+        // URL файлу в GitHub
+        $github_file_url = 'https://raw.githubusercontent.com/pekarskyi/ip-get-logger-db/main/ip-get-logger-exclude.txt';
+        
+        // Використовуємо WordPress HTTP API для безпечного отримання файлу
+        $response = wp_remote_get($github_file_url);
+        
+        // Перевіряємо на помилки
+        if (is_wp_error($response)) {
+            wp_send_json_error(sprintf(
+                __('Failed to fetch data from GitHub: %s', 'ip-get-logger'),
+                $response->get_error_message()
+            ));
+            return;
+        }
+        
+        // Перевіряємо HTTP код відповіді
+        $response_code = wp_remote_retrieve_response_code($response);
+        if ($response_code !== 200) {
+            wp_send_json_error(sprintf(
+                __('Failed to fetch data from GitHub. HTTP Response Code: %s', 'ip-get-logger'),
+                $response_code
+            ));
+            return;
+        }
+        
+        // Отримуємо тіло відповіді (вміст файлу)
+        $content = wp_remote_retrieve_body($response);
+        
+        if (empty($content)) {
+            wp_send_json_error(__('No exclude patterns found in the repository.', 'ip-get-logger'));
+            return;
+        }
+        
+        // Розбиваємо зміст файлу на рядки та видаляємо порожні рядки
+        $patterns = array_filter(explode("\n", $content), function($line) {
+            return !empty(trim($line)) && strpos(trim($line), '#') !== 0;
+        });
+        
+        // Видаляємо зайві пробіли та дублікати
+        $patterns = array_unique(array_map('trim', $patterns));
+        
+        if (empty($patterns)) {
+            wp_send_json_error(__('No valid exclude patterns found in the repository.', 'ip-get-logger'));
+            return;
+        }
+        
+        // Отримуємо поточні шаблони виключення
+        $current_patterns = ip_get_logger_get_option('exclude_patterns', array());
+        
+        // Визначаємо, які шаблони є новими
+        $new_patterns = array_diff($patterns, $current_patterns);
+        
+        // Визначаємо кількість доданих шаблонів
+        $added_count = count($new_patterns);
+        
+        // Оновлюємо масив шаблонів виключення
+        $updated_patterns = array_values(array_unique(array_merge($current_patterns, $patterns)));
+        
+        // Зберігаємо оновлений масив
+        ip_get_logger_update_option('exclude_patterns', $updated_patterns);
+        
+        // Оновлюємо локальний масив шаблонів
+        $this->exclude_patterns = $updated_patterns;
+        
+        wp_send_json_success(array(
+            'message' => sprintf(
+                _n(
+                    'Successfully added %d new exclude pattern from the repository.',
+                    'Successfully added %d new exclude patterns from the repository.',
+                    $added_count,
+                    'ip-get-logger'
+                ),
+                $added_count
+            ),
+            'patterns' => $updated_patterns,
+            'total_patterns' => count($updated_patterns),
+            'added_patterns' => $added_count
+        ));
     }
 } 

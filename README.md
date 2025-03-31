@@ -28,18 +28,28 @@ IP GET Logger is a powerful WordPress plugin designed to help website administra
 
 ## Features
 
+### Main features
 - **GET Request Tracking**: Define specific GET request patterns to monitor
-- **Email Notifications**: Receive instant notifications when matching requests are detected
 - **Logging System**: Keep detailed logs of all matched requests
+- **Email Notifications**: Receive instant notifications when matching requests are detected
+- **Persistent Logs**: Logs are stored in the `/wp-content/ip-get-logger-logs/` directory and preserved during plugin updates
+- **Device Detection**: Identify and log the device type (Desktop, Mobile, Tablet, Bot)
+- **Geolocation**: Determine and log the country from which requests originate
+
+### Patterns Management
 - **Import/Export**: Easily import or export your GET request patterns
 - **Patterns Management**: Search, filter, and paginate through your patterns collection
 - **Update Patterns**: Update patterns from the global database repository
 - **Clear Patterns**: Easily clear all patterns with one click
+
+### Exclude Patterns
+- **Exclude Patterns**: Define URL patterns that should be ignored by the logger
+- **Auto-update Exclude Patterns**: Update exclusion patterns from the remote repository
+
+### Other features
 - **User-friendly Admin Interface**: Intuitive settings page for easy configuration
 - **Test URL**: Test your URL against defined patterns
 - **Plugin update system**: Stay updated with the latest version
-- **Device Detection**: Identify and log the device type (Desktop, Mobile, Tablet, Bot)
-- **Geolocation**: Determine and log the country from which requests originate
 
 ## Screenshots
 
@@ -49,11 +59,17 @@ Logs
 Patterns
 ![https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_db.jpg](https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_db.jpg)
 
+Exclude Patterns
+![https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_exclude.jpg](https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_exclude.jpg)
+
 Settings
 ![https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_sett.jpg](https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_sett.jpg)
 
 URL Matching Test
 ![https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_test-url.jpg](https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_test-url.jpg)
+
+Email Notifications
+![https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_email.jpg](https://github.com/pekarskyi/assets/raw/master/ip-get-logger/ip-get-logger_email.jpg)
 
 ## Installation
 
@@ -69,17 +85,26 @@ This will track requests that might be attempting code injection.
 
 ## Languages:
 - English
-- Ukrainian
+- Українська
 
 The plugin supports the creation of localization for any language.
 
 ## Do you have any questions?
 
-The plugin may skip some requests or display the HTTP code incorrectly. The author continues to improve it. At the same time, the plugin remains a reliable tool for early threat detection when an attacker attempts to find vulnerabilities on your site.
 
 If you have any questions, suggestions, found bugs, or discovered new malicious requests, please report them on GitHub in the [Issues section](https://github.com/pekarskyi/ip-get-logger/issues).
 
 ## Changelog
+
+1.2.2 - 01.04.2025:
+- Changed logs storage location to `/wp-content/ip-get-logger-logs/` to preserve logs during plugin updates
+- Removed HTTP status code tracking and display for better simplicity
+- Improved email notifications with detailed request information in HTML table format
+- Added pagination for logs with ability to select number of entries per page
+- Added exclude patterns functionality to ignore specific URL patterns
+- Added auto-update of exclude patterns from remote repository
+- Fixed minor bugs and improved overall stability
+- Updated localization
 
 1.2.1 - 31.03.2025:
 - Added device type detection (Desktop, Mobile, Tablet, Bot)

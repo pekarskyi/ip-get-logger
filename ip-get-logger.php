@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IP GET Logger
  * Description: Plugin for tracking GET requests to the site and logging them
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: InwebPress
  * Author URI: https://inwebpress.com
  * Plugin URI: https://github.com/pekarskyi/ip-get-logger
@@ -25,7 +25,7 @@ function ip_get_logger_get_plugin_version() {
 define('IP_GET_LOGGER_VERSION', ip_get_logger_get_plugin_version());
 define('IP_GET_LOGGER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('IP_GET_LOGGER_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('IP_GET_LOGGER_LOGS_DIR', IP_GET_LOGGER_PLUGIN_DIR . 'logs/');
+define('IP_GET_LOGGER_LOGS_DIR', WP_CONTENT_DIR . '/ip-get-logger-logs/');
 define('IP_GET_LOGGER_TABLE', 'ip_get_logger');
 
 // Глобальна змінна для відслідковування вже зареєстрованих запитів
@@ -173,24 +173,6 @@ function ip_get_logger_log_match($pattern) {
         }
     }
     
-    // Визначаємо статус-код
-    $status_code = 200; // За замовчуванням
-    
-    if ($is_static_file) {
-        // Отримуємо відносний шлях із запиту
-        $path = parse_url($request_uri, PHP_URL_PATH);
-        
-        // Формуємо повний шлях до файлу
-        $file_path = ABSPATH . ltrim($path, '/');
-        
-        // Перевіряємо наявність файлу
-        if (file_exists($file_path) && is_file($file_path)) {
-            $status_code = 200;
-        } else {
-            $status_code = 404;
-        }
-    }
-    
     // Отримуємо User-Agent
     $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Not provided';
     
@@ -209,7 +191,6 @@ function ip_get_logger_log_match($pattern) {
         'country' => $country_code,
         'user_agent' => $user_agent,
         'device_type' => $device_type,
-        'status_code' => $status_code,
         'timestamp' => current_time('mysql'),
         'hook' => 'early_capture'
     );
@@ -231,13 +212,14 @@ function ip_get_logger_log_match($pattern) {
         // Зберігаємо дані сповіщення для подальшої відправки
         $notification = array(
             'to' => $settings['email_recipient'],
-            'subject' => isset($settings['email_subject']) ? $settings['email_subject'] : __('GET Request Match Found', 'ip-get-logger'),
+            'subject' => isset($settings['email_subject']) ? $settings['email_subject'] : __('Suspicious request detected on your site', 'ip-get-logger'),
             'message' => isset($settings['email_message']) ? $settings['email_message'] : __('A GET request matching your database has been detected: {request}', 'ip-get-logger'),
             'request_url' => $request_url,
             'ip' => $_SERVER['REMOTE_ADDR'],
             'country' => $country_code,
             'user_agent' => $user_agent,
             'device_type' => $device_type,
+            'method' => $_SERVER['REQUEST_METHOD'],
             'timestamp' => current_time('mysql')
         );
         
@@ -255,16 +237,56 @@ function ip_get_logger_send_notifications() {
         foreach ($ip_get_logger_notifications as $notification) {
             $to = $notification['to'];
             $subject = $notification['subject'];
-            $message = str_replace('{request}', $notification['request_url'], $notification['message']);
+            $message_template = $notification['message'];
             
-            // Додаємо додаткову інформацію
+            // Отримуємо дані про запит
+            $request_url = $notification['request_url'];
+            $ip = $notification['ip'];
+            $country = $notification['country'];
+            $user_agent = $notification['user_agent'];
+            $device_type = $notification['device_type'];
+            $timestamp = $notification['timestamp'];
+            $date = date('Y-m-d', strtotime($timestamp));
+            $time = date('H:i:s', strtotime($timestamp));
+            
+            // Замінюємо змінні у повідомленні
+            $message = str_replace(
+                array('{request}', '{ip}', '{date}', '{time}', '{user_agent}', '{country}', '{device_type}'),
+                array(
+                    $request_url,
+                    $ip,
+                    $date,
+                    $time,
+                    $user_agent,
+                    $country,
+                    $device_type
+                ),
+                $message_template
+            );
+            
+            // Додаємо детальну інформацію про запит у вигляді HTML-таблиці
             $message .= '<br><br>';
-            $message .= __('Request details:', 'ip-get-logger') . '<br>';
-            $message .= __('IP Address:', 'ip-get-logger') . ' ' . $notification['ip'] . '<br>';
-            $message .= __('Country:', 'ip-get-logger') . ' ' . $notification['country'] . '<br>';
-            $message .= __('Device Type:', 'ip-get-logger') . ' ' . $notification['device_type'] . '<br>';
-            $message .= __('User Agent:', 'ip-get-logger') . ' ' . $notification['user_agent'] . '<br>';
-            $message .= __('Date and Time:', 'ip-get-logger') . ' ' . $notification['timestamp'] . '<br>';
+            $message .= '<h3>' . __('Request details:', 'ip-get-logger') . '</h3>';
+            $message .= '<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">';
+            $message .= '<tr><th style="text-align: left; background-color: #f2f2f2;">' . __('Parameter', 'ip-get-logger') . '</th><th style="text-align: left; background-color: #f2f2f2;">' . __('Value', 'ip-get-logger') . '</th></tr>';
+            $message .= '<tr><td>' . __('URL', 'ip-get-logger') . '</td><td>' . $request_url . '</td></tr>';
+            $message .= '<tr><td>' . __('IP Address', 'ip-get-logger') . '</td><td>' . $ip . '</td></tr>';
+            $message .= '<tr><td>' . __('Country', 'ip-get-logger') . '</td><td>' . $country . '</td></tr>';
+            $message .= '<tr><td>' . __('Device Type', 'ip-get-logger') . '</td><td>' . $device_type . '</td></tr>';
+            $message .= '<tr><td>' . __('Date', 'ip-get-logger') . '</td><td>' . $date . '</td></tr>';
+            $message .= '<tr><td>' . __('Time', 'ip-get-logger') . '</td><td>' . $time . '</td></tr>';
+            $message .= '<tr><td>' . __('User Agent', 'ip-get-logger') . '</td><td>' . $user_agent . '</td></tr>';
+            
+            // Додаємо інформацію про метод та HTTP_HOST, якщо вони є
+            $http_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+            $request_method = isset($notification['method']) ? $notification['method'] : 'GET';
+            
+            if (!empty($http_host)) {
+                $message .= '<tr><td>' . __('HTTP Host', 'ip-get-logger') . '</td><td>' . $http_host . '</td></tr>';
+            }
+            
+            $message .= '<tr><td>' . __('Request Method', 'ip-get-logger') . '</td><td>' . $request_method . '</td></tr>';
+            $message .= '</table>';
             
             $headers = array('Content-Type: text/html; charset=UTF-8');
             
@@ -304,6 +326,19 @@ function ip_get_logger_activate() {
         file_put_contents($htaccess_file, $htaccess_content);
     }
     
+    // Створення index.php для додаткового захисту директорії логів
+    $index_file = IP_GET_LOGGER_LOGS_DIR . 'index.php';
+    if (!file_exists($index_file)) {
+        $index_content = "<?php\n// Silence is golden.";
+        file_put_contents($index_file, $index_content);
+    }
+    
+    // Створення порожнього лог-файлу, якщо не існує
+    $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
+    if (!file_exists($log_file)) {
+        file_put_contents($log_file, '');
+    }
+    
     // Створення таблиці в базі даних
     $table_name = $wpdb->prefix . IP_GET_LOGGER_TABLE;
     $charset_collate = $wpdb->get_charset_collate();
@@ -322,7 +357,7 @@ function ip_get_logger_activate() {
     // Додавання початкових налаштувань
     $default_options = array(
         'email_recipient' => get_option('admin_email'),
-        'email_subject' => __('GET Request Match Found', 'ip-get-logger'),
+        'email_subject' => __('Suspicious request detected on your site', 'ip-get-logger'),
         'email_message' => __('A GET request matching your database has been detected: {request}', 'ip-get-logger'),
         'auto_cleanup_days' => 30,
         'delete_table_on_uninstall' => 1,
@@ -334,12 +369,6 @@ function ip_get_logger_activate() {
     
     // Створюємо порожній масив для запитів
     ip_get_logger_update_option('get_requests', array());
-    
-    // Створення лог-файлу
-    $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
-    if (!file_exists($log_file)) {
-        file_put_contents($log_file, '');
-    }
 }
 
 // Деактивація плагіна

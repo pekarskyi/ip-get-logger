@@ -169,6 +169,46 @@
     white-space: nowrap;
 }
 
+/* Стилі для пагінації */
+.ip-get-logger-pagination {
+    margin-top: 20px;
+}
+
+.ip-get-logger-pagination .tablenav-pages {
+    float: right;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.ip-get-logger-pagination .displaying-num {
+    margin-right: 10px;
+    color: #777;
+}
+
+.ip-get-logger-pagination .pagination-links {
+    display: flex;
+    align-items: center;
+}
+
+.ip-get-logger-pagination .pagination-links .button {
+    padding: 0 8px;
+    margin: 0 2px;
+    min-width: 30px;
+    text-align: center;
+}
+
+.ip-get-logger-pagination .pagination-links .paging-input {
+    margin: 0 5px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.ip-get-logger-pagination .pagination-links .button.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
 /* Стилі для модального вікна */
 .ip-get-logger-modal {
     display: none;

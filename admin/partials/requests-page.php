@@ -373,27 +373,35 @@ jQuery(document).ready(function($) {
     $('#ip-get-logger-update-from-github-form').on('submit', function(e) {
         e.preventDefault();
         
-        if (confirm('<?php echo esc_js(__('Do you want to update the list of patterns from the repository?', 'ip-get-logger')); ?>')) {
-            $.ajax({
-                url: ip_get_logger_params.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'ip_get_logger_update_from_github',
-                    nonce: ip_get_logger_params.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.data.message);
-                        window.location.reload();
-                    } else {
-                        alert(response.data);
-                    }
-                },
-                error: function() {
-                    alert('<?php echo esc_js(__('An error occurred while updating the list of patterns from the repository!', 'ip-get-logger')); ?>');
+        const updateButton = $(this).find('button[type="submit"]');
+        const originalText = updateButton.text();
+        
+        // Змінюємо текст кнопки, щоб показати, що йде процес
+        updateButton.text('<?php echo esc_js(__('Updating...', 'ip-get-logger')); ?>').prop('disabled', true);
+        
+        $.ajax({
+            url: ip_get_logger_params.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'ip_get_logger_update_from_github',
+                nonce: ip_get_logger_params.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.data.message);
+                    window.location.reload();
+                } else {
+                    alert(response.data);
+                    // Повертаємо оригінальний текст кнопки
+                    updateButton.text(originalText).prop('disabled', false);
                 }
-            });
-        }
+            },
+            error: function() {
+                alert('<?php echo esc_js(__('An error occurred while updating the list of patterns from the repository!', 'ip-get-logger')); ?>');
+                // Повертаємо оригінальний текст кнопки
+                updateButton.text(originalText).prop('disabled', false);
+            }
+        });
     });
 
     // Очищення бази даних
@@ -401,6 +409,12 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         
         if (confirm('<?php echo esc_js(__('Are you sure you want to clear the list of patterns?', 'ip-get-logger')); ?>')) {
+            const clearButton = $(this).find('button[type="submit"]');
+            const originalText = clearButton.text();
+            
+            // Змінюємо текст кнопки, щоб показати, що йде процес
+            clearButton.text('<?php echo esc_js(__('Clearing...', 'ip-get-logger')); ?>').prop('disabled', true);
+            
             $.ajax({
                 url: ip_get_logger_params.ajax_url,
                 type: 'POST',
@@ -414,10 +428,14 @@ jQuery(document).ready(function($) {
                         window.location.reload();
                     } else {
                         alert(response.data);
+                        // Повертаємо оригінальний текст кнопки
+                        clearButton.text(originalText).prop('disabled', false);
                     }
                 },
                 error: function() {
                     alert('<?php echo esc_js(__('An error occurred while clearing the list of patterns.', 'ip-get-logger')); ?>');
+                    // Повертаємо оригінальний текст кнопки
+                    clearButton.text(originalText).prop('disabled', false);
                 }
             });
         }
