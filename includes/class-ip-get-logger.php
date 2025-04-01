@@ -385,6 +385,14 @@ class IP_Get_Logger {
             $date = current_time('Y-m-d');
             $time = current_time('H:i:s');
             
+            // Отримуємо загальну кількість логів
+            $total_logs_count = 0;
+            $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
+            if (file_exists($log_file)) {
+                $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                $total_logs_count = count($logs);
+            }
+            
             // Замінюємо змінні у повідомленні
             $message = str_replace(
                 array('{request}', '{ip}', '{date}', '{time}', '{user_agent}', '{country}', '{device_type}'),
@@ -418,6 +426,9 @@ class IP_Get_Logger {
             $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'Not provided';
             $message .= '<tr><td>' . __('Request Method', 'ip-get-logger') . '</td><td>' . $request_method . '</td></tr>';
             $message .= '<tr><td>' . __('HTTP Host', 'ip-get-logger') . '</td><td>' . $http_host . '</td></tr>';
+            
+            // Додаємо інформацію про загальну кількість логів
+            $message .= '<tr><td>' . __('Total Log Entries', 'ip-get-logger') . '</td><td>' . $total_logs_count . '</td></tr>';
             $message .= '</table>';
             
             // Додаємо примітку про обмеження частоти, якщо воно активоване

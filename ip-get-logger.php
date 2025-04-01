@@ -249,6 +249,14 @@ function ip_get_logger_send_notifications() {
             $date = date('Y-m-d', strtotime($timestamp));
             $time = date('H:i:s', strtotime($timestamp));
             
+            // Отримуємо загальну кількість логів
+            $total_logs_count = 0;
+            $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
+            if (file_exists($log_file)) {
+                $logs = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                $total_logs_count = count($logs);
+            }
+            
             // Замінюємо змінні у повідомленні
             $message = str_replace(
                 array('{request}', '{ip}', '{date}', '{time}', '{user_agent}', '{country}', '{device_type}'),
@@ -286,9 +294,15 @@ function ip_get_logger_send_notifications() {
             }
             
             $message .= '<tr><td>' . __('Request Method', 'ip-get-logger') . '</td><td>' . $request_method . '</td></tr>';
+            
+            // Додаємо інформацію про загальну кількість логів
+            $message .= '<tr><td>' . __('Total Log Entries', 'ip-get-logger') . '</td><td>' . $total_logs_count . '</td></tr>';
             $message .= '</table>';
             
-            $headers = array('Content-Type: text/html; charset=UTF-8');
+            $headers = array(
+                'Content-Type: text/html; charset=UTF-8',
+                'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>'
+            );
             
             // Відправляємо лист
             wp_mail($to, $subject, $message, $headers);

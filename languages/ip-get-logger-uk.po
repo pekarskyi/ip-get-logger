@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: IP GET Logger 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ip-get-logger\n"
 "POT-Creation-Date: 2024-03-30T04:00:00+00:00\n"
-"PO-Revision-Date: 2025-04-01 13:12+0000\n"
+"PO-Revision-Date: 2025-04-01 13:22+0000\n"
 "Last-Translator: \n"
 "Language-Team: Українська\n"
 "Language: uk\n"
@@ -76,7 +76,7 @@ msgstr "5 хв."
 msgid "6 hours"
 msgstr "6 год."
 
-#: ip-get-logger.php:216 ip-get-logger.php:366
+#: ip-get-logger.php:216 ip-get-logger.php:380
 #: admin/class-ip-get-logger-admin.php:490 includes/class-ip-get-logger.php:379
 msgid "A GET request matching your database has been detected: {request}"
 msgstr "Було виявлено GET-запит, який відповідає шаблону: {request}"
@@ -238,7 +238,7 @@ msgstr "Налаштування сповіщень на E-mail про збіг�
 msgid "Configure parameters for logging GET requests"
 msgstr "Налаштуйте параметри для логування GET-запитів"
 
-#: ip-get-logger.php:274 includes/class-ip-get-logger.php:410
+#: ip-get-logger.php:282 includes/class-ip-get-logger.php:418
 #: admin/partials/logs-page.php:131
 msgid "Country"
 msgstr "Країна"
@@ -268,7 +268,7 @@ msgid ""
 msgstr ""
 "База успішно оновлена: додано %d нових шаблонів, пропущено %d дублікатів."
 
-#: ip-get-logger.php:276 includes/class-ip-get-logger.php:412
+#: ip-get-logger.php:284 includes/class-ip-get-logger.php:420
 msgid "Date"
 msgstr "Дата"
 
@@ -296,7 +296,7 @@ msgstr "Видаляти таблицю з бази даних при видал
 msgid "Device"
 msgstr "Пристрій"
 
-#: ip-get-logger.php:275 includes/class-ip-get-logger.php:411
+#: ip-get-logger.php:283 includes/class-ip-get-logger.php:419
 #| msgid "Device Type:"
 msgid "Device Type"
 msgstr "Тип пристрою"
@@ -418,7 +418,7 @@ msgstr "Не вдалося отримати дані з GitHub: %s"
 msgid "Failed to read file"
 msgstr "Не вдалося прочитати файл"
 
-#: ip-get-logger.php:494 ip-get-logger.php:508
+#: ip-get-logger.php:508 ip-get-logger.php:522
 msgid "File not found"
 msgstr "Файл не знайдено"
 
@@ -470,7 +470,7 @@ msgid "HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>"
 msgstr ""
 "Підтримуються HTML-теги, наприклад, /?q=<iframe> або /?q=<script></iframe>."
 
-#: ip-get-logger.php:285 includes/class-ip-get-logger.php:420
+#: ip-get-logger.php:293 includes/class-ip-get-logger.php:428
 msgid "HTTP Host"
 msgstr "HTTP-хост"
 
@@ -513,7 +513,7 @@ msgstr[0] "Імпортовано %d шаблон"
 msgstr[1] "Імпортовано %d шаблони"
 msgstr[2] "Імпортовано %d шаблонів"
 
-#: ip-get-logger.php:489
+#: ip-get-logger.php:503
 msgid "Insufficient permissions"
 msgstr "Недостатньо прав"
 
@@ -530,7 +530,7 @@ msgstr "Недостатньо прав"
 msgid "Insufficient permissions to perform this operation"
 msgstr "Недостатньо прав для виконання цієї операції"
 
-#: ip-get-logger.php:500
+#: ip-get-logger.php:514
 msgid "Invalid file"
 msgstr "Недопустимий файл"
 
@@ -542,7 +542,7 @@ msgstr "InwebPress"
 msgid "IP"
 msgstr "IP"
 
-#: ip-get-logger.php:273 includes/class-ip-get-logger.php:409
+#: ip-get-logger.php:281 includes/class-ip-get-logger.php:417
 #| msgid "IP Address:"
 msgid "IP Address"
 msgstr "IP-адреса"
@@ -644,7 +644,7 @@ msgstr "Відсутні нові шаблони для виключення."
 msgid "Not matched"
 msgstr "Не збігається"
 
-#: includes/class-ip-get-logger.php:426
+#: includes/class-ip-get-logger.php:437
 msgid ""
 "Note: Email notifications are throttled. You will not receive another "
 "notification for %d minutes."
@@ -665,7 +665,7 @@ msgstr "на Github - Issues - New issue"
 msgid "Only .txt files are allowed"
 msgstr "Дозволені тільки файли з розширенням .txt"
 
-#: ip-get-logger.php:271 includes/class-ip-get-logger.php:407
+#: ip-get-logger.php:279 includes/class-ip-get-logger.php:415
 msgid "Parameter"
 msgstr "Параметр"
 
@@ -736,11 +736,11 @@ msgstr "Попередня"
 msgid "Report a new malicious pattern:"
 msgstr "Повідомте про новий шкідливий запит:"
 
-#: ip-get-logger.php:269 includes/class-ip-get-logger.php:405
+#: ip-get-logger.php:277 includes/class-ip-get-logger.php:413
 msgid "Request details:"
 msgstr "Деталі:"
 
-#: ip-get-logger.php:288 includes/class-ip-get-logger.php:419
+#: ip-get-logger.php:296 includes/class-ip-get-logger.php:427
 msgid "Request Method"
 msgstr "Метод запиту"
 
@@ -768,7 +768,7 @@ msgstr "Пошук"
 msgid "Search patterns..."
 msgstr "Пошук..."
 
-#: ip-get-logger.php:484
+#: ip-get-logger.php:498
 msgid "Security error"
 msgstr "Помилка безпеки"
 
@@ -808,7 +808,7 @@ msgstr[0] "Успішно додано %d новий шаблон для вик�
 msgstr[1] "Успішно додано %d нових шаблонів для виключення."
 msgstr[2] "Успішно додано %d нових шаблонів для виключення."
 
-#: ip-get-logger.php:215 ip-get-logger.php:365
+#: ip-get-logger.php:215 ip-get-logger.php:379
 #: admin/class-ip-get-logger-admin.php:482 includes/class-ip-get-logger.php:378
 msgid "Suspicious request detected on your site"
 msgstr "На вашому сайті виявлено підозрілий запит"
@@ -877,9 +877,13 @@ msgstr ""
 "Цей інструмент дозволяє перевірити, чи відповідає URL-адреса будь-якому з "
 "шаблонів."
 
-#: ip-get-logger.php:277 includes/class-ip-get-logger.php:413
+#: ip-get-logger.php:285 includes/class-ip-get-logger.php:421
 msgid "Time"
 msgstr "Час"
+
+#: ip-get-logger.php:299 includes/class-ip-get-logger.php:431
+msgid "Total Log Entries"
+msgstr "Всього записів у журналі"
 
 #: admin/partials/exclude-page.php:35
 msgid "Update Exclude Patterns"
@@ -902,7 +906,7 @@ msgstr "Оновлення шаблонів з репозиторію:"
 msgid "Updating..."
 msgstr "Оновлення..."
 
-#: ip-get-logger.php:272 includes/class-ip-get-logger.php:408
+#: ip-get-logger.php:280 includes/class-ip-get-logger.php:416
 #: admin/partials/logs-page.php:128
 msgid "URL"
 msgstr "URL"
@@ -937,12 +941,12 @@ msgstr ""
 "Використовуйте шаблони виключення, щоб ігнорувати певні шаблони URL-адрес. "
 "Наприклад:"
 
-#: ip-get-logger.php:278 includes/class-ip-get-logger.php:414
+#: ip-get-logger.php:286 includes/class-ip-get-logger.php:422
 #| msgid "User Agent:"
 msgid "User Agent"
 msgstr "User Agent"
 
-#: ip-get-logger.php:271 includes/class-ip-get-logger.php:407
+#: ip-get-logger.php:279 includes/class-ip-get-logger.php:415
 msgid "Value"
 msgstr "Значення"
 

@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-01 13:11+0000\n"
+"POT-Creation-Date: 2025-04-01 13:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: ip-get-logger\n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "6 hours"
 msgstr ""
 
-#: ip-get-logger.php:216 ip-get-logger.php:366
+#: ip-get-logger.php:216 ip-get-logger.php:380
 #: admin/class-ip-get-logger-admin.php:490 includes/class-ip-get-logger.php:379
 msgid "A GET request matching your database has been detected: {request}"
 msgstr ""
@@ -229,7 +229,7 @@ msgstr ""
 msgid "Configure parameters for logging GET requests"
 msgstr ""
 
-#: ip-get-logger.php:274 includes/class-ip-get-logger.php:410
+#: ip-get-logger.php:282 includes/class-ip-get-logger.php:418
 #: admin/partials/logs-page.php:131
 msgid "Country"
 msgstr ""
@@ -255,7 +255,7 @@ msgid ""
 "Database updated successfully: %d new patterns added, %d duplicates skipped."
 msgstr ""
 
-#: ip-get-logger.php:276 includes/class-ip-get-logger.php:412
+#: ip-get-logger.php:284 includes/class-ip-get-logger.php:420
 msgid "Date"
 msgstr ""
 
@@ -283,7 +283,7 @@ msgstr ""
 msgid "Device"
 msgstr ""
 
-#: ip-get-logger.php:275 includes/class-ip-get-logger.php:411
+#: ip-get-logger.php:283 includes/class-ip-get-logger.php:419
 msgid "Device Type"
 msgstr ""
 
@@ -403,7 +403,7 @@ msgstr ""
 msgid "Failed to read file"
 msgstr ""
 
-#: ip-get-logger.php:494 ip-get-logger.php:508
+#: ip-get-logger.php:508 ip-get-logger.php:522
 msgid "File not found"
 msgstr ""
 
@@ -449,7 +449,7 @@ msgstr ""
 msgid "HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>"
 msgstr ""
 
-#: ip-get-logger.php:285 includes/class-ip-get-logger.php:420
+#: ip-get-logger.php:293 includes/class-ip-get-logger.php:428
 msgid "HTTP Host"
 msgstr ""
 
@@ -485,7 +485,7 @@ msgid_plural "Imported %d patterns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ip-get-logger.php:489
+#: ip-get-logger.php:503
 msgid "Insufficient permissions"
 msgstr ""
 
@@ -502,7 +502,7 @@ msgstr ""
 msgid "Insufficient permissions to perform this operation"
 msgstr ""
 
-#: ip-get-logger.php:500
+#: ip-get-logger.php:514
 msgid "Invalid file"
 msgstr ""
 
@@ -514,7 +514,7 @@ msgstr ""
 msgid "IP"
 msgstr ""
 
-#: ip-get-logger.php:273 includes/class-ip-get-logger.php:409
+#: ip-get-logger.php:281 includes/class-ip-get-logger.php:417
 msgid "IP Address"
 msgstr ""
 
@@ -615,7 +615,7 @@ msgstr ""
 msgid "Not matched"
 msgstr ""
 
-#: includes/class-ip-get-logger.php:426
+#: includes/class-ip-get-logger.php:437
 msgid ""
 "Note: Email notifications are throttled. You will not receive another "
 "notification for %d minutes."
@@ -633,7 +633,7 @@ msgstr ""
 msgid "Only .txt files are allowed"
 msgstr ""
 
-#: ip-get-logger.php:271 includes/class-ip-get-logger.php:407
+#: ip-get-logger.php:279 includes/class-ip-get-logger.php:415
 msgid "Parameter"
 msgstr ""
 
@@ -700,11 +700,11 @@ msgstr ""
 msgid "Report a new malicious pattern:"
 msgstr ""
 
-#: ip-get-logger.php:269 includes/class-ip-get-logger.php:405
+#: ip-get-logger.php:277 includes/class-ip-get-logger.php:413
 msgid "Request details:"
 msgstr ""
 
-#: ip-get-logger.php:288 includes/class-ip-get-logger.php:419
+#: ip-get-logger.php:296 includes/class-ip-get-logger.php:427
 msgid "Request Method"
 msgstr ""
 
@@ -732,7 +732,7 @@ msgstr ""
 msgid "Search patterns..."
 msgstr ""
 
-#: ip-get-logger.php:484
+#: ip-get-logger.php:498
 msgid "Security error"
 msgstr ""
 
@@ -771,7 +771,7 @@ msgid_plural "Successfully added %d new exclude patterns from the repository."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ip-get-logger.php:215 ip-get-logger.php:365
+#: ip-get-logger.php:215 ip-get-logger.php:379
 #: admin/class-ip-get-logger-admin.php:482 includes/class-ip-get-logger.php:378
 msgid "Suspicious request detected on your site"
 msgstr ""
@@ -833,8 +833,12 @@ msgid ""
 "configured patterns."
 msgstr ""
 
-#: ip-get-logger.php:277 includes/class-ip-get-logger.php:413
+#: ip-get-logger.php:285 includes/class-ip-get-logger.php:421
 msgid "Time"
+msgstr ""
+
+#: ip-get-logger.php:299 includes/class-ip-get-logger.php:431
+msgid "Total Log Entries"
 msgstr ""
 
 #: admin/partials/exclude-page.php:35
@@ -857,7 +861,7 @@ msgstr ""
 msgid "Updating..."
 msgstr ""
 
-#: ip-get-logger.php:272 includes/class-ip-get-logger.php:408
+#: ip-get-logger.php:280 includes/class-ip-get-logger.php:416
 #: admin/partials/logs-page.php:128
 msgid "URL"
 msgstr ""
@@ -890,11 +894,11 @@ msgstr ""
 msgid "Use exclude patterns to ignore specific URL patterns. For example:"
 msgstr ""
 
-#: ip-get-logger.php:278 includes/class-ip-get-logger.php:414
+#: ip-get-logger.php:286 includes/class-ip-get-logger.php:422
 msgid "User Agent"
 msgstr ""
 
-#: ip-get-logger.php:271 includes/class-ip-get-logger.php:407
+#: ip-get-logger.php:279 includes/class-ip-get-logger.php:415
 msgid "Value"
 msgstr ""
 
