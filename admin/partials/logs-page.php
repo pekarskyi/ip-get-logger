@@ -33,6 +33,7 @@
                     <option value="mobile" <?php selected($filter_device, 'mobile'); ?>>Mobile</option>
                     <option value="tablet" <?php selected($filter_device, 'tablet'); ?>>Tablet</option>
                     <option value="bot" <?php selected($filter_device, 'bot'); ?>>Bot</option>
+                    <option value="unknown" <?php selected($filter_device, 'unknown'); ?>>Unknown</option>
                 </select>
             </div>
             
@@ -49,20 +50,76 @@
             <div class="ip-get-logger-filter-controls">
                 <button type="submit" class="button button-primary"><?php echo esc_html__('Filter', 'ip-get-logger'); ?></button>
                 <a href="<?php echo admin_url('admin.php?page=ip-get-logger'); ?>" class="button button-primary"><?php echo esc_html__('Reset Filters', 'ip-get-logger'); ?></a>
+                <button type="button" id="ip-get-logger-clear-logs-btn" class="button red"><?php echo esc_html__('Clear Logs', 'ip-get-logger'); ?></button>
             </div>
         </form>
     </div>
     
-    <div class="ip-get-logger-clear-logs">
-        <button id="ip-get-logger-clear-logs-btn" class="button button-primary"><?php echo esc_html__('Clear Logs', 'ip-get-logger'); ?></button>
-    </div>
-    
     <div class="ip-get-logger-logs-list">
-        <h2><?php echo esc_html__('Logs List', 'ip-get-logger'); ?></h2>
         
         <?php if (empty($processed_logs)) : ?>
             <p><?php echo esc_html__('No saved logs.', 'ip-get-logger'); ?></p>
         <?php else : ?>
+            <div class="ip-get-logger-pagination">
+                <div class="tablenav-pages">
+                    <span class="displaying-num">
+                        <?php echo sprintf(
+                            _n('%s item', '%s items', $total_items, 'ip-get-logger'), 
+                            number_format_i18n($total_items)
+                        ); ?>
+                    </span>
+                    
+                    <span class="pagination-links">
+                        <?php
+                        // Генеруємо URL із збереженням параметрів фільтрів
+                        $base_url = add_query_arg(
+                            array(
+                                'page' => 'ip-get-logger',
+                                'filter_date' => $filter_date,
+                                'filter_ip' => $filter_ip,
+                                'filter_country' => $filter_country,
+                                'filter_url' => $filter_url,
+                                'filter_device' => $filter_device,
+                                'per_page' => $per_page
+                            ),
+                            admin_url('admin.php')
+                        );
+                        
+                        // Першу сторінку
+                        if ($current_page > 1) {
+                            echo '<a class="first-page button" href="' . esc_url(add_query_arg('paged', 1, $base_url)) . '"><span class="screen-reader-text">' . __('First page', 'ip-get-logger') . '</span><span aria-hidden="true">&laquo;</span></a>';
+                        } else {
+                            echo '<span class="first-page button disabled" aria-hidden="true">&laquo;</span>';
+                        }
+                        
+                        // Попередню сторінку
+                        if ($current_page > 1) {
+                            echo '<a class="prev-page button" href="' . esc_url(add_query_arg('paged', $current_page - 1, $base_url)) . '"><span class="screen-reader-text">' . __('Previous page', 'ip-get-logger') . '</span><span aria-hidden="true">&lsaquo;</span></a>';
+                        } else {
+                            echo '<span class="prev-page button disabled" aria-hidden="true">&lsaquo;</span>';
+                        }
+                        
+                        // Поточна/загальна сторінки
+                        echo '<span class="paging-input">' . $current_page . ' / ' . $total_pages . '</span>';
+                        
+                        // Наступну сторінку
+                        if ($current_page < $total_pages) {
+                            echo '<a class="next-page button" href="' . esc_url(add_query_arg('paged', $current_page + 1, $base_url)) . '"><span class="screen-reader-text">' . __('Next page', 'ip-get-logger') . '</span><span aria-hidden="true">&rsaquo;</span></a>';
+                        } else {
+                            echo '<span class="next-page button disabled" aria-hidden="true">&rsaquo;</span>';
+                        }
+                        
+                        // Останню сторінку
+                        if ($current_page < $total_pages) {
+                            echo '<a class="last-page button" href="' . esc_url(add_query_arg('paged', $total_pages, $base_url)) . '"><span class="screen-reader-text">' . __('Last page', 'ip-get-logger') . '</span><span aria-hidden="true">&raquo;</span></a>';
+                        } else {
+                            echo '<span class="last-page button disabled" aria-hidden="true">&raquo;</span>';
+                        }
+                        ?>
+                    </span>
+                </div>
+            </div>
+            
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
@@ -105,67 +162,65 @@
                 </tbody>
             </table>
             
-            <?php if ($total_pages > 1) : ?>
-                <div class="ip-get-logger-pagination">
-                    <div class="tablenav-pages">
-                        <span class="displaying-num">
-                            <?php echo sprintf(
-                                _n('%s item', '%s items', $total_items, 'ip-get-logger'), 
-                                number_format_i18n($total_items)
-                            ); ?>
-                        </span>
+            <div class="ip-get-logger-pagination">
+                <div class="tablenav-pages">
+                    <span class="displaying-num">
+                        <?php echo sprintf(
+                            _n('%s item', '%s items', $total_items, 'ip-get-logger'), 
+                            number_format_i18n($total_items)
+                        ); ?>
+                    </span>
+                    
+                    <span class="pagination-links">
+                        <?php
+                        // Генеруємо URL із збереженням параметрів фільтрів
+                        $base_url = add_query_arg(
+                            array(
+                                'page' => 'ip-get-logger',
+                                'filter_date' => $filter_date,
+                                'filter_ip' => $filter_ip,
+                                'filter_country' => $filter_country,
+                                'filter_url' => $filter_url,
+                                'filter_device' => $filter_device,
+                                'per_page' => $per_page
+                            ),
+                            admin_url('admin.php')
+                        );
                         
-                        <span class="pagination-links">
-                            <?php
-                            // Генеруємо URL із збереженням параметрів фільтрів
-                            $base_url = add_query_arg(
-                                array(
-                                    'page' => 'ip-get-logger',
-                                    'filter_date' => $filter_date,
-                                    'filter_ip' => $filter_ip,
-                                    'filter_country' => $filter_country,
-                                    'filter_url' => $filter_url,
-                                    'filter_device' => $filter_device,
-                                    'per_page' => $per_page
-                                ),
-                                admin_url('admin.php')
-                            );
-                            
-                            // Першу сторінку
-                            if ($current_page > 1) {
-                                echo '<a class="first-page button" href="' . esc_url(add_query_arg('paged', 1, $base_url)) . '"><span class="screen-reader-text">' . __('First page', 'ip-get-logger') . '</span><span aria-hidden="true">&laquo;</span></a>';
-                            } else {
-                                echo '<span class="first-page button disabled" aria-hidden="true">&laquo;</span>';
-                            }
-                            
-                            // Попередню сторінку
-                            if ($current_page > 1) {
-                                echo '<a class="prev-page button" href="' . esc_url(add_query_arg('paged', $current_page - 1, $base_url)) . '"><span class="screen-reader-text">' . __('Previous page', 'ip-get-logger') . '</span><span aria-hidden="true">&lsaquo;</span></a>';
-                            } else {
-                                echo '<span class="prev-page button disabled" aria-hidden="true">&lsaquo;</span>';
-                            }
-                            
-                            // Поточна/загальна сторінки
-                            echo '<span class="paging-input">' . $current_page . ' / ' . $total_pages . '</span>';
-                            
-                            // Наступну сторінку
-                            if ($current_page < $total_pages) {
-                                echo '<a class="next-page button" href="' . esc_url(add_query_arg('paged', $current_page + 1, $base_url)) . '"><span class="screen-reader-text">' . __('Next page', 'ip-get-logger') . '</span><span aria-hidden="true">&rsaquo;</span></a>';
-                            } else {
-                                echo '<span class="next-page button disabled" aria-hidden="true">&rsaquo;</span>';
-                            }
-                            
-                            // Останню сторінку
-                            if ($current_page < $total_pages) {
-                                echo '<a class="last-page button" href="' . esc_url(add_query_arg('paged', $total_pages, $base_url)) . '"><span class="screen-reader-text">' . __('Last page', 'ip-get-logger') . '</span><span aria-hidden="true">&raquo;</span></a>';
-                            } else {
-                                echo '<span class="last-page button disabled" aria-hidden="true">&raquo;</span>';
-                            }
-                            ?>
-                        </span>
-                    </div>
+                        // Першу сторінку
+                        if ($current_page > 1) {
+                            echo '<a class="first-page button" href="' . esc_url(add_query_arg('paged', 1, $base_url)) . '"><span class="screen-reader-text">' . __('First page', 'ip-get-logger') . '</span><span aria-hidden="true">&laquo;</span></a>';
+                        } else {
+                            echo '<span class="first-page button disabled" aria-hidden="true">&laquo;</span>';
+                        }
+                        
+                        // Попередню сторінку
+                        if ($current_page > 1) {
+                            echo '<a class="prev-page button" href="' . esc_url(add_query_arg('paged', $current_page - 1, $base_url)) . '"><span class="screen-reader-text">' . __('Previous page', 'ip-get-logger') . '</span><span aria-hidden="true">&lsaquo;</span></a>';
+                        } else {
+                            echo '<span class="prev-page button disabled" aria-hidden="true">&lsaquo;</span>';
+                        }
+                        
+                        // Поточна/загальна сторінки
+                        echo '<span class="paging-input">' . $current_page . ' / ' . $total_pages . '</span>';
+                        
+                        // Наступну сторінку
+                        if ($current_page < $total_pages) {
+                            echo '<a class="next-page button" href="' . esc_url(add_query_arg('paged', $current_page + 1, $base_url)) . '"><span class="screen-reader-text">' . __('Next page', 'ip-get-logger') . '</span><span aria-hidden="true">&rsaquo;</span></a>';
+                        } else {
+                            echo '<span class="next-page button disabled" aria-hidden="true">&rsaquo;</span>';
+                        }
+                        
+                        // Останню сторінку
+                        if ($current_page < $total_pages) {
+                            echo '<a class="last-page button" href="' . esc_url(add_query_arg('paged', $total_pages, $base_url)) . '"><span class="screen-reader-text">' . __('Last page', 'ip-get-logger') . '</span><span aria-hidden="true">&raquo;</span></a>';
+                        } else {
+                            echo '<span class="last-page button disabled" aria-hidden="true">&raquo;</span>';
+                        }
+                        ?>
+                    </span>
                 </div>
-            <?php endif; ?>
+            </div>
         <?php endif; ?>
     </div>
 </div>
@@ -193,6 +248,12 @@ jQuery(document).ready(function($) {
     // Очищення логів
     $('#ip-get-logger-clear-logs-btn').on('click', function() {
         if (confirm('<?php echo esc_js(__('Are you sure you want to clear all logs?', 'ip-get-logger')); ?>')) {
+            var $button = $(this);
+            var originalText = $button.text();
+            
+            // Змінюємо текст кнопки і додаємо атрибут disabled
+            $button.text('<?php echo esc_js(__('Clearing...', 'ip-get-logger')); ?>').prop('disabled', true);
+            
             $.ajax({
                 url: ip_get_logger_params.ajax_url,
                 type: 'POST',
@@ -202,12 +263,17 @@ jQuery(document).ready(function($) {
                 },
                 success: function(response) {
                     if (response.success) {
-                        window.location.href = '<?php echo admin_url('admin.php?page=ip-get-logger'); ?>';
+                        // Додаємо випадковий параметр timestamp для запобігання кешування
+                        window.location.href = '<?php echo admin_url('admin.php?page=ip-get-logger'); ?>&nocache=' + new Date().getTime();
                     } else {
+                        // Повертаємо початковий стан кнопки
+                        $button.text(originalText).prop('disabled', false);
                         alert(response.data);
                     }
                 },
                 error: function() {
+                    // Повертаємо початковий стан кнопки
+                    $button.text(originalText).prop('disabled', false);
                     alert('<?php echo esc_js(__('An error occurred while clearing logs', 'ip-get-logger')); ?>');
                 }
             });

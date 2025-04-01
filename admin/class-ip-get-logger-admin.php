@@ -677,8 +677,21 @@ class IP_Get_Logger_Admin {
         
         $log_file = IP_GET_LOGGER_LOGS_DIR . 'requests.log';
         
-        // Очищуємо файл
-        file_put_contents($log_file, '');
+        // Перевіряємо, чи існує файл
+        if (file_exists($log_file)) {
+            // Очищуємо файл
+            $result = file_put_contents($log_file, '');
+            
+            if ($result === false) {
+                wp_send_json_error(__('Failed to clear logs. Check file permissions.', 'ip-get-logger'));
+                return;
+            }
+            
+            // Додатково очищуємо кеш опкоду PHP, якщо він активований
+            if (function_exists('opcache_reset')) {
+                opcache_reset();
+            }
+        }
         
         wp_send_json_success(array('message' => __('Logs cleared successfully', 'ip-get-logger')));
     }
