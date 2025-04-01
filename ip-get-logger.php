@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IP GET Logger
  * Description: Plugin for tracking GET requests to the site and logging them
- * Version: 1.2.2
+ * Version: 1.2.3
  * Author: InwebPress
  * Author URI: https://inwebpress.com
  * Plugin URI: https://github.com/pekarskyi/ip-get-logger
@@ -367,6 +367,7 @@ function ip_get_logger_activate() {
             'auto_cleanup_days' => 30,
             'delete_table_on_uninstall' => 1,
             'send_notifications' => 1,
+            'email_throttle' => 5, // За замовчуванням обмеження 5 хвилин
         );
         
         // Зберігаємо опції в новій таблиці

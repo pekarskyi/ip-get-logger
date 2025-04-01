@@ -32,6 +32,7 @@ IP GET Logger is a powerful WordPress plugin designed to help website administra
 - **GET Request Tracking**: Define specific GET request patterns to monitor
 - **Logging System**: Keep detailed logs of all matched requests
 - **Email Notifications**: Receive instant notifications when matching requests are detected
+- **Email Throttling**: Limit notification frequency to prevent inbox flooding
 - **Persistent Logs**: Logs are stored in the `/wp-content/ip-get-logger-logs/` directory and preserved during plugin updates
 - **Device Detection**: Identify and log the device type (Desktop, Mobile, Tablet, Bot)
 - **Geolocation**: Determine and log the country from which requests originate
@@ -95,6 +96,12 @@ The plugin supports the creation of localization for any language.
 If you have any questions, suggestions, found bugs, or discovered new malicious requests, please report them on GitHub in the [Issues section](https://github.com/pekarskyi/ip-get-logger/issues).
 
 ## Changelog
+
+1.2.3 - 01.04.2025:
+- Added data preservation during plugin updates even with the "Delete database table when uninstalling" option enabled
+- Added email throttling to limit notification frequency (1min, 5min, 10min, 30min, 1h, 6h, 12h, 24h)
+- Fixed potential data loss issues during plugin updates
+- Updated localization
 
 1.2.2 - 01.04.2025:
 - Changed logs storage location to `/wp-content/ip-get-logger-logs/` to preserve logs during plugin updates

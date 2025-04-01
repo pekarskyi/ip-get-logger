@@ -357,6 +357,22 @@ class IP_Get_Logger {
         $send_notifications = isset($settings['send_notifications']) ? $settings['send_notifications'] : 1;
         
         if ($send_notifications && !empty($settings['email_recipient'])) {
+            // Перевіряємо обмеження частоти відправки email
+            $throttle_minutes = isset($settings['email_throttle']) ? intval($settings['email_throttle']) : 0;
+            
+            if ($throttle_minutes > 0) {
+                $last_email_time = get_option('ip_get_logger_last_email_time', 0);
+                $current_time = time();
+                
+                // Якщо не минуло достатньо часу після останнього листа, пропускаємо відправку
+                if (($current_time - $last_email_time) < ($throttle_minutes * 60)) {
+                    return;
+                }
+                
+                // Оновлюємо час останньої відправки
+                update_option('ip_get_logger_last_email_time', $current_time);
+            }
+            
             // Підготовка даних для відправки
             $to = $settings['email_recipient'];
             $subject = isset($settings['email_subject']) ? $settings['email_subject'] : __('Suspicious request detected on your site', 'ip-get-logger');
@@ -403,6 +419,14 @@ class IP_Get_Logger {
             $message .= '<tr><td>' . __('Request Method', 'ip-get-logger') . '</td><td>' . $request_method . '</td></tr>';
             $message .= '<tr><td>' . __('HTTP Host', 'ip-get-logger') . '</td><td>' . $http_host . '</td></tr>';
             $message .= '</table>';
+            
+            // Додаємо примітку про обмеження частоти, якщо воно активоване
+            if ($throttle_minutes > 0) {
+                $message .= '<br><p style="font-size: 12px; color: #666;">' . sprintf(
+                    __('Note: Email notifications are throttled. You will not receive another notification for %d minutes.', 'ip-get-logger'),
+                    $throttle_minutes
+                ) . '</p>';
+            }
             
             // Встановлюємо заголовки
             $headers = array(

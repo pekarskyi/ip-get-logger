@@ -126,26 +126,39 @@ class IP_Get_Logger_Admin {
      * Реєстрація налаштувань
      */
     public function register_settings() {
-        register_setting('ip_get_logger_settings', 'ip_get_logger_form_settings', array($this, 'sanitize_settings'));
+        register_setting(
+            'ip_get_logger_settings',
+            'ip_get_logger_form_settings',
+            array($this, 'sanitize_settings')
+        );
         
+        // Секція налаштувань email
         add_settings_section(
             'ip_get_logger_email_section',
-            __('Notification Settings', 'ip-get-logger'),
+            __('Email Notifications', 'ip-get-logger'),
             array($this, 'email_section_callback'),
             'ip-get-logger-settings'
         );
         
         add_settings_field(
             'send_notifications',
-            __('Enable Email Notifications', 'ip-get-logger'),
+            __('Send Notifications', 'ip-get-logger'),
             array($this, 'send_notifications_callback'),
             'ip-get-logger-settings',
             'ip_get_logger_email_section'
         );
         
         add_settings_field(
+            'email_throttle',
+            __('Email Throttle', 'ip-get-logger'),
+            array($this, 'email_throttle_callback'),
+            'ip-get-logger-settings',
+            'ip_get_logger_email_section'
+        );
+        
+        add_settings_field(
             'email_recipient',
-            __('Recipient Email', 'ip-get-logger'),
+            __('Email Recipient', 'ip-get-logger'),
             array($this, 'email_recipient_callback'),
             'ip-get-logger-settings',
             'ip_get_logger_email_section'
@@ -417,19 +430,45 @@ class IP_Get_Logger_Admin {
      * Колбек для секції налаштувань email
      */
     public function email_section_callback() {
-        echo '<p>' . __('Configure parameters for sending email notifications when a GET request matches', 'ip-get-logger') . '</p>';
+        echo '<p>' . __('Configure email notifications for GET request matches', 'ip-get-logger') . '</p>';
     }
     
     /**
-     * Колбек для вмикання/вимикання сповіщень
+     * Колбек для поля відправки сповіщень
      */
     public function send_notifications_callback() {
-        $enabled = isset($this->options['send_notifications']) ? $this->options['send_notifications'] : 1;
-        echo '<label><input type="checkbox" id="send_notifications" name="ip_get_logger_form_settings[send_notifications]" value="1" ' . checked(1, $enabled, false) . ' /> ' . __('Send email notifications when a GET request matches', 'ip-get-logger') . '</label>';
+        $send_notifications = isset($this->options['send_notifications']) ? intval($this->options['send_notifications']) : 1;
+        echo '<label><input type="checkbox" id="send_notifications" name="ip_get_logger_form_settings[send_notifications]" value="1" ' . checked(1, $send_notifications, false) . ' /> ' . __('Send email notifications when a request matches a pattern', 'ip-get-logger') . '</label>';
     }
     
     /**
-     * Колбек для поля email отримувача
+     * Колбек для поля обмеження частоти відправлення сповіщень
+     */
+    public function email_throttle_callback() {
+        $throttle_values = array(
+            0 => __('No limit (send all notifications)', 'ip-get-logger'),
+            1 => __('1 minute', 'ip-get-logger'),
+            5 => __('5 minutes', 'ip-get-logger'),
+            10 => __('10 minutes', 'ip-get-logger'),
+            30 => __('30 minutes', 'ip-get-logger'),
+            60 => __('1 hour', 'ip-get-logger'),
+            360 => __('6 hours', 'ip-get-logger'),
+            720 => __('12 hours', 'ip-get-logger'),
+            1440 => __('24 hours', 'ip-get-logger')
+        );
+        
+        $throttle = isset($this->options['email_throttle']) ? intval($this->options['email_throttle']) : 0;
+        
+        echo '<select id="email_throttle" name="ip_get_logger_form_settings[email_throttle]">';
+        foreach ($throttle_values as $value => $label) {
+            echo '<option value="' . esc_attr($value) . '" ' . selected($throttle, $value, false) . '>' . esc_html($label) . '</option>';
+        }
+        echo '</select>';
+        echo '<p class="description">' . __('For example, if we set 5 minutes, and multiple suspicious requests are detected within a 5-minute period, only one email notification will be sent. The next notification can be sent only 5 minutes after the previous one.', 'ip-get-logger') . '</p>';
+    }
+    
+    /**
+     * Колбек для поля отримувача email
      */
     public function email_recipient_callback() {
         $email = isset($this->options['email_recipient']) ? $this->options['email_recipient'] : get_option('admin_email');
@@ -494,6 +533,7 @@ class IP_Get_Logger_Admin {
         $input['auto_cleanup_days'] = intval($input['auto_cleanup_days']);
         $input['delete_table_on_uninstall'] = isset($input['delete_table_on_uninstall']) ? 1 : 0;
         $input['send_notifications'] = isset($input['send_notifications']) ? 1 : 0;
+        $input['email_throttle'] = isset($input['email_throttle']) ? intval($input['email_throttle']) : 0;
         
         return $input;
     }
@@ -511,6 +551,7 @@ class IP_Get_Logger_Admin {
         $settings['auto_cleanup_days'] = intval($input['auto_cleanup_days']);
         $settings['delete_table_on_uninstall'] = isset($input['delete_table_on_uninstall']) ? 1 : 0;
         $settings['send_notifications'] = isset($input['send_notifications']) ? 1 : 0;
+        $settings['email_throttle'] = isset($input['email_throttle']) ? intval($input['email_throttle']) : 0;
         
         // Зберігаємо налаштування
         ip_get_logger_update_option('settings', $settings);
