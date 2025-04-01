@@ -49,33 +49,34 @@
     </div>
     
     <div class="ip-get-logger-requests-list">
-        <h2><?php echo esc_html__('Saved Exclude Patterns List', 'ip-get-logger'); ?></h2>
         
         <?php if (empty($exclude_patterns)) : ?>
             <p><?php echo esc_html__('No saved exclude patterns.', 'ip-get-logger'); ?></p>
         <?php else : ?>
             <div class="tablenav top">
-                <div class="alignleft actions">
-                    <form method="get" class="ip-get-logger-search-form">
-                        <input type="hidden" name="page" value="ip-get-logger-exclude">
-                        <input type="hidden" name="per_page" value="<?php echo esc_attr($per_page); ?>">
-                        <input type="hidden" name="paged" value="1">
-                        <input type="search" name="search" id="ip-get-logger-search-input" value="<?php echo esc_attr($search); ?>" placeholder="<?php echo esc_attr__('Search patterns...', 'ip-get-logger'); ?>">
-                        <input type="submit" class="button" value="<?php echo esc_attr__('Search', 'ip-get-logger'); ?>">
-                    </form>
-                </div>
-                <div class="alignleft actions">
-                    <form method="get" class="ip-get-logger-per-page-form">
-                        <input type="hidden" name="page" value="ip-get-logger-exclude">
-                        <input type="hidden" name="search" value="<?php echo esc_attr($search); ?>">
-                        <label for="per_page"><?php echo esc_html__('Per Page:', 'ip-get-logger'); ?></label>
-                        <select name="per_page" id="per_page">
-                            <option value="10" <?php selected($per_page, 10); ?>>10</option>
-                            <option value="20" <?php selected($per_page, 20); ?>>20</option>
-                            <option value="50" <?php selected($per_page, 50); ?>>50</option>
-                            <option value="100" <?php selected($per_page, 100); ?>>100</option>
-                        </select>
-                    </form>
+                <div class="flex-container">
+                    <div class="alignleft actions">
+                        <form method="get" class="ip-get-logger-search-form">
+                            <input type="hidden" name="page" value="ip-get-logger-exclude">
+                            <input type="hidden" name="per_page" value="<?php echo esc_attr($per_page); ?>">
+                            <input type="hidden" name="paged" value="1">
+                            <input type="search" name="search" id="ip-get-logger-search-input" value="<?php echo esc_attr($search); ?>" placeholder="<?php echo esc_attr__('Search patterns...', 'ip-get-logger'); ?>">
+                            <input type="submit" class="button" value="<?php echo esc_attr__('Search', 'ip-get-logger'); ?>">
+                        </form>
+                    </div>
+                    <div class="alignleft actions">
+                        <form method="get" class="ip-get-logger-per-page-form">
+                            <input type="hidden" name="page" value="ip-get-logger-exclude">
+                            <input type="hidden" name="search" value="<?php echo esc_attr($search); ?>">
+                            <label for="per_page"><?php echo esc_html__('Per Page:', 'ip-get-logger'); ?></label>
+                            <select name="per_page" id="per_page">
+                                <option value="10" <?php selected($per_page, 10); ?>>10</option>
+                                <option value="20" <?php selected($per_page, 20); ?>>20</option>
+                                <option value="50" <?php selected($per_page, 50); ?>>50</option>
+                                <option value="100" <?php selected($per_page, 100); ?>>100</option>
+                            </select>
+                        </form>
+                    </div>
                 </div>
                 
                 <div class="ip-get-logger-pagination">
@@ -165,6 +166,7 @@
             </table>
             
             <div class="tablenav bottom">
+                <div class="flex-container"></div>
                 <div class="ip-get-logger-pagination">
                     <div class="tablenav-pages">
                         <span class="displaying-num">

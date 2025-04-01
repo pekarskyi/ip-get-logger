@@ -256,3 +256,30 @@
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
+
+/* Стилі для навігації в таблицях (виключення, шаблони) */
+.tablenav.top,
+.tablenav.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 0px 10px 0px;
+}
+
+.tablenav .flex-container {
+    display: flex;
+    align-items: center;
+}
+
+.tablenav .alignleft.actions {
+    margin-right: 10px;
+}
+
+.tablenav .alignleft.actions form.ip-get-logger-per-page-form {
+    display: flex;
+    align-items: center;
+}
+
+.tablenav .alignleft.actions label {
+    margin-right: 5px;
+}

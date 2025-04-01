@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: IP GET Logger 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ip-get-logger\n"
 "POT-Creation-Date: 2024-03-30T04:00:00+00:00\n"
-"PO-Revision-Date: 2025-04-01 12:06+0000\n"
+"PO-Revision-Date: 2025-04-01 13:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: Українська\n"
 "Language: uk\n"
@@ -18,13 +18,13 @@ msgstr ""
 "X-Domain: ip-get-logger\n"
 "X-Loco-Version: 2.7.1; wp-6.7.2"
 
-#: admin/partials/exclude-page.php:132 admin/partials/requests-page.php:130
+#: admin/partials/exclude-page.php:142 admin/partials/requests-page.php:172
 msgid "#"
 msgstr "№"
 
-#: admin/partials/exclude-page.php:81 admin/partials/exclude-page.php:160
-#: admin/partials/logs-page.php:113 admin/partials/requests-page.php:111
-#: admin/partials/requests-page.php:158
+#: admin/partials/exclude-page.php:86 admin/partials/exclude-page.php:174
+#: admin/partials/logs-page.php:67 admin/partials/logs-page.php:169
+#: admin/partials/requests-page.php:116 admin/partials/requests-page.php:204
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
@@ -81,7 +81,7 @@ msgstr "6 год."
 msgid "A GET request matching your database has been detected: {request}"
 msgstr "Було виявлено GET-запит, який відповідає шаблону: {request}"
 
-#: admin/partials/exclude-page.php:134 admin/partials/requests-page.php:132
+#: admin/partials/exclude-page.php:144 admin/partials/requests-page.php:174
 msgid "Actions"
 msgstr "Дії"
 
@@ -105,81 +105,81 @@ msgstr "Додати шаблон"
 msgid "All devices"
 msgstr "Всі пристрої"
 
-#: admin/partials/exclude-page.php:285
+#: admin/partials/exclude-page.php:304
 msgid "An error occurred while adding the exclude pattern"
 msgstr "Виникла помилка під час додавання шаблонів виключень"
 
-#: admin/partials/requests-page.php:243
+#: admin/partials/requests-page.php:344
 #| msgid "An error occurred while adding the request"
 msgid "An error occurred while adding the pattern"
 msgstr "Виникла помилка під час додавання шаблону"
 
-#: admin/partials/exclude-page.php:390
+#: admin/partials/exclude-page.php:409
 msgid "An error occurred while clearing exclude patterns"
 msgstr "Виникла помилка під час очищення шаблонів виключень"
 
-#: admin/partials/logs-page.php:211
+#: admin/partials/logs-page.php:277
 msgid "An error occurred while clearing logs"
 msgstr "Виникла помилка при очищенні логів"
 
-#: admin/partials/requests-page.php:436
+#: admin/partials/requests-page.php:537
 msgid "An error occurred while clearing the list of patterns."
 msgstr "Виникла помилка під час очищення списку шаблонів."
 
-#: admin/partials/exclude-page.php:311
+#: admin/partials/exclude-page.php:330
 msgid "An error occurred while deleting the exclude pattern"
 msgstr "Виникла помилка під час видалення шаблонів виключень"
 
-#: admin/partials/requests-page.php:269
+#: admin/partials/requests-page.php:370
 #| msgid "An error occurred while deleting the request"
 msgid "An error occurred while deleting the pattern"
 msgstr "Виникла помилка під час видалення шаблону"
 
-#: admin/partials/requests-page.php:314
+#: admin/partials/requests-page.php:415
 #| msgid "An error occurred while editing the request"
 msgid "An error occurred while editing the pattern"
 msgstr "Виникла помилка при редагуванні шаблону"
 
-#: admin/partials/requests-page.php:367
+#: admin/partials/requests-page.php:468
 #| msgid "An error occurred while exporting requests"
 msgid "An error occurred while exporting patterns"
 msgstr "Виникла помилка під час експорту шаблонів"
 
-#: admin/partials/requests-page.php:343
+#: admin/partials/requests-page.php:444
 #| msgid "An error occurred while importing requests"
 msgid "An error occurred while importing patterns"
 msgstr "Виникла помилка під час імпорту шаблонів"
 
-#: admin/partials/exclude-page.php:426
+#: admin/partials/exclude-page.php:445
 msgid "An error occurred while updating exclude patterns"
 msgstr "Виникла помилка під час оновлення шаблонів виключень"
 
-#: admin/partials/exclude-page.php:357
+#: admin/partials/exclude-page.php:376
 msgid "An error occurred while updating the exclude pattern"
 msgstr "Виникла помилка під час оновлення шаблонів"
 
-#: admin/partials/requests-page.php:400
+#: admin/partials/requests-page.php:501
 msgid ""
 "An error occurred while updating the list of patterns from the repository!"
 msgstr "Виникла помилка при оновленні списку шаблонів з репозиторію"
 
-#: admin/partials/exclude-page.php:366
+#: admin/partials/exclude-page.php:385
 msgid "Are you sure you want to clear all exclude patterns?"
 msgstr "Ви впевнені, що хочете очистити всі шаблони виключень?"
 
-#: admin/partials/logs-page.php:195
+#: admin/partials/logs-page.php:250
 msgid "Are you sure you want to clear all logs?"
 msgstr "Ви впевнені, що хочете очистити всі логи?"
 
-#: admin/partials/requests-page.php:411
+#: admin/partials/requests-page.php:512
 msgid "Are you sure you want to clear the list of patterns?"
 msgstr "Ви впевнені, що хочете очистити список шаблонів?"
 
-#: admin/partials/exclude-page.php:292
+#: admin/partials/exclude-page.php:311
 msgid "Are you sure you want to delete this exclude pattern?"
 msgstr "Ви впевнені, що хочете видалити цей шаблон виключення?"
 
-#: admin/partials/requests-page.php:250
+#: admin/partials/requests-page.php:351
 #| msgid "Are you sure you want to delete this request?"
 msgid "Are you sure you want to delete this pattern?"
 msgstr "Ви впевнені, що хочете видалити цей шаблон?"
@@ -193,7 +193,7 @@ msgid "Break it down into different variants (full URL, path, filename, etc.)"
 msgstr ""
 "Розділить його на різні варіанти (повна URL-адреса, шлях, ім'я файлу тощо)."
 
-#: admin/partials/exclude-page.php:215 admin/partials/requests-page.php:191
+#: admin/partials/exclude-page.php:234 admin/partials/requests-page.php:274
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -209,7 +209,7 @@ msgstr "Очистити список"
 msgid "Clear exclude patterns:"
 msgstr "Очистити шаблони виключень:"
 
-#: admin/partials/logs-page.php:57
+#: admin/partials/logs-page.php:53
 msgid "Clear Logs"
 msgstr "Очистити логи"
 
@@ -221,7 +221,8 @@ msgstr "Очистити список"
 msgid "Clear patterns:"
 msgstr "Очистити список шаблонів:"
 
-#: admin/partials/exclude-page.php:371 admin/partials/requests-page.php:416
+#: admin/partials/exclude-page.php:390 admin/partials/logs-page.php:255
+#: admin/partials/requests-page.php:517
 msgid "Clearing..."
 msgstr "Очищення..."
 
@@ -238,7 +239,7 @@ msgid "Configure parameters for logging GET requests"
 msgstr "Налаштуйте параметри для логування GET-запитів"
 
 #: ip-get-logger.php:274 includes/class-ip-get-logger.php:410
-#: admin/partials/logs-page.php:74
+#: admin/partials/logs-page.php:131
 msgid "Country"
 msgstr "Країна"
 
@@ -258,7 +259,7 @@ msgstr "Налаштування бази даних"
 msgid "Database Table"
 msgstr "Таблиця в базі даних"
 
-#: admin/class-ip-get-logger-admin.php:901
+#: admin/class-ip-get-logger-admin.php:914
 #| msgid ""
 #| "Database updated successfully: %d new requests added, %d duplicates "
 #| "skipped."
@@ -271,7 +272,7 @@ msgstr ""
 msgid "Date"
 msgstr "Дата"
 
-#: admin/partials/logs-page.php:69
+#: admin/partials/logs-page.php:126
 msgid "Date & Time"
 msgstr "Дата і час"
 
@@ -279,7 +280,7 @@ msgstr "Дата і час"
 msgid "Date:"
 msgstr "Дата:"
 
-#: admin/partials/exclude-page.php:151 admin/partials/requests-page.php:149
+#: admin/partials/exclude-page.php:161 admin/partials/requests-page.php:191
 msgid "Delete"
 msgstr "Видалити"
 
@@ -291,7 +292,7 @@ msgstr "Видалення даних при видаленні плагіна"
 msgid "Delete database table when uninstalling the plugin"
 msgstr "Видаляти таблицю з бази даних при видаленні плагіна"
 
-#: admin/partials/logs-page.php:75
+#: admin/partials/logs-page.php:132
 msgid "Device"
 msgstr "Пристрій"
 
@@ -304,15 +305,15 @@ msgstr "Тип пристрою"
 msgid "Device:"
 msgstr "Пристрій:"
 
-#: admin/partials/exclude-page.php:150 admin/partials/requests-page.php:148
+#: admin/partials/exclude-page.php:160 admin/partials/requests-page.php:190
 msgid "Edit"
 msgstr "Редагувати"
 
-#: admin/partials/exclude-page.php:205
+#: admin/partials/exclude-page.php:224
 msgid "Edit Exclude Pattern"
 msgstr "Редагувати шаблон виключення"
 
-#: admin/partials/requests-page.php:181
+#: admin/partials/requests-page.php:264
 #| msgid "Edit pattern"
 msgid "Edit GET Pattern"
 msgstr "Редагувати шаблон"
@@ -337,7 +338,7 @@ msgstr "Тема листа"
 msgid "Email Throttle"
 msgstr "Затримка сповіщень"
 
-#: admin/class-ip-get-logger-admin.php:867
+#: admin/class-ip-get-logger-admin.php:880
 msgid "Empty response from GitHub"
 msgstr "Порожня відповідь від GitHub"
 
@@ -353,34 +354,34 @@ msgstr "Введіть шаблон URL-адреси для виключення
 msgid "Enter URL to test:"
 msgstr "Введіть URL для перевірки:"
 
-#: admin/class-ip-get-logger-admin.php:1026
-#: admin/class-ip-get-logger-admin.php:1052
+#: admin/class-ip-get-logger-admin.php:1039
+#: admin/class-ip-get-logger-admin.php:1065
 msgid "Error fetching remote data"
 msgstr "Помилка отримання віддалених даних"
 
-#: admin/partials/exclude-page.php:133
+#: admin/partials/exclude-page.php:143
 msgid "Exclude Pattern"
 msgstr "Шаблон виключення"
 
-#: admin/class-ip-get-logger-admin.php:1169
+#: admin/class-ip-get-logger-admin.php:1182
 msgid "Exclude pattern added successfully"
 msgstr "Шаблон виключення доданий успішно"
 
-#: admin/class-ip-get-logger-admin.php:1152
-#: admin/class-ip-get-logger-admin.php:1205
+#: admin/class-ip-get-logger-admin.php:1165
+#: admin/class-ip-get-logger-admin.php:1218
 msgid "Exclude pattern cannot be empty"
 msgstr "Шаблон виключення не може бути порожнім"
 
-#: admin/class-ip-get-logger-admin.php:1266
+#: admin/class-ip-get-logger-admin.php:1279
 msgid "Exclude pattern deleted successfully"
 msgstr "Шаблон виключення успішно видалено"
 
-#: admin/class-ip-get-logger-admin.php:1194
-#: admin/class-ip-get-logger-admin.php:1252
+#: admin/class-ip-get-logger-admin.php:1207
+#: admin/class-ip-get-logger-admin.php:1265
 msgid "Exclude pattern not found"
 msgstr "Не знайдено шаблон виключення"
 
-#: admin/class-ip-get-logger-admin.php:1227
+#: admin/class-ip-get-logger-admin.php:1240
 msgid "Exclude pattern updated successfully"
 msgstr "Шаблон виключення успішно оновлено"
 
@@ -397,14 +398,18 @@ msgstr "Експортувати"
 msgid "Export patterns to file:"
 msgstr "Експортуйте шаблони у файл:"
 
-#: admin/class-ip-get-logger-admin.php:857
-#: admin/class-ip-get-logger-admin.php:1321
+#: admin/class-ip-get-logger-admin.php:686
+msgid "Failed to clear logs. Check file permissions."
+msgstr "Не вдалося очистити журнали. Перевірте права доступу до файлів."
+
+#: admin/class-ip-get-logger-admin.php:870
+#: admin/class-ip-get-logger-admin.php:1334
 #, php-format
 msgid "Failed to fetch data from GitHub. HTTP Response Code: %s"
 msgstr "Не вдалося отримати дані з GitHub. Код відповіді HTTP: %s"
 
-#: admin/class-ip-get-logger-admin.php:847
-#: admin/class-ip-get-logger-admin.php:1311
+#: admin/class-ip-get-logger-admin.php:860
+#: admin/class-ip-get-logger-admin.php:1324
 #, php-format
 msgid "Failed to fetch data from GitHub: %s"
 msgstr "Не вдалося отримати дані з GitHub: %s"
@@ -417,7 +422,7 @@ msgstr "Не вдалося прочитати файл"
 msgid "File not found"
 msgstr "Файл не знайдено"
 
-#: admin/partials/logs-page.php:50
+#: admin/partials/logs-page.php:51
 msgid "Filter"
 msgstr "Фільтрувати"
 
@@ -434,8 +439,9 @@ msgstr "Фільтр за IP"
 msgid "Filter by URL"
 msgstr "Фільтр за URL"
 
-#: admin/partials/exclude-page.php:96 admin/partials/exclude-page.php:165
-#: admin/partials/logs-page.php:136
+#: admin/partials/exclude-page.php:105 admin/partials/exclude-page.php:183
+#: admin/partials/logs-page.php:90 admin/partials/logs-page.php:192
+#: admin/partials/requests-page.php:135 admin/partials/requests-page.php:223
 msgid "First page"
 msgstr "Перша"
 
@@ -459,7 +465,7 @@ msgstr "Логи GET-запитів"
 msgid "Help"
 msgstr "Довідка"
 
-#: admin/partials/requests-page.php:11 admin/partials/requests-page.php:187
+#: admin/partials/requests-page.php:11 admin/partials/requests-page.php:270
 msgid "HTML tags are supported, e.g., /?q=<iframe> or /?q=<script>"
 msgstr ""
 "Підтримуються HTML-теги, наприклад, /?q=<iframe> або /?q=<script></iframe>."
@@ -514,13 +520,13 @@ msgstr "Недостатньо прав"
 #: admin/class-ip-get-logger-admin.php:580
 #: admin/class-ip-get-logger-admin.php:636
 #: admin/class-ip-get-logger-admin.php:674
-#: admin/class-ip-get-logger-admin.php:695
-#: admin/class-ip-get-logger-admin.php:737
-#: admin/class-ip-get-logger-admin.php:795
-#: admin/class-ip-get-logger-admin.php:834
-#: admin/class-ip-get-logger-admin.php:1141
-#: admin/class-ip-get-logger-admin.php:1183
-#: admin/class-ip-get-logger-admin.php:1241
+#: admin/class-ip-get-logger-admin.php:708
+#: admin/class-ip-get-logger-admin.php:750
+#: admin/class-ip-get-logger-admin.php:808
+#: admin/class-ip-get-logger-admin.php:847
+#: admin/class-ip-get-logger-admin.php:1154
+#: admin/class-ip-get-logger-admin.php:1196
+#: admin/class-ip-get-logger-admin.php:1254
 msgid "Insufficient permissions to perform this operation"
 msgstr "Недостатньо прав для виконання цієї операції"
 
@@ -532,7 +538,7 @@ msgstr "Недопустимий файл"
 msgid "InwebPress"
 msgstr "InwebPress"
 
-#: admin/partials/logs-page.php:73
+#: admin/partials/logs-page.php:130
 msgid "IP"
 msgstr "IP"
 
@@ -553,12 +559,9 @@ msgstr "Налаштування IP GET Logger"
 msgid "IP:"
 msgstr "IP:"
 
-#: admin/partials/exclude-page.php:71 admin/partials/requests-page.php:101
-msgid "Items per page:"
-msgstr "на сторінці:"
-
-#: admin/partials/exclude-page.php:120 admin/partials/exclude-page.php:189
-#: admin/partials/logs-page.php:160
+#: admin/partials/exclude-page.php:129 admin/partials/exclude-page.php:207
+#: admin/partials/logs-page.php:114 admin/partials/logs-page.php:216
+#: admin/partials/requests-page.php:159 admin/partials/requests-page.php:247
 msgid "Last page"
 msgstr "Остання"
 
@@ -566,13 +569,9 @@ msgstr "Остання"
 msgid "Log Settings"
 msgstr "Налаштування логів"
 
-#: admin/class-ip-get-logger-admin.php:683
+#: admin/class-ip-get-logger-admin.php:696
 msgid "Logs cleared successfully"
 msgstr "Логи успішно очищено"
-
-#: admin/partials/logs-page.php:61
-msgid "Logs List"
-msgstr "Список логів"
 
 #: admin/partials/test-url-page.php:39
 msgid "Match Found"
@@ -590,21 +589,22 @@ msgstr "Шаблон"
 msgid "Matching Patterns"
 msgstr "Відповідні шаблони"
 
-#: admin/partials/logs-page.php:70
+#: admin/partials/logs-page.php:127
 msgid "Method"
 msgstr "Метод"
 
-#: admin/partials/exclude-page.php:113 admin/partials/exclude-page.php:182
-#: admin/partials/logs-page.php:153
+#: admin/partials/exclude-page.php:122 admin/partials/exclude-page.php:200
+#: admin/partials/logs-page.php:107 admin/partials/logs-page.php:209
+#: admin/partials/requests-page.php:152 admin/partials/requests-page.php:240
 msgid "Next page"
 msgstr "Наступна"
 
-#: admin/class-ip-get-logger-admin.php:1032
-#: admin/class-ip-get-logger-admin.php:1058
+#: admin/class-ip-get-logger-admin.php:1045
+#: admin/class-ip-get-logger-admin.php:1071
 msgid "No data available"
 msgstr "Дані відсутні"
 
-#: admin/class-ip-get-logger-admin.php:1331
+#: admin/class-ip-get-logger-admin.php:1344
 msgid "No exclude patterns found in the repository."
 msgstr "Відсутні шаблони для виключення."
 
@@ -624,19 +624,19 @@ msgstr "Збігів не знайдено"
 msgid "No patterns to export"
 msgstr "Немає шаблонів для експорту"
 
-#: admin/partials/exclude-page.php:55
+#: admin/partials/exclude-page.php:54
 msgid "No saved exclude patterns."
 msgstr "Шаблони відсутні."
 
-#: admin/partials/logs-page.php:64
+#: admin/partials/logs-page.php:61
 msgid "No saved logs."
 msgstr "Немає збережених логів."
 
-#: admin/partials/requests-page.php:85
+#: admin/partials/requests-page.php:84
 msgid "No saved patterns."
 msgstr "Немає збережених шаблонів."
 
-#: admin/class-ip-get-logger-admin.php:1344
+#: admin/class-ip-get-logger-admin.php:1357
 msgid "No valid exclude patterns found in the repository."
 msgstr "Відсутні нові шаблони для виключення."
 
@@ -669,31 +669,31 @@ msgstr "Дозволені тільки файли з розширенням .tx
 msgid "Parameter"
 msgstr "Параметр"
 
-#: admin/partials/logs-page.php:72 admin/partials/requests-page.php:131
+#: admin/partials/logs-page.php:129 admin/partials/requests-page.php:173
 msgid "Pattern"
 msgstr "Шаблон"
 
-#: admin/class-ip-get-logger-admin.php:723
+#: admin/class-ip-get-logger-admin.php:736
 #| msgid "Request added successfully"
 msgid "Pattern added successfully"
 msgstr "Шаблон успішно додано"
 
-#: admin/class-ip-get-logger-admin.php:706
-#: admin/class-ip-get-logger-admin.php:759
+#: admin/class-ip-get-logger-admin.php:719
+#: admin/class-ip-get-logger-admin.php:772
 msgid "Pattern cannot be empty"
 msgstr "Шаблон не може бути порожнім"
 
-#: admin/class-ip-get-logger-admin.php:820
+#: admin/class-ip-get-logger-admin.php:833
 #| msgid "Request deleted successfully"
 msgid "Pattern deleted successfully"
 msgstr "Шаблон успішно видалено"
 
-#: admin/class-ip-get-logger-admin.php:748
-#: admin/class-ip-get-logger-admin.php:806
+#: admin/class-ip-get-logger-admin.php:761
+#: admin/class-ip-get-logger-admin.php:819
 msgid "Pattern not found"
 msgstr "Шаблон не знайдено"
 
-#: admin/class-ip-get-logger-admin.php:781
+#: admin/class-ip-get-logger-admin.php:794
 #| msgid "Request updated successfully"
 msgid "Pattern updated successfully"
 msgstr "Шаблон успішно оновлено"
@@ -712,7 +712,8 @@ msgstr "шаблони"
 msgid "Patterns with HTML Tags"
 msgstr "Шаблони з тегами HTML"
 
-#: admin/partials/logs-page.php:40
+#: admin/partials/exclude-page.php:71 admin/partials/logs-page.php:41
+#: admin/partials/requests-page.php:101
 msgid "Per Page:"
 msgstr "На сторінці:"
 
@@ -724,8 +725,9 @@ msgstr "Плагін відстежує та логує спеціальні GET
 msgid "Plugin Information"
 msgstr "Інформація про плагін"
 
-#: admin/partials/exclude-page.php:103 admin/partials/exclude-page.php:172
-#: admin/partials/logs-page.php:143
+#: admin/partials/exclude-page.php:112 admin/partials/exclude-page.php:190
+#: admin/partials/logs-page.php:97 admin/partials/logs-page.php:199
+#: admin/partials/requests-page.php:142 admin/partials/requests-page.php:230
 msgid "Previous page"
 msgstr "Попередня"
 
@@ -742,29 +744,21 @@ msgstr "Деталі:"
 msgid "Request Method"
 msgstr "Метод запиту"
 
-#: admin/partials/exclude-page.php:11 admin/partials/exclude-page.php:211
+#: admin/partials/exclude-page.php:11 admin/partials/exclude-page.php:230
 msgid "Requests containing this pattern will be ignored and not logged."
 msgstr "Запити, що містять цей шаблон, будуть ігноруватися і не реєструватися."
 
-#: admin/partials/logs-page.php:51
+#: admin/partials/logs-page.php:52
 msgid "Reset Filters"
 msgstr "Скинути фільтри"
 
-#: admin/partials/exclude-page.php:214 admin/partials/requests-page.php:190
+#: admin/partials/exclude-page.php:233 admin/partials/requests-page.php:273
 msgid "Save"
 msgstr "Зберегти"
 
 #: admin/partials/settings-page.php:10
 msgid "Save Settings"
 msgstr "Зберегти налаштування"
-
-#: admin/partials/exclude-page.php:52
-msgid "Saved Exclude Patterns List"
-msgstr "Збережений список вилучених шаблонів"
-
-#: admin/partials/requests-page.php:82
-msgid "Saved Patterns List"
-msgstr "Список ваших шаблонів"
 
 #: admin/partials/exclude-page.php:64 admin/partials/requests-page.php:94
 msgid "Search"
@@ -807,7 +801,7 @@ msgstr "Покаже, які шаблони збіглися і які варі�
 msgid "Specify the number of days to keep logs (0 - never delete)"
 msgstr "Вкажіть кількість днів для зберігання логів (0 - не видаляти)"
 
-#: admin/class-ip-get-logger-admin.php:1368
+#: admin/class-ip-get-logger-admin.php:1381
 msgid "Successfully added %d new exclude pattern from the repository."
 msgid_plural "Successfully added %d new exclude patterns from the repository."
 msgstr[0] "Успішно додано %d новий шаблон для виключення."
@@ -836,11 +830,11 @@ msgstr "Тестувати з тегами HTML"
 msgid "Tested URL"
 msgstr "Перевірена URL-адреса"
 
-#: admin/class-ip-get-logger-admin.php:1288
+#: admin/class-ip-get-logger-admin.php:1301
 msgid "The list of exclude patterns is successfully cleared."
 msgstr "Список виключених шаблонів успішно очищено."
 
-#: admin/class-ip-get-logger-admin.php:935
+#: admin/class-ip-get-logger-admin.php:948
 msgid "The list of patterns is successfully cleared."
 msgstr "Список шаблонів успішно очищено."
 
@@ -864,13 +858,13 @@ msgstr ""
 "Це може допомогти вам з'ясувати, чому певні URL-адреси не виявляються або не "
 "реєструються."
 
-#: admin/class-ip-get-logger-admin.php:1158
-#: admin/class-ip-get-logger-admin.php:1212
+#: admin/class-ip-get-logger-admin.php:1171
+#: admin/class-ip-get-logger-admin.php:1225
 msgid "This exclude pattern already exists"
 msgstr "Цей шаблон виключення вже існує"
 
-#: admin/class-ip-get-logger-admin.php:712
-#: admin/class-ip-get-logger-admin.php:766
+#: admin/class-ip-get-logger-admin.php:725
+#: admin/class-ip-get-logger-admin.php:779
 #| msgid "This request already exists in the database"
 msgid "This pattern already exists in the database"
 msgstr "Цей шаблон вже існує в базі даних"
@@ -904,12 +898,12 @@ msgstr "Оновити шаблони"
 msgid "Update patterns from repository:"
 msgstr "Оновлення шаблонів з репозиторію:"
 
-#: admin/partials/exclude-page.php:406 admin/partials/requests-page.php:380
+#: admin/partials/exclude-page.php:425 admin/partials/requests-page.php:481
 msgid "Updating..."
 msgstr "Оновлення..."
 
 #: ip-get-logger.php:272 includes/class-ip-get-logger.php:408
-#: admin/partials/logs-page.php:71
+#: admin/partials/logs-page.php:128
 msgid "URL"
 msgstr "URL"
 
@@ -917,11 +911,11 @@ msgstr "URL"
 msgid "URL Matching Test"
 msgstr "Тест на відповідність URL-адреси"
 
-#: admin/partials/requests-page.php:9 admin/partials/requests-page.php:185
+#: admin/partials/requests-page.php:9 admin/partials/requests-page.php:268
 msgid "URL or request pattern:"
 msgstr "URL або шаблон запиту:"
 
-#: admin/partials/exclude-page.php:9 admin/partials/exclude-page.php:209
+#: admin/partials/exclude-page.php:9 admin/partials/exclude-page.php:228
 msgid "URL pattern to exclude:"
 msgstr "Виключити шаблон URL-адреси:"
 
@@ -979,13 +973,13 @@ msgstr "написати в Telegram"
 msgid "Yes, URL matched one or more patterns"
 msgstr "Так, URL-адреса відповідає одному або декільком шаблонам"
 
-#: admin/class-ip-get-logger-admin.php:925
-#: admin/class-ip-get-logger-admin.php:1278
-#: admin/class-ip-get-logger-admin.php:1299
+#: admin/class-ip-get-logger-admin.php:938
+#: admin/class-ip-get-logger-admin.php:1291
+#: admin/class-ip-get-logger-admin.php:1312
 msgid "You do not have sufficient permissions to perform this action."
 msgstr "Ви не маєте достатніх прав для виконання цієї дії."
 
-#: admin/class-ip-get-logger-admin.php:910
+#: admin/class-ip-get-logger-admin.php:923
 #| msgid ""
 #| "Your database is up to date. No new requests added. %d duplicates skipped."
 msgid ""
