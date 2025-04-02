@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: IP GET Logger 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ip-get-logger\n"
 "POT-Creation-Date: 2024-03-30T04:00:00+00:00\n"
-"PO-Revision-Date: 2025-04-01 13:22+0000\n"
+"PO-Revision-Date: 2025-04-02 23:14+0000\n"
 "Last-Translator: \n"
 "Language-Team: Українська\n"
 "Language: uk\n"
@@ -990,3 +990,58 @@ msgid ""
 "Your database is up to date. No new patterns added. %d duplicates skipped."
 msgstr ""
 "Ваша база актуальна. Нових шаблонів не додано. Пропущено %d дублікатів."
+
+#: admin/partials/test-url-page.php:37
+msgid "Excluded by Pattern"
+msgstr "Виключено за шаблоном"
+
+#: admin/partials/test-url-page.php:40
+msgid "URL is excluded by one or more exclude patterns"
+msgstr "URL-адреса виключена одним або кількома шаблонами виключення"
+
+#: admin/partials/test-url-page.php:45
+msgid "Conclusion:"
+msgstr "Висновок:"
+
+#: admin/partials/test-url-page.php:46
+msgid ""
+"This URL matches your patterns but will NOT be logged due to exclusion rules."
+msgstr ""
+"Ця URL-адреса відповідає вашим шаблонам, але НЕ буде логована через правила "
+"виключення."
+
+#: admin/partials/test-url-page.php:50
+msgid ""
+"This URL does not match any patterns and is also excluded. It will NOT be "
+"logged."
+msgstr ""
+"Ця URL-адреса не відповідає жодному шаблону і також виключена. Вона НЕ буде "
+"логована."
+
+#: admin/partials/test-url-page.php:56
+msgid "URL is not excluded by any patterns"
+msgstr "URL-адреса не виключена жодним шаблоном"
+
+#: admin/partials/test-url-page.php:61
+msgid "This URL will be logged when accessed."
+msgstr "Ця URL-адреса буде логована при доступі."
+
+#: admin/partials/test-url-page.php:65
+msgid "This URL does not match any patterns. It will NOT be logged."
+msgstr "Ця URL-адреса не відповідає жодному шаблону. Вона НЕ буде логована."
+
+#: admin/partials/test-url-page.php:87
+msgid "Exclude Patterns Matches"
+msgstr "Збіги шаблонів виключення"
+
+#: admin/partials/test-url-page.php:91
+msgid "Matched Exclude Pattern"
+msgstr "Збіг зі шаблоном виключення"
+
+#: admin/partials/test-url-page.php:126
+msgid "Matched but excluded"
+msgstr "Збіг, але виключено"
+
+#: admin/partials/test-url-page.php:134
+msgid "Excluded"
+msgstr "Виключено"

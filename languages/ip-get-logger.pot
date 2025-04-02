@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-01 13:21+0000\n"
+"POT-Creation-Date: 2025-04-02 23:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: ip-get-logger\n"
@@ -180,7 +180,7 @@ msgstr ""
 msgid "Auto-cleanup logs (days)"
 msgstr ""
 
-#: admin/partials/test-url-page.php:111
+#: admin/partials/test-url-page.php:192
 msgid "Break it down into different variants (full URL, path, filename, etc.)"
 msgstr ""
 
@@ -188,7 +188,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: admin/partials/test-url-page.php:112
+#: admin/partials/test-url-page.php:193
 msgid "Check each variant against all your patterns"
 msgstr ""
 
@@ -215,6 +215,11 @@ msgstr ""
 #: admin/partials/exclude-page.php:390 admin/partials/logs-page.php:255
 #: admin/partials/requests-page.php:517
 msgid "Clearing..."
+msgstr ""
+
+#: admin/partials/test-url-page.php:60 admin/partials/test-url-page.php:65
+#: admin/partials/test-url-page.php:77 admin/partials/test-url-page.php:82
+msgid "Conclusion:"
 msgstr ""
 
 #: admin/class-ip-get-logger-admin.php:514
@@ -375,6 +380,18 @@ msgstr ""
 msgid "Exclude Patterns"
 msgstr ""
 
+#: admin/partials/test-url-page.php:114
+msgid "Exclude Patterns Matches"
+msgstr ""
+
+#: admin/partials/test-url-page.php:169
+msgid "Excluded"
+msgstr ""
+
+#: admin/partials/test-url-page.php:52
+msgid "Excluded by Pattern"
+msgstr ""
+
 #: admin/partials/requests-page.php:51
 msgid "Export"
 msgstr ""
@@ -441,7 +458,7 @@ msgstr ""
 msgid "GET Requests Logs"
 msgstr ""
 
-#: admin/partials/test-url-page.php:106
+#: admin/partials/test-url-page.php:187
 msgid "Help"
 msgstr ""
 
@@ -548,15 +565,23 @@ msgstr ""
 msgid "Match Found"
 msgstr ""
 
-#: admin/partials/test-url-page.php:93
+#: admin/partials/test-url-page.php:165
 msgid "Matched"
 msgstr ""
 
-#: admin/partials/test-url-page.php:58
+#: admin/partials/test-url-page.php:161
+msgid "Matched but excluded"
+msgstr ""
+
+#: admin/partials/test-url-page.php:119
+msgid "Matched Exclude Pattern"
+msgstr ""
+
+#: admin/partials/test-url-page.php:97
 msgid "Matched Pattern"
 msgstr ""
 
-#: admin/partials/test-url-page.php:53
+#: admin/partials/test-url-page.php:92
 msgid "Matching Patterns"
 msgstr ""
 
@@ -611,7 +636,7 @@ msgstr ""
 msgid "No valid exclude patterns found in the repository."
 msgstr ""
 
-#: admin/partials/test-url-page.php:95
+#: admin/partials/test-url-page.php:173
 msgid "Not matched"
 msgstr ""
 
@@ -673,7 +698,7 @@ msgstr ""
 msgid "patterns"
 msgstr ""
 
-#: admin/partials/test-url-page.php:75
+#: admin/partials/test-url-page.php:136
 msgid "Patterns with HTML Tags"
 msgstr ""
 
@@ -757,7 +782,7 @@ msgstr ""
 msgid "Settings saved successfully"
 msgstr ""
 
-#: admin/partials/test-url-page.php:113
+#: admin/partials/test-url-page.php:194
 msgid "Show you which patterns matched and which variants were checked"
 msgstr ""
 
@@ -807,11 +832,11 @@ msgid ""
 "or requests."
 msgstr ""
 
-#: admin/partials/test-url-page.php:76
+#: admin/partials/test-url-page.php:137
 msgid "These patterns in your database contain HTML tags:"
 msgstr ""
 
-#: admin/partials/test-url-page.php:115
+#: admin/partials/test-url-page.php:196
 msgid ""
 "This can help you troubleshoot why certain URLs are not being detected or "
 "logged."
@@ -827,10 +852,29 @@ msgstr ""
 msgid "This pattern already exists in the database"
 msgstr ""
 
-#: admin/partials/test-url-page.php:108
+#: admin/partials/test-url-page.php:189
 msgid ""
 "This tool allows you to test if a URL would be matched by any of your "
 "configured patterns."
+msgstr ""
+
+#: admin/partials/test-url-page.php:66
+msgid ""
+"This URL does not match any patterns and is also excluded. It will NOT be "
+"logged."
+msgstr ""
+
+#: admin/partials/test-url-page.php:83
+msgid "This URL does not match any patterns. It will NOT be logged."
+msgstr ""
+
+#: admin/partials/test-url-page.php:61
+msgid ""
+"This URL matches your patterns but will NOT be logged due to exclusion rules."
+msgstr ""
+
+#: admin/partials/test-url-page.php:78
+msgid "This URL will be logged when accessed."
 msgstr ""
 
 #: ip-get-logger.php:285 includes/class-ip-get-logger.php:421
@@ -866,6 +910,14 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#: admin/partials/test-url-page.php:55
+msgid "URL is excluded by one or more exclude patterns"
+msgstr ""
+
+#: admin/partials/test-url-page.php:72
+msgid "URL is not excluded by any patterns"
+msgstr ""
+
 #: admin/partials/test-url-page.php:2
 msgid "URL Matching Test"
 msgstr ""
@@ -878,7 +930,7 @@ msgstr ""
 msgid "URL pattern to exclude:"
 msgstr ""
 
-#: admin/partials/test-url-page.php:57
+#: admin/partials/test-url-page.php:96 admin/partials/test-url-page.php:118
 msgid "URL Variant"
 msgstr ""
 
@@ -886,7 +938,7 @@ msgstr ""
 msgid "URL:"
 msgstr ""
 
-#: admin/partials/test-url-page.php:86
+#: admin/partials/test-url-page.php:147
 msgid "URLs Checked"
 msgstr ""
 
@@ -912,7 +964,7 @@ msgid ""
 "deleted along with the plugin!"
 msgstr ""
 
-#: admin/partials/test-url-page.php:109
+#: admin/partials/test-url-page.php:190
 msgid "When you enter a URL, the system will:"
 msgstr ""
 

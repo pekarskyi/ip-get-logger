@@ -97,6 +97,13 @@ If you have any questions, suggestions, found bugs, or discovered new malicious 
 
 ## Changelog
 
+1.2.4 - 03.04.2025:
+- Enhanced URL Matching Test with exclude patterns support
+- Improved test results display with clear visual indicators for matched and excluded patterns
+- Added conclusive test results showing whether a URL will be logged or excluded
+- Enhanced UX with color-coded indicators for match and exclusion status
+- Updated and expanded Ukrainian localization
+
 1.2.3 - 01.04.2025:
 - Added data preservation during plugin updates even with the "Delete database table when uninstalling" option enabled
 - Added email throttling to limit notification frequency (1min, 5min, 10min, 30min, 1h, 6h, 12h, 24h)

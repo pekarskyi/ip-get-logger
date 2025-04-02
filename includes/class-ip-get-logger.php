@@ -614,10 +614,37 @@ class IP_Get_Logger {
         $results = array(
             'test_url' => $test_url,
             'urls_checked' => $urls_to_check,
-            'matches' => array()
+            'matches' => array(),
+            'exclude_matches' => array() // Додаємо новий масив для співпадінь з виключеннями
         );
         
+        // Отримуємо шаблони виключення
+        $exclude_patterns = ip_get_logger_get_option('exclude_patterns', array());
+        
         foreach ($urls_to_check as $url) {
+            // Перевіряємо на виключення
+            $excluded = false;
+            $exclude_pattern_matched = null;
+            
+            foreach ($exclude_patterns as $pattern) {
+                $decoded_url = urldecode($url);
+                $double_decoded_url = urldecode($decoded_url);
+                
+                if (strpos($url, $pattern) !== false || 
+                    strpos($decoded_url, $pattern) !== false || 
+                    strpos($double_decoded_url, $pattern) !== false) {
+                    $excluded = true;
+                    $exclude_pattern_matched = $pattern;
+                    break;
+                }
+            }
+            
+            // Якщо URL підпадає під виключення, додаємо його до результатів
+            if ($excluded) {
+                $results['exclude_matches'][$url] = $exclude_pattern_matched;
+            }
+            
+            // Перевіряємо на збіг з регулярними шаблонами
             $match = $this->match_request($url);
             if ($match) {
                 $results['matches'][$url] = $match;
@@ -625,6 +652,7 @@ class IP_Get_Logger {
         }
         
         $results['match_found'] = !empty($results['matches']);
+        $results['exclude_found'] = !empty($results['exclude_matches']);
         
         return $results;
     }
