@@ -149,7 +149,7 @@
                             <td>
                                 <div class="ip-get-logger-url-container">
                                     <a href="<?php echo esc_url($log_data['url'] ?? ''); ?>" target="_blank" title="<?php echo esc_attr($log_data['url'] ?? ''); ?>">
-                                        <?php echo esc_html(substr($log_data['url'] ?? '', 0, 50) . (strlen($log_data['url'] ?? '') > 50 ? '...' : '')); ?>
+                                        <?php echo esc_html(substr($log_data['url'] ?? '', 0, 70) . (strlen($log_data['url'] ?? '') > 70 ? '...' : '')); ?>
                                     </a>
                                 </div>
                             </td>
