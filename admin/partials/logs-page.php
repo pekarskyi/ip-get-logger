@@ -26,15 +26,8 @@
             </div>
             
             <div class="ip-get-logger-filter-group">
-                <label for="filter_device"><?php echo esc_html__('Device:', 'ip-get-logger'); ?></label>
-                <select id="filter_device" name="filter_device">
-                    <option value=""><?php echo esc_html__('All devices', 'ip-get-logger'); ?></option>
-                    <option value="desktop" <?php selected($filter_device, 'desktop'); ?>>Desktop</option>
-                    <option value="mobile" <?php selected($filter_device, 'mobile'); ?>>Mobile</option>
-                    <option value="tablet" <?php selected($filter_device, 'tablet'); ?>>Tablet</option>
-                    <option value="bot" <?php selected($filter_device, 'bot'); ?>>Bot</option>
-                    <option value="unknown" <?php selected($filter_device, 'unknown'); ?>>Unknown</option>
-                </select>
+                <label for="filter_user_agent"><?php echo esc_html__('User Agent:', 'ip-get-logger'); ?></label>
+                <input type="text" id="filter_user_agent" name="filter_user_agent" value="<?php echo esc_attr($filter_user_agent); ?>" placeholder="<?php echo esc_attr__('Filter by User Agent', 'ip-get-logger'); ?>">
             </div>
             
             <div class="ip-get-logger-filter-group">
@@ -79,7 +72,7 @@
                                 'filter_ip' => $filter_ip,
                                 'filter_country' => $filter_country,
                                 'filter_url' => $filter_url,
-                                'filter_device' => $filter_device,
+                                'filter_user_agent' => $filter_user_agent,
                                 'per_page' => $per_page
                             ),
                             admin_url('admin.php')
@@ -129,7 +122,7 @@
                         <th scope="col"><?php echo esc_html__('Pattern', 'ip-get-logger'); ?></th>
                         <th scope="col"><?php echo esc_html__('IP', 'ip-get-logger'); ?></th>
                         <th scope="col"><?php echo esc_html__('Country', 'ip-get-logger'); ?></th>
-                        <th scope="col"><?php echo esc_html__('Device', 'ip-get-logger'); ?></th>
+                        <th scope="col"><?php echo esc_html__('User Agent', 'ip-get-logger'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,7 +149,7 @@
                             <td><?php echo esc_html($log_data['matched_pattern'] ?? ''); ?></td>
                             <td><?php echo esc_html($log_data['ip'] ?? ''); ?></td>
                             <td><?php echo esc_html($log_data['country'] ?? ''); ?></td>
-                            <td><?php echo esc_html($log_data['device_type'] ?? 'Unknown'); ?></td>
+                            <td><?php echo esc_html($log_data['user_agent'] ?? 'Unknown'); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -181,7 +174,7 @@
                                 'filter_ip' => $filter_ip,
                                 'filter_country' => $filter_country,
                                 'filter_url' => $filter_url,
-                                'filter_device' => $filter_device,
+                                'filter_user_agent' => $filter_user_agent,
                                 'per_page' => $per_page
                             ),
                             admin_url('admin.php')

@@ -142,8 +142,13 @@
     width: 60px;
 }
 
+.ip-get-logger-logs-list th:nth-child(3) {
+    max-width: 250px;
+}
+
 .ip-get-logger-logs-list th:nth-child(4) {
-    width: 250px;
+    width: 150px;
+    max-width: 150px;
 }
 
 .ip-get-logger-logs-list th:nth-child(5) {
@@ -155,7 +160,7 @@
 }
 
 .ip-get-logger-logs-list th:nth-child(7) {
-    width: 80px;
+    max-width: 350px;
 }
 
 .ip-get-logger-logs-list th:nth-child(8) {

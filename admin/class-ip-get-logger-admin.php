@@ -290,7 +290,7 @@ class IP_Get_Logger_Admin {
         $filter_ip = isset($_GET['filter_ip']) ? sanitize_text_field($_GET['filter_ip']) : '';
         $filter_country = isset($_GET['filter_country']) ? sanitize_text_field($_GET['filter_country']) : '';
         $filter_url = isset($_GET['filter_url']) ? sanitize_text_field($_GET['filter_url']) : '';
-        $filter_device = isset($_GET['filter_device']) ? sanitize_text_field($_GET['filter_device']) : '';
+        $filter_user_agent = isset($_GET['filter_user_agent']) ? sanitize_text_field($_GET['filter_user_agent']) : '';
         
         // Параметри пагінації
         $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 20;
@@ -337,7 +337,7 @@ class IP_Get_Logger_Admin {
             if (isset($log_data['country'])) {
                 // Масив відповідностей локалізованих значень до англійських
                 $country_map = array(
-                    'Local' => 'Local',
+                    'Local' => 'Local Network',
                     'Unknown' => 'Unknown'
                 );
                 
@@ -350,7 +350,7 @@ class IP_Get_Logger_Admin {
             // Фільтрація логів
             $match = true;
             
-            if (!empty($filter_date) || !empty($filter_ip) || !empty($filter_country) || !empty($filter_url) || !empty($filter_device)) {
+            if (!empty($filter_date) || !empty($filter_ip) || !empty($filter_country) || !empty($filter_url) || !empty($filter_user_agent)) {
                 if (!empty($filter_date)) {
                     if (isset($log_data['timestamp'])) {
                         $log_date = date('Y-m-d', strtotime($log_data['timestamp']));
@@ -380,9 +380,8 @@ class IP_Get_Logger_Admin {
                     }
                 }
                 
-                if (!empty($filter_device)) {
-                    if (!isset($log_data['device_type']) || 
-                        strtolower($log_data['device_type']) !== strtolower($filter_device)) {
+                if (!empty($filter_user_agent)) {
+                    if (!isset($log_data['user_agent']) || stripos($log_data['user_agent'], $filter_user_agent) === false) {
                         $match = false;
                     }
                 }

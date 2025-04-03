@@ -802,7 +802,7 @@ class IP_Get_Logger {
      * Визначає країну за IP-адресою
      * 
      * @param string $ip IP-адреса
-     * @return string Код країни або 'Unknown'
+     * @return string Назва країни або 'Unknown'
      */
     public function get_country_by_ip($ip) {
         // Перевірка на локальні IP-адреси
@@ -810,7 +810,7 @@ class IP_Get_Logger {
             strpos($ip, '192.168.') === 0 || 
             strpos($ip, '10.') === 0 || 
             strpos($ip, '172.16.') === 0) {
-            return 'Local';
+            return 'Local Network';
         }
         
         // Спробуємо отримати інформацію через безкоштовний GeoIP API
@@ -836,14 +836,14 @@ class IP_Get_Logger {
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body, true);
         
-        if (isset($data['status']) && $data['status'] === 'success' && !empty($data['countryCode'])) {
-            // Зберігаємо результат в кеш на 7 днів
-            set_transient($transient_name, $data['countryCode'], 7 * DAY_IN_SECONDS);
-            return $data['countryCode'];
+        if (isset($data['status']) && $data['status'] === 'success' && !empty($data['country'])) {
+            // Зберігаємо повну назву країни в кеш на 7 днів
+            set_transient($transient_name, $data['country'], 7 * DAY_IN_SECONDS);
+            return $data['country'];
         }
         
         // Альтернативний API, якщо перший не відповів
-        $api_url_alt = 'https://ipapi.co/' . $ip . '/country/';
+        $api_url_alt = 'https://ipapi.co/' . $ip . '/country_name/';
         
         $response_alt = wp_remote_get($api_url_alt, array(
             'timeout' => 5,
@@ -851,12 +851,12 @@ class IP_Get_Logger {
         ));
         
         if (!is_wp_error($response_alt)) {
-            $country_code = trim(wp_remote_retrieve_body($response_alt));
+            $country_name = trim(wp_remote_retrieve_body($response_alt));
             
-            if (!empty($country_code) && strlen($country_code) === 2) {
+            if (!empty($country_name)) {
                 // Зберігаємо результат в кеш на 7 днів
-                set_transient($transient_name, $country_code, 7 * DAY_IN_SECONDS);
-                return $country_code;
+                set_transient($transient_name, $country_name, 7 * DAY_IN_SECONDS);
+                return $country_name;
             }
         }
         
