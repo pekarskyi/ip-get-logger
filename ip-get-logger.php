@@ -541,9 +541,9 @@ function ip_get_logger_download_export() {
 // Adding update check via GitHub
 require_once plugin_dir_path( __FILE__ ) . 'updates/github-updater.php';
 
-$github_username = 'github_username'; // Вказуємо ім'я користувача GitHub
-$repo_name = 'repo_name'; // Вказуємо ім'я репозиторію GitHub, наприклад ip-wp-github-updater
-$prefix = 'your_prefix'; // Встановлюємо унікальний префікс плагіну, наприклад ip_wp_github_updater
+$github_username = 'pekarskyi'; // Вказуємо ім'я користувача GitHub
+$repo_name = 'ip-get-logger'; // Вказуємо ім'я репозиторію GitHub, наприклад ip-wp-github-updater
+$prefix = 'ip_get_logger'; // Встановлюємо унікальний префікс плагіну, наприклад ip_wp_github_updater
 
 // Ініціалізуємо систему оновлення плагіну з GitHub
 if ( function_exists( 'ip_github_updater_load' ) ) {
