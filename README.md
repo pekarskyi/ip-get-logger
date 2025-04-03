@@ -97,7 +97,7 @@ If you have any questions, suggestions, found bugs, or discovered new malicious 
 
 ## Changelog
 
-1.2.5 - 05.04.2025:
+1.2.5 - 03.04.2025:
 - Changed "Device" column to "User Agent" in logs table to display full User-Agent information
 - Added ability to filter logs by User Agent string
 - Enhanced country detection to display full country names instead of country codes
