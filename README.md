@@ -2,10 +2,11 @@
 
 # IP GET Logger
 
-WordPress Plugin for Monitoring, Logging, and Alerting Suspicious GET Requests on Your Website 
+WordPress plugin for monitoring, logging, and alerting suspicious GET requests on your website. It acts as an additional security layer, helping you detect potential threats at an early stage.
 
-### Main Purpose  
-This plugin acts as an additional security layer, helping to detect potential threats at an early stage.  
+[Читати опис українською мовою](https://github.com/pekarskyi/ip-get-logger/blob/master/README_UA.md) <img src="https://github.com/pekarskyi/assets/raw/master/flags/ua.svg" width="17">
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/pekarskyi/ip-get-logger?style=for-the-badge)](https://GitHub.com/pekarskyi/ip-get-logger/releases/)
 
 ### How It Works  
 Attackers may use specific GET requests to search for vulnerabilities in your system. The plugin automatically:  
@@ -19,8 +20,6 @@ Attackers may use specific GET requests to search for vulnerabilities in your sy
 - Quick response capabilities  
 
 With this plugin, you can enhance your website's security and proactively prevent potential attacks.
-
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/pekarskyi/ip-get-logger?style=for-the-badge)](https://GitHub.com/pekarskyi/ip-get-logger/releases/)
 
 ## Description
 
@@ -74,9 +73,28 @@ Email Notifications
 
 ## Installation
 
-1. Upload the `ip-get-logger` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Navigate to the 'IP GET Logger' settings page to configure the plugin
+### Option 1:
+
+1. Download the `IP GET Logger` plugin (green Code button - Download ZIP). Unpack it.
+2. Upload the `ip-get-logger` folder to the `/wp-content/plugins/` directory. Make sure the plugin folder is named `ip-get-logger` (the name doesn't affect how the plugin works, but it does affect receiving future updates).
+3. Activate the plugin. 
+
+### Option 2 (recommended):
+
+1. Install and activate this plugin (plugin installer): https://github.com/pekarskyi/ip-installer
+2. Using the `IP Installer` plugin, install and activate the `IP GET Logger`.
+
+## What to do after activating the plugin?
+
+1. Configure necessary parameters in the plugin settings.
+2. Go to the `Patterns` section and click the `Update Patterns` button to install a list of patterns against which requests will be checked and logged.
+3. Go to the `Exclude Patterns` section and click the `Update Exclude Patterns` button to install a list of exclusions. The plugin will ignore requests with URLs that match these exclusion patterns.
+
+The plugin allows you to add your own patterns and exclusions that won't be erased after updating the main database. You have the ability to add, edit, and delete patterns and exclusions.
+
+The list of patterns and exclusions is periodically updated by the plugin author.
+
+If you have any questions, suggestions, found bugs, or discovered new malicious requests, please report them on GitHub in the [Issues section](https://github.com/pekarskyi/ip-get-logger/issues).
 
 ## Example: Watch for suspicious parameters
 
@@ -90,12 +108,11 @@ This will track requests that might be attempting code injection.
 
 The plugin supports the creation of localization for any language.
 
-## Do you have any questions?
-
-
-If you have any questions, suggestions, found bugs, or discovered new malicious requests, please report them on GitHub in the [Issues section](https://github.com/pekarskyi/ip-get-logger/issues).
-
 ## Changelog
+
+1.2.6 - 05.04.2025:
+- Improved plugin data removal function after plugin deinstallation
+- Enhanced plugin update system
 
 1.2.5 - 03.04.2025:
 - Changed "Device" column to "User Agent" in logs table to display full User-Agent information

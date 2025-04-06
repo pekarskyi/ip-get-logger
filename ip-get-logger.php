@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IP GET Logger
  * Description: Plugin for tracking GET requests to the site and logging them
- * Version: 1.2.5
+ * Version: 1.2.6
  * Author: InwebPress
  * Author URI: https://inwebpress.com
  * Plugin URI: https://github.com/pekarskyi/ip-get-logger
@@ -399,28 +399,6 @@ function ip_get_logger_activate() {
 register_deactivation_hook(__FILE__, 'ip_get_logger_deactivate');
 function ip_get_logger_deactivate() {
     // Операції при деактивації
-}
-
-// Видалення плагіна
-register_uninstall_hook(__FILE__, 'ip_get_logger_uninstall');
-function ip_get_logger_uninstall() {
-    global $wpdb;
-    
-    // Перевіряємо, чи це справжнє видалення плагіна, а не оновлення
-    // При оновленні зазвичай WP_UNINSTALL_PLUGIN не визначено або не встановлено на шлях плагіна
-    if (!defined('WP_UNINSTALL_PLUGIN') || WP_UNINSTALL_PLUGIN !== plugin_basename(__FILE__)) {
-        return; // Це оновлення або інша ситуація, не видаляємо дані
-    }
-    
-    // Перевіряємо чи потрібно видаляти таблицю
-    $delete_table = ip_get_logger_get_option('settings', array());
-    $delete_table = isset($delete_table['delete_table_on_uninstall']) ? $delete_table['delete_table_on_uninstall'] : 0;
-    
-    if ($delete_table) {
-        // Видаляємо таблицю тільки при справжньому видаленні плагіна
-        $table_name = $wpdb->prefix . IP_GET_LOGGER_TABLE;
-        $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
-    }
 }
 
 // Функція для отримання опцій з таблиці бази даних
