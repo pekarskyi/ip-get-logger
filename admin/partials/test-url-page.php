@@ -13,11 +13,13 @@
             </div>
             
             <div class="ip-get-logger-form-group">
-                <label for="test_html_tag" class="checkbox-label">
-                    <input type="checkbox" id="test_html_tag" name="test_html_tag" 
-                        <?php checked(isset($_POST['test_html_tag'])); ?>>
-                    <?php echo esc_html__('Test with HTML tags (will add ?q=<iframe> to URL)', 'ip-get-logger'); ?>
-                </label>
+                <div class="ip-get-logger-switch-wrapper">
+                    <label class="ip-get-logger-switch">
+                        <input type="checkbox" id="test_html_tag" name="test_html_tag" <?php checked(isset($_POST['test_html_tag'])); ?> />
+                        <span class="ip-get-logger-slider"></span>
+                    </label>
+                    <label for="test_html_tag"><?php echo esc_html__('Test with HTML tags (will add ?q=<iframe> to URL)', 'ip-get-logger'); ?></label>
+                </div>
             </div>
             
             <div class="ip-get-logger-form-group">

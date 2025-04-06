@@ -416,6 +416,10 @@ class IP_Get_Logger_Admin {
      * Виведення сторінки налаштувань
      */
     public function display_settings_page() {
+        // Підключаємо необхідні скрипти і стилі
+        wp_enqueue_style('ip-get-logger-admin', IP_GET_LOGGER_PLUGIN_URL . 'admin/css/ip-get-logger-admin.css', array(), IP_GET_LOGGER_VERSION);
+        wp_enqueue_script('ip-get-logger-admin', IP_GET_LOGGER_PLUGIN_URL . 'admin/js/ip-get-logger-admin.js', array('jquery'), IP_GET_LOGGER_VERSION, true);
+
         // Якщо форма була відправлена, зберігаємо налаштування
         if (isset($_POST['submit']) && isset($_POST['ip_get_logger_form_settings'])) {
             $this->save_settings($_POST['ip_get_logger_form_settings']);
@@ -437,7 +441,13 @@ class IP_Get_Logger_Admin {
      */
     public function send_notifications_callback() {
         $send_notifications = isset($this->options['send_notifications']) ? intval($this->options['send_notifications']) : 1;
-        echo '<label><input type="checkbox" id="send_notifications" name="ip_get_logger_form_settings[send_notifications]" value="1" ' . checked(1, $send_notifications, false) . ' /> ' . __('Send email notifications when a request matches a pattern', 'ip-get-logger') . '</label>';
+        echo '<div class="ip-get-logger-switch-wrapper">
+            <label class="ip-get-logger-switch">
+                <input type="checkbox" id="send_notifications" name="ip_get_logger_form_settings[send_notifications]" value="1" ' . checked(1, $send_notifications, false) . ' />
+                <span class="ip-get-logger-slider"></span>
+            </label>
+            <label>' . __('Send email notifications when a request matches a pattern', 'ip-get-logger') . '</label>
+        </div>';
     }
     
     /**
@@ -518,7 +528,13 @@ class IP_Get_Logger_Admin {
      */
     public function delete_table_callback() {
         $delete_table = isset($this->options['delete_table_on_uninstall']) ? intval($this->options['delete_table_on_uninstall']) : 1;
-        echo '<label><input type="checkbox" id="delete_table_on_uninstall" name="ip_get_logger_form_settings[delete_table_on_uninstall]" value="1" ' . checked(1, $delete_table, false) . ' /> ' . __('Delete database table when uninstalling the plugin', 'ip-get-logger') . '</label>';
+        echo '<div class="ip-get-logger-switch-wrapper">
+            <label class="ip-get-logger-switch">
+                <input type="checkbox" id="delete_table_on_uninstall" name="ip_get_logger_form_settings[delete_table_on_uninstall]" value="1" ' . checked(1, $delete_table, false) . ' />
+                <span class="ip-get-logger-slider"></span>
+            </label>
+            <label>' . __('Delete database table when uninstalling the plugin', 'ip-get-logger') . '</label>
+        </div>';
         echo '<p class="description">' . __('Warning! If this option is enabled, all patterns and settings will be deleted along with the plugin!', 'ip-get-logger') . '</p>';
     }
     
@@ -981,6 +997,10 @@ class IP_Get_Logger_Admin {
      * Відображення сторінки тестування URL
      */
     public function display_test_url_page() {
+        // Підключаємо необхідні скрипти і стилі
+        wp_enqueue_style('ip-get-logger-admin', IP_GET_LOGGER_PLUGIN_URL . 'admin/css/ip-get-logger-admin.css', array(), IP_GET_LOGGER_VERSION);
+        wp_enqueue_script('ip-get-logger-admin', IP_GET_LOGGER_PLUGIN_URL . 'admin/js/ip-get-logger-admin.js', array('jquery'), IP_GET_LOGGER_VERSION, true);
+        
         $test_results = null;
         $test_html_tag = false;
         

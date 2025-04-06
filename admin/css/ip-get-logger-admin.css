@@ -36,6 +36,69 @@
     font-weight: 500;
 }
 
+/* Стилі для перемикачів (switch) */
+.ip-get-logger-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin: 0;
+}
+
+.ip-get-logger-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ip-get-logger-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.ip-get-logger-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.ip-get-logger-slider {
+    background-color: #0073aa;
+}
+
+input:focus+.ip-get-logger-slider {
+    box-shadow: 0 0 1px #0073aa;
+}
+
+input:checked+.ip-get-logger-slider:before {
+    transform: translateX(26px);
+}
+
+.ip-get-logger-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ip-get-logger-switch-wrapper label {
+    margin-left: 10px;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
 /* Стилі для сторінки запитів */
 .ip-get-logger-requests-list {
     margin-top: 30px;
