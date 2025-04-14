@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IP GET Logger
  * Description: Plugin for tracking GET requests to the site and logging them
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: InwebPress
  * Author URI: https://inwebpress.com
  * Plugin URI: https://github.com/pekarskyi/ip-get-logger
