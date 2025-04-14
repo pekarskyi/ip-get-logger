@@ -53,6 +53,7 @@ class IP_Get_Logger_Admin {
         add_action('wp_ajax_ip_get_logger_edit_request', array($this, 'ajax_edit_request'));
         add_action('wp_ajax_ip_get_logger_update_from_github', array($this, 'ajax_update_from_github'));
         add_action('wp_ajax_ip_get_logger_clear_database', array($this, 'ajax_clear_database'));
+        add_action('wp_ajax_ip_get_logger_export_logs', array($this, 'ajax_export_logs'));
         
         // AJAX-хендлери для шаблонів виключень
         add_action('wp_ajax_ip_get_logger_add_exclude_pattern', array($this, 'ajax_add_exclude_pattern'));
@@ -1409,5 +1410,351 @@ class IP_Get_Logger_Admin {
             'total_patterns' => count($updated_patterns),
             'added_patterns' => $added_count
         ));
+    }
+
+    /**
+     * AJAX-обробник для експорту логів
+     */
+    public function ajax_export_logs() {
+        // Перевіряємо nonce
+        check_ajax_referer('ip-get-logger-nonce', 'nonce');
+        
+        // Перевіряємо права
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions to perform this operation', 'ip-get-logger'));
+            return;
+        }
+        
+        // Отримуємо формат експорту
+        $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : 'csv';
+        
+        // Отримуємо фільтри
+        $filter_date = isset($_POST['filter_date']) ? sanitize_text_field($_POST['filter_date']) : '';
+        $filter_ip = isset($_POST['filter_ip']) ? sanitize_text_field($_POST['filter_ip']) : '';
+        $filter_country = isset($_POST['filter_country']) ? sanitize_text_field($_POST['filter_country']) : '';
+        $filter_url = isset($_POST['filter_url']) ? sanitize_text_field($_POST['filter_url']) : '';
+        $filter_user_agent = isset($_POST['filter_user_agent']) ? sanitize_text_field($_POST['filter_user_agent']) : '';
+        
+        // Отримання логів
+        $logs = $this->get_logs();
+        $all_logs = array();
+        
+        // Створюємо екземпляр класу IP_Get_Logger для використання його методів
+        $logger = new IP_Get_Logger();
+        
+        // Обробляємо кожний рядок логу
+        foreach ($logs as $log_line) {
+            $log_data = json_decode($log_line, true);
+            
+            if ($log_data) {
+                // Додаємо тип пристрою та країну, якщо вони не встановлені
+                if (!isset($log_data['device_type']) && isset($log_data['user_agent'])) {
+                    $log_data['device_type'] = $logger->get_device_type($log_data['user_agent']);
+                }
+                
+                if (!isset($log_data['country']) && isset($log_data['ip'])) {
+                    $log_data['country'] = $logger->get_country_by_ip($log_data['ip']);
+                }
+                
+                // Фільтрація логів
+                $match = true;
+                
+                if (!empty($filter_date)) {
+                    if (!isset($log_data['timestamp']) || strpos($log_data['timestamp'], $filter_date) !== 0) {
+                        $match = false;
+                    }
+                }
+                
+                if (!empty($filter_ip)) {
+                    if (!isset($log_data['ip']) || strpos($log_data['ip'], $filter_ip) === false) {
+                        $match = false;
+                    }
+                }
+                
+                if (!empty($filter_country)) {
+                    if (!isset($log_data['country']) || stripos($log_data['country'], $filter_country) === false) {
+                        $match = false;
+                    }
+                }
+                
+                if (!empty($filter_url)) {
+                    if (!isset($log_data['url']) || strpos($log_data['url'], $filter_url) === false) {
+                        $match = false;
+                    }
+                }
+                
+                if (!empty($filter_user_agent)) {
+                    if (!isset($log_data['user_agent']) || stripos($log_data['user_agent'], $filter_user_agent) === false) {
+                        $match = false;
+                    }
+                }
+                
+                if ($match) {
+                    $all_logs[] = $log_data;
+                }
+            }
+        }
+        
+        // Сортування логів за часом (від найновіших до найстаріших)
+        usort($all_logs, function($a, $b) {
+            $time_a = isset($a['timestamp']) ? strtotime($a['timestamp']) : 0;
+            $time_b = isset($b['timestamp']) ? strtotime($b['timestamp']) : 0;
+            return $time_b - $time_a; // За спаданням (найновіші вгорі)
+        });
+        
+        // Якщо немає логів для експорту
+        if (empty($all_logs)) {
+            wp_send_json_error(__('No logs to export', 'ip-get-logger'));
+            return;
+        }
+        
+        // Генеруємо файл експорту залежно від формату
+        $result = $this->generate_export_file($all_logs, $format);
+        
+        if ($result === false) {
+            wp_send_json_error(__('Failed to generate export file', 'ip-get-logger'));
+            return;
+        }
+        
+        // Готуємо URL для завантаження
+        $export_url = add_query_arg(array(
+            'action' => 'ip_get_logger_download_export_logs',
+            'nonce' => wp_create_nonce('ip-get-logger-export-logs-nonce'),
+            'file' => $result,
+            'format' => $format
+        ), admin_url('admin-ajax.php'));
+        
+        wp_send_json_success(array('export_url' => $export_url));
+    }
+    
+    /**
+     * Генерує файл експорту в заданому форматі
+     *
+     * @param array $logs Масив логів
+     * @param string $format Формат експорту (excel, html)
+     * @return string|false Ім'я файлу або false у випадку помилки
+     */
+    private function generate_export_file($logs, $format) {
+        // Створюємо тимчасовий файл
+        $temp_dir = get_temp_dir();
+        $file_name = 'ip-get-logger-export-' . time();
+        
+        // Масив для заголовків
+        $headers = array(
+            __('Date & Time', 'ip-get-logger'),
+            __('Method', 'ip-get-logger'),
+            __('URL', 'ip-get-logger'),
+            __('Pattern', 'ip-get-logger'),
+            __('IP', 'ip-get-logger'),
+            __('Country', 'ip-get-logger'),
+            __('User Agent', 'ip-get-logger')
+        );
+        
+        // Генеруємо дані для експорту
+        $data = array();
+        
+        // Додаємо заголовки
+        $data[] = $headers;
+        
+        // Додаємо дані логів
+        foreach ($logs as $log) {
+            $timestamp = isset($log['timestamp']) ? date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($log['timestamp'])) : '-';
+            
+            $row = array(
+                $timestamp,
+                isset($log['method']) ? $log['method'] : '-',
+                isset($log['url']) ? $log['url'] : '-',
+                isset($log['matched_pattern']) ? $log['matched_pattern'] : '-',
+                isset($log['ip']) ? $log['ip'] : '-',
+                isset($log['country']) ? $log['country'] : '-',
+                isset($log['user_agent']) ? $log['user_agent'] : '-'
+            );
+            
+            $data[] = $row;
+        }
+        
+        // Генеруємо файл залежно від формату
+        switch ($format) {
+            case 'html':
+                return $this->generate_html_file($data, $temp_dir, $file_name);
+                
+            case 'excel':
+            default:
+                return $this->generate_excel_file($data, $temp_dir, $file_name);
+        }
+    }
+    
+    /**
+     * Генерує Excel-файл (XLS)
+     *
+     * @param array $data Масив даних
+     * @param string $temp_dir Тимчасова директорія
+     * @param string $file_name Базове ім'я файлу
+     * @return string|false Ім'я файлу або false у випадку помилки
+     */
+    private function generate_excel_file($data, $temp_dir, $file_name) {
+        // Для Excel (XLS) можна використати PHP-бібліотеку PhpSpreadsheet,
+        // але для простоти створимо HTML-таблицю з розширенням .xls, 
+        // яку Excel автоматично відкриє
+        $file_path = $temp_dir . $file_name . '.xls';
+        
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IP GET Logger Export</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>';
+        
+        // Додаємо заголовки
+        foreach ($data[0] as $header) {
+            $html .= '<th>' . htmlspecialchars($header) . '</th>';
+        }
+        
+        $html .= '</tr>
+        </thead>
+        <tbody>';
+        
+        // Додаємо дані (пропускаємо першу строку з заголовками)
+        for ($i = 1; $i < count($data); $i++) {
+            $html .= '<tr>';
+            
+            foreach ($data[$i] as $cell) {
+                $html .= '<td>' . htmlspecialchars($cell) . '</td>';
+            }
+            
+            $html .= '</tr>';
+        }
+        
+        $html .= '</tbody>
+    </table>
+</body>
+</html>';
+        
+        // Записуємо файл
+        $result = file_put_contents($file_path, $html);
+        
+        if ($result === false) {
+            return false;
+        }
+        
+        return $file_name . '.xls';
+    }
+    
+    /**
+     * Генерує HTML-файл
+     *
+     * @param array $data Масив даних
+     * @param string $temp_dir Тимчасова директорія
+     * @param string $file_name Базове ім'я файлу
+     * @return string|false Ім'я файлу або false у випадку помилки
+     */
+    private function generate_html_file($data, $temp_dir, $file_name) {
+        $file_path = $temp_dir . $file_name . '.html';
+        
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IP GET Logger Export</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>' . __('IP GET Logger - Log Export', 'ip-get-logger') . '</h1>
+    
+    <table>
+        <thead>
+            <tr>';
+        
+        // Додаємо заголовки
+        foreach ($data[0] as $header) {
+            $html .= '<th>' . htmlspecialchars($header) . '</th>';
+        }
+        
+        $html .= '</tr>
+        </thead>
+        <tbody>';
+        
+        // Додаємо дані (пропускаємо першу строку з заголовками)
+        for ($i = 1; $i < count($data); $i++) {
+            $html .= '<tr>';
+            
+            foreach ($data[$i] as $cell) {
+                $html .= '<td>' . htmlspecialchars($cell) . '</td>';
+            }
+            
+            $html .= '</tr>';
+        }
+        
+        $html .= '</tbody>
+    </table>
+    
+    <div class="footer">
+        <p>' . sprintf(__('Generated by IP GET Logger v%s on %s', 'ip-get-logger'), IP_GET_LOGGER_VERSION, date_i18n(get_option('date_format') . ' ' . get_option('time_format'))) . '</p>
+    </div>
+</body>
+</html>';
+        
+        // Записуємо файл
+        $result = file_put_contents($file_path, $html);
+        
+        if ($result === false) {
+            return false;
+        }
+        
+        return $file_name . '.html';
     }
 } 

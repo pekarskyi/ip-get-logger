@@ -516,6 +516,75 @@ function ip_get_logger_download_export() {
     exit;
 }
 
+// AJAX-хендлер для завантаження експортованих логів
+add_action('wp_ajax_ip_get_logger_download_export_logs', 'ip_get_logger_download_export_logs');
+function ip_get_logger_download_export_logs() {
+    // Перевіряємо nonce
+    if (!isset($_GET['nonce']) || !wp_verify_nonce($_GET['nonce'], 'ip-get-logger-export-logs-nonce')) {
+        wp_die(__('Security error', 'ip-get-logger'));
+    }
+    
+    // Перевіряємо права
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Insufficient permissions', 'ip-get-logger'));
+    }
+    
+    // Перевіряємо наявність файлу та формату
+    if (!isset($_GET['file']) || !isset($_GET['format'])) {
+        wp_die(__('Missing required parameters', 'ip-get-logger'));
+    }
+    
+    // Обмежуємо доступ лише до тимчасових файлів
+    $file_name = sanitize_file_name($_GET['file']);
+    if (strpos($file_name, 'ip-get-logger-export-') !== 0) {
+        wp_die(__('Invalid file', 'ip-get-logger'));
+    }
+    
+    // Отримуємо формат
+    $format = sanitize_text_field($_GET['format']);
+    
+    // Визначаємо розширення файлу за форматом
+    $extension = '';
+    $content_type = '';
+    
+    switch ($format) {
+        case 'html':
+            $extension = '.html';
+            $content_type = 'text/html';
+            $download_name = 'ip-get-logger-logs.html';
+            break;
+        case 'excel':
+        default:
+            $extension = '.xls';
+            $content_type = 'application/vnd.ms-excel';
+            $download_name = 'ip-get-logger-logs.xls';
+            break;
+    }
+    
+    // Отримуємо шлях до файлу
+    $file_path = get_temp_dir() . $file_name;
+    
+    // Перевіряємо чи файл існує
+    if (!file_exists($file_path)) {
+        wp_die(__('File not found', 'ip-get-logger'));
+    }
+    
+    // Відправляємо файл для завантаження
+    header('Content-Description: File Transfer');
+    header('Content-Type: ' . $content_type);
+    header('Content-Disposition: attachment; filename="' . $download_name . '"');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file_path));
+    readfile($file_path);
+    
+    // Видаляємо тимчасовий файл
+    @unlink($file_path);
+    
+    exit;
+}
+
 // Adding update check via GitHub
 require_once plugin_dir_path( __FILE__ ) . 'updates/github-updater.php';
 

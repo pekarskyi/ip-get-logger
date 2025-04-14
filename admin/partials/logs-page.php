@@ -43,6 +43,7 @@
             <div class="ip-get-logger-filter-controls">
                 <button type="submit" class="button button-primary"><?php echo esc_html__('Filter', 'ip-get-logger'); ?></button>
                 <a href="<?php echo admin_url('admin.php?page=ip-get-logger'); ?>" class="button button-primary"><?php echo esc_html__('Reset Filters', 'ip-get-logger'); ?></a>
+                <button type="button" id="ip-get-logger-export-logs-btn" class="button green"><?php echo esc_html__('Export Logs', 'ip-get-logger'); ?></button>
                 <button type="button" id="ip-get-logger-clear-logs-btn" class="button red"><?php echo esc_html__('Clear Logs', 'ip-get-logger'); ?></button>
             </div>
         </form>
@@ -272,5 +273,76 @@ jQuery(document).ready(function($) {
             });
         }
     });
+
+    // Експорт логів
+    $('#ip-get-logger-export-logs-btn').on('click', function() {
+        $('#ip-get-logger-export-modal').show();
+    });
+
+    // Закриття модального вікна
+    $('.ip-get-logger-modal-close').on('click', function() {
+        $('.ip-get-logger-modal').hide();
+    });
+
+    // Закриття модального вікна при кліку поза ним
+    $(window).on('click', function(event) {
+        if ($(event.target).hasClass('ip-get-logger-modal')) {
+            $('.ip-get-logger-modal').hide();
+        }
+    });
+
+    // Обробка експорту при виборі формату
+    $('#ip-get-logger-export-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        var format = $('#export_format').val();
+        
+        $.ajax({
+            url: ip_get_logger_params.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'ip_get_logger_export_logs',
+                nonce: ip_get_logger_params.nonce,
+                format: format,
+                filter_date: '<?php echo esc_js($filter_date); ?>',
+                filter_ip: '<?php echo esc_js($filter_ip); ?>',
+                filter_country: '<?php echo esc_js($filter_country); ?>',
+                filter_url: '<?php echo esc_js($filter_url); ?>',
+                filter_user_agent: '<?php echo esc_js($filter_user_agent); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.data.export_url;
+                    // Приховуємо модальне вікно після успішного експорту
+                    $('#ip-get-logger-export-modal').hide();
+                } else {
+                    alert(response.data);
+                }
+            },
+            error: function() {
+                alert('<?php echo esc_js(__('An error occurred while exporting logs', 'ip-get-logger')); ?>');
+            }
+        });
+    });
 });
-</script> 
+</script>
+
+<!-- Модальне вікно для вибору формату експорту -->
+<div id="ip-get-logger-export-modal" class="ip-get-logger-modal">
+    <div class="ip-get-logger-modal-content">
+        <span class="ip-get-logger-modal-close">&times;</span>
+        <h2><?php echo esc_html__('Export Logs', 'ip-get-logger'); ?></h2>
+        <form id="ip-get-logger-export-form" method="post">
+            <p>
+                <label for="export_format"><?php echo esc_html__('Select Export Format:', 'ip-get-logger'); ?></label>
+                <select id="export_format" name="export_format">
+                    <option value="excel" selected><?php echo esc_html__('Excel (XLS)', 'ip-get-logger'); ?></option>
+                    <option value="html"><?php echo esc_html__('HTML', 'ip-get-logger'); ?></option>
+                </select>
+            </p>
+            <p>
+                <button type="submit" class="button button-primary"><?php echo esc_html__('Export', 'ip-get-logger'); ?></button>
+            </p>
+        </form>
+    </div>
+</div> 

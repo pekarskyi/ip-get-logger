@@ -110,5 +110,9 @@ The plugin supports the creation of localization for any language.
 
 ## Changelog
 
+1.0.1 - 14.04.2025
+- Added Logs Export (XLS, HTML)
+- Updated localization
+
 1.0.0 - 06.04.2025
 - Initial release
