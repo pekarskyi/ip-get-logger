@@ -21,7 +21,7 @@
                 <p><span class="dashicons dashicons-shield"></span> <?php echo esc_html__('Report a new malicious pattern:', 'ip-get-logger'); ?>
                 <ul>
                     <li>- <a href="https://github.com/pekarskyi/ip-get-logger/issues" target="_blank"><?php echo esc_html__('on Github - Issues - New issue', 'ip-get-logger'); ?></a></li>
-                    <li>- <?php echo esc_html__('send me an email:', 'ip-get-logger'); ?> <a href="mailto:ipgetlogger@gmail.com">ipgetlogger@gmail.com</a></li>
+                    <li>- <?php echo esc_html__('send me an email:', 'ip-get-logger'); ?> <a href="mailto:inwebpress@gmail.com">inwebpress@gmail.com</a></li>
                     <li>- <a href="https://telegram.im/@sovka7" target="_blank"><?php echo esc_html__('write to me in Telegram', 'ip-get-logger'); ?></a></li>
                 </ul>
                  
